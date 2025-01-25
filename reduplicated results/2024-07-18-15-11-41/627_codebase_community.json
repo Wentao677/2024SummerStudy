@@ -1,0 +1,222 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "adult",
+            "users",
+            "Age",
+            "19",
+            "65",
+            "user",
+            "where",
+            "BETWEEN"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "Age"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "user"
+                ],
+                "Location": [
+                    "Everywhere"
+                ]
+            },
+            "comments": {
+                "UserDisplayName": [
+                    "user28"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "age": {
+                    "column_name": "",
+                    "column_description": "user's age",
+                    "value_description": "\u0095 teenager: 13-18 \u0095 adult: 19-65 \u0095 elder: > 65"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the user id",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the voter",
+                    "value_description": ""
+                }
+            },
+            "badges": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the unique id of the user",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the user who post the comment",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the user who post the post",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "users": [
+                "Age",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks how many users were adult, and the hint provides the age range for an adult user. This information is stored in the 'users' table, which contains the 'Age' column. The 'badges' table is not relevant to the question, as it only stores information about badges and their relationships with users. The 'comments', 'postHistory', 'postLinks', 'posts', 'tags', and 'votes' tables are also not necessary, as they do not contain information about user age. Therefore, the only table needed to answer the question is the 'users' table.",
+        "selected_tables": [
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "users": [
+                "Age"
+            ]
+        },
+        "model_selected_columns": {
+            "users": [
+                "Age"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks how many users were adult, and the hint provides the definition of 'adult' as users with Age between 19 and 65. Therefore, we need to identify the column that contains this information and use it to filter the results.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'users'.'id'"
+        ],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(Id) FROM users WHERE Age BETWEEN 19 AND 65 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the SQL query. I used the hint provided to determine that 'adult' refers to users where Age is between 19 and 65. I then used the SELECT COUNT(Id) statement to count the number of users that meet this condition.",
+        "SQL": "SELECT COUNT(Id) FROM users WHERE Age BETWEEN 19 AND 65",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many users were adult?",
+            "Evidence": "adult refers to user where Age BETWEEN 19 and 65;",
+            "GOLD_SQL": "SELECT COUNT(id) FROM users WHERE Age BETWEEN 19 AND 65",
+            "PREDICTED_SQL": "SELECT COUNT(Id) FROM users WHERE Age BETWEEN 19 AND 65 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many users were adult?",
+            "Evidence": "adult refers to user where Age BETWEEN 19 and 65;",
+            "GOLD_SQL": "SELECT COUNT(id) FROM users WHERE Age BETWEEN 19 AND 65",
+            "PREDICTED_SQL": "SELECT COUNT(Id) FROM users WHERE Age BETWEEN 19 AND 65"
+        },
+        "status": "success"
+    }
+]

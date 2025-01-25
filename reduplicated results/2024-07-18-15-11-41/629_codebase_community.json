@@ -1,0 +1,251 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "votes",
+            "2010",
+            "2011",
+            "ratio",
+            "CreationDate",
+            "Id",
+            "YEAR",
+            "FROM",
+            "votes"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "votes": [
+                "CreationDate",
+                "Id"
+            ]
+        },
+        "similar_values": {
+            "tags": {
+                "TagName": [
+                    "ratio"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the user account",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the vote",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the vote id",
+                    "value_description": ""
+                },
+                "votetypeid": {
+                    "column_name": "Vote Type Id",
+                    "column_description": "the id of the vote type",
+                    "value_description": ""
+                },
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the id of the post that is voted",
+                    "value_description": ""
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the voter",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "score": {
+                    "column_name": "",
+                    "column_description": "rating score",
+                    "value_description": "The score is from 0 to 100. The score more than 60 refers that the comment is a positive comment. The score less than 60 refers that the comment is a negative comment."
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the comment",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Id",
+                "CreaionDate",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "CreationDate",
+                "UpVotes",
+                "Id"
+            ],
+            "votes": [
+                "PostId",
+                "CreationDate",
+                "UserId",
+                "Id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "votes": [
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "votes": [
+                "PostId",
+                "CreationDate",
+                "UserId",
+                "Id"
+            ],
+            "posts": [
+                "Id",
+                "CreaionDate",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "users": [
+                "CreationDate",
+                "UpVotes",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the ratio of votes in 2010 and 2011. The hint suggests using the 'votes' table and applying a condition on the 'CreationDate' column to filter the votes by year. The 'CreationDate' column is present in the 'votes' table, which implies that this table is necessary for the calculation. Additionally, the 'votes' table contains the 'PostId' and 'UserId' columns, which are foreign keys referencing the 'posts' and 'users' tables, respectively. These tables might be necessary to provide additional context or information about the votes. Therefore, the necessary tables are 'votes', 'posts', and 'users'.",
+        "selected_tables": [
+            "votes",
+            "posts",
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "votes": [
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "votes": [
+                "Id",
+                "CreationDate"
+            ]
+        },
+        "model_selected_columns": {
+            "votes": [
+                "Id",
+                "CreationDate"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the ratio of votes in 2010 and 2011. The hint suggests using the YEAR(CreationDate) function to filter votes by year. This implies that the CreationDate column is crucial for determining the year of each vote. Additionally, the question requires counting the number of votes, which necessitates the Id column. The table votes is the only table that contains the necessary information, specifically the CreationDate and Id columns.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "votes": [
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2010' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2011' THEN 1 ELSE 0 END) FROM votes ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to calculate the ratio of votes in 2010 and 2011. I used the STRFTIME function to extract the year from the CreationDate column, and then used a CASE statement to count the number of votes in each year. I then divided the two counts to get the ratio.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2010' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2011' THEN 1 ELSE 0 END) FROM votes",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Calculate the ratio of votes in 2010 and 2011.",
+            "Evidence": "DIVIDE(COUNT(Id where YEAR(CreationDate) = 2010), COUNT(Id where YEAR(CreationDate) = 2011)) FROM votes;",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(STRFTIME('%Y', CreationDate) = '2010', 1, 0)) AS REAL) / SUM(IIF(STRFTIME('%Y', CreationDate) = '2011', 1, 0)) FROM votes",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2010' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2011' THEN 1 ELSE 0 END) FROM votes "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Calculate the ratio of votes in 2010 and 2011.",
+            "Evidence": "DIVIDE(COUNT(Id where YEAR(CreationDate) = 2010), COUNT(Id where YEAR(CreationDate) = 2011)) FROM votes;",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(STRFTIME('%Y', CreationDate) = '2010', 1, 0)) AS REAL) / SUM(IIF(STRFTIME('%Y', CreationDate) = '2011', 1, 0)) FROM votes",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2010' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN STRFTIME('%Y', CreationDate) = '2011' THEN 1 ELSE 0 END) FROM votes"
+        },
+        "status": "success"
+    }
+]

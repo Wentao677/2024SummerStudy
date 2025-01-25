@@ -1,0 +1,281 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "birthday",
+            "1959/3/1",
+            "symptoms",
+            "examination",
+            "1993/9/27"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Birthday"
+            ],
+            "Examination": [
+                "Symptoms"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1959.4"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "sex": {
+                    "column_name": "",
+                    "column_description": "Sex",
+                    "value_description": "F: female; M: male"
+                },
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                }
+            },
+            "laboratory": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "alb": {
+                    "column_name": "albumin",
+                    "column_description": "albumin",
+                    "value_description": "Commonsense evidence:  Normal range: 3.5 < N < 5.5"
+                },
+                "c3": {
+                    "column_name": "complement 3",
+                    "column_description": "complement 3",
+                    "value_description": "Commonsense evidence:  Normal range: N > 35"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "u-pro": {
+                    "column_name": "proteinuria",
+                    "column_description": "proteinuria",
+                    "value_description": "Commonsense evidence:  Normal range: 0 < N < 30"
+                }
+            },
+            "examination": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "symptoms": {
+                    "column_name": "",
+                    "column_description": "other symptoms observed",
+                    "value_description": ""
+                },
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "ana pattern": {
+                    "column_name": "pattern observed in the sheet of ANA examination",
+                    "column_description": "pattern observed in the sheet of ANA examination",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Symptoms"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "symptoms",
+                "id",
+                "Examination Date"
+            ],
+            "patient": [
+                "id",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Symptoms"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday",
+                "First Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the symptoms of a patient with a specific birthday during a specific examination date. The hint provides the patient's birthday and the examination date. To answer this question, we need to find the patient with the matching birthday and then find the symptoms associated with that patient on the given examination date. The Examination table contains the symptoms, but it also requires the ID of the patient, which is linked to the Patient table. The Patient table contains the ID and birthday, and the Laboratory table contains the ID of the patient, which is also linked to the Patient table. However, the Laboratory table is not necessary for this question as it provides the date of laboratory tests, which is not relevant to the question. Therefore, we need to use the Examination, Patient, and foreign key constraints to link the tables.",
+        "selected_tables": [
+            "Examination",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "symptoms",
+                "id",
+                "Examination Date"
+            ],
+            "patient": [
+                "id",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Symptoms"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday",
+                "First Date"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "ID",
+                "Symptoms"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday",
+                "First Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the symptoms of a patient whose birthday is 1959/3/1, during an examination on 1993/9/27. The hint helps identify the patient's ID, which is linked to the Examination table. We need to filter by the patient's birthday and examination date, and then retrieve the corresponding symptoms.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'examination'.'Examination Date'"
+        ],
+        "correct_columns": {
+            "examination": [
+                "symptoms",
+                "id",
+                "Examination Date"
+            ],
+            "patient": [
+                "id",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.Symptoms FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-03-01' AND T1.`First Date` = '1993-09-27' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the patient's birthday as 1959/3/1. Then, I looked for the examination date as 1993/9/27. I joined the Patient table with the Examination table on the ID column, filtered the results to match the patient's birthday and examination date, and finally selected the Symptoms column.",
+        "SQL": "SELECT T2.Symptoms FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-03-01' AND T2.`Examination Date` = '1993-09-27'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For the patient whose birthday was 1959/3/1, what symptoms did he/she have during the examination on 1993/9/27?",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT T2.Symptoms FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-03-01' AND T2.`Examination Date` = '1993-09-27'",
+            "PREDICTED_SQL": "SELECT T2.Symptoms FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-03-01' AND T1.`First Date` = '1993-09-27' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patient whose birthday was 1959/3/1, what symptoms did he/she have during the examination on 1993/9/27?",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT T2.Symptoms FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-03-01' AND T2.`Examination Date` = '1993-09-27'",
+            "PREDICTED_SQL": "SELECT T2.Symptoms FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-03-01' AND T2.`Examination Date` = '1993-09-27'"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,244 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "born",
+            "1959/2/18",
+            "total cholesterol",
+            "November",
+            "December",
+            "1981",
+            "decrease rate",
+            "Birthday",
+            "Date",
+            "T-CHO",
+            "SUM",
+            "SUBTRACT"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Birthday"
+            ],
+            "Laboratory": [
+                "Date",
+                "T-CHO"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1982.1"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "t-cho": {
+                    "column_name": "total cholesterol",
+                    "column_description": "total cholesterol",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO",
+                "TAT",
+                "TAT2"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO",
+                "TAT",
+                "TAT2"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the decrease rate of total cholesterol for a specific patient born on 1959/2/18, between November and December 1981. The hint provides a formula for calculating this decrease rate, which involves subtracting the sum of total cholesterol values for November 1981 from the sum of total cholesterol values for December 1981, for the same patient. This requires information about the patient's ID, examination dates, and total cholesterol values. The hint also mentions the patient's birthday, which is used to identify the patient. Therefore, we need to select tables that contain this information.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the decrease rate of total cholesterol for a specific patient born on 1959/2/18, between November and December 1981. The hint suggests using the Birthday column to filter the patient, and the Date and T-CHO columns to calculate the decrease rate. The LIKE operator is used to filter dates in the hint, so we need to include the Date column. The T-CHO column is necessary for calculating the total cholesterol values.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT SUM(CASE WHEN T2.Date LIKE '1981-11-%' THEN T2.`T-CHO` ELSE 0 END) - SUM(CASE WHEN T2.Date LIKE '1981-12-%' THEN T2.`T-CHO` ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-02-18' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the patient's ID based on the birthday. Then, I joined the Laboratory table with the Patient table on the ID. I filtered the dates to November and December 1981 and calculated the total cholesterol for each month. Finally, I subtracted the total cholesterol for November from December to get the decrease rate.",
+        "SQL": "SELECT (SELECT SUM(T2.`T-CHO`) FROM Laboratory AS T2 WHERE T2.Date LIKE '1981-12-%' AND T2.ID IN (SELECT T1.ID FROM Patient AS T1 WHERE T1.Birthday = '1959-02-18')) - (SELECT SUM(T2.`T-CHO`) FROM Laboratory AS T2 WHERE T2.Date LIKE '1981-11-%' AND T2.ID IN (SELECT T1.ID FROM Patient AS T1 WHERE T1.Birthday = '1959-02-18'))",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For the patient who was born on 1959/2/18, what is the decrease rate for his/her total cholesterol from November to December in 1981?",
+            "Evidence": "born on 1959/2/18 refers to Birthday = '1959-02-18'; calculation = SUBTRACT(SUM(Birthday = '1959-02-18' and Date like '1981-11-%' THEN `T-CHO`), SUM(Birthday = '1959-02-18' and Date like '1981-12-%' THEN `T-CHO`))",
+            "GOLD_SQL": "SELECT CAST((SUM(CASE WHEN T2.Date LIKE '1981-11-%' THEN T2.`T-CHO` ELSE 0 END) - SUM(CASE WHEN T2.Date LIKE '1981-12-%' THEN T2.`T-CHO` ELSE 0 END)) AS REAL) / SUM(CASE WHEN T2.Date LIKE '1981-12-%' THEN T2.`T-CHO` ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-02-18'",
+            "PREDICTED_SQL": "SELECT SUM(CASE WHEN T2.Date LIKE '1981-11-%' THEN T2.`T-CHO` ELSE 0 END) - SUM(CASE WHEN T2.Date LIKE '1981-12-%' THEN T2.`T-CHO` ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-02-18' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For the patient who was born on 1959/2/18, what is the decrease rate for his/her total cholesterol from November to December in 1981?",
+            "Evidence": "born on 1959/2/18 refers to Birthday = '1959-02-18'; calculation = SUBTRACT(SUM(Birthday = '1959-02-18' and Date like '1981-11-%' THEN `T-CHO`), SUM(Birthday = '1959-02-18' and Date like '1981-12-%' THEN `T-CHO`))",
+            "GOLD_SQL": "SELECT CAST((SUM(CASE WHEN T2.Date LIKE '1981-11-%' THEN T2.`T-CHO` ELSE 0 END) - SUM(CASE WHEN T2.Date LIKE '1981-12-%' THEN T2.`T-CHO` ELSE 0 END)) AS REAL) / SUM(CASE WHEN T2.Date LIKE '1981-12-%' THEN T2.`T-CHO` ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday = '1959-02-18'",
+            "PREDICTED_SQL": "SELECT (SELECT SUM(T2.`T-CHO`) FROM Laboratory AS T2 WHERE T2.Date LIKE '1981-12-%' AND T2.ID IN (SELECT T1.ID FROM Patient AS T1 WHERE T1.Birthday = '1959-02-18')) - (SELECT SUM(T2.`T-CHO`) FROM Laboratory AS T2 WHERE T2.Date LIKE '1981-11-%' AND T2.ID IN (SELECT T1.ID FROM Patient AS T1 WHERE T1.Birthday = '1959-02-18'))"
+        },
+        "status": "success"
+    }
+]

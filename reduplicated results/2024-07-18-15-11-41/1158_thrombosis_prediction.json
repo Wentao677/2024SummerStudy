@@ -1,0 +1,233 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patients",
+            "born",
+            "1937",
+            "total cholesterol",
+            "normal range",
+            "year(birthday)",
+            "T-CHO",
+            "250"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "T-CHO"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1250"
+                ]
+            },
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "t-cho": {
+                    "column_name": "total cholesterol",
+                    "column_description": "total cholesterol",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "examination": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO",
+                "HCT",
+                "TAT",
+                "TAT2",
+                "RF"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO",
+                "HCT",
+                "TAT",
+                "TAT2",
+                "RF"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients born in 1937 with total cholesterol beyond the normal range. The hint provides specific values for year of birth and total cholesterol. This information is present in the Patient and Laboratory tables, respectively. The Examination table is not relevant to this question. The Patient table is necessary to get the birth year, and the Laboratory table is necessary to get the total cholesterol value. Therefore, both tables are required to answer the question.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-CHO"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-CHO"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients born in 1937 with total cholesterol beyond the normal range. The hint provides the exact values to filter for. We need to identify the columns that contain these values and the table that holds the patient information.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday LIKE '1937%' AND T2.`T-CHO` >= 250 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns needed to answer the question. I needed the patient ID, which is present in the Patient table. I also needed the total cholesterol value, which is present in the Laboratory table. I then joined the two tables on the ID column. I filtered the results to only include patients born in 1937 and total cholesterol values greater than or equal to 250. Finally, I used the SELECT DISTINCT statement to return only unique patient IDs.",
+        "SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday LIKE '1937%' AND T2.`T-CHO` >= 250",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all patients who were born in 1937 whose total cholesterol was beyond the normal range.",
+            "Evidence": "who were born in 1937 refers to year(birthday) = '1937'; total cholesterol was beyond the normal range refers to `T-CHO` > = '250'",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.Birthday) = '1937' AND T2.`T-CHO` >= 250",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday LIKE '1937%' AND T2.`T-CHO` >= 250 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all patients who were born in 1937 whose total cholesterol was beyond the normal range.",
+            "Evidence": "who were born in 1937 refers to year(birthday) = '1937'; total cholesterol was beyond the normal range refers to `T-CHO` > = '250'",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.Birthday) = '1937' AND T2.`T-CHO` >= 250",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Birthday LIKE '1937%' AND T2.`T-CHO` >= 250"
+        },
+        "status": "success"
+    }
+]

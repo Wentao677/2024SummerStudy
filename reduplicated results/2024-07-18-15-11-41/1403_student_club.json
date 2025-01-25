@@ -1,0 +1,276 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "closed event",
+            "event_name",
+            "status",
+            "Closed",
+            "exceed the budget",
+            "remaining",
+            "MIN(remaining)",
+            "where remaining < 0"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "event": [
+                "event_name",
+                "status"
+            ],
+            "budget": [
+                "remaining",
+                "remaining",
+                "remaining"
+            ]
+        },
+        "similar_values": {
+            "event": {
+                "status": [
+                    "Closed"
+                ],
+                "type": [
+                    "Budget"
+                ]
+            },
+            "budget": {
+                "event_status": [
+                    "Closed"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "budget": {
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                },
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event to which the budget line applies.",
+                    "value_description": "References the Event table"
+                },
+                "event_status": {
+                    "column_name": "event status",
+                    "column_description": "the status of the event",
+                    "value_description": "Closed / Open/ Planning    \u2022 Closed: It means that the event is closed. The spent and the remaining won't change anymore. \u2022 Open: It means that the event is already opened. The spent and the remaining will change with new expenses. \u2022 Planning: The event is not started yet but is planning. The spent and the remaining won't change at this stage."
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                }
+            },
+            "expense": {
+                "expense_date": {
+                    "column_name": "expense date",
+                    "column_description": "The date the expense was incurred",
+                    "value_description": "e.g. YYYY-MM-DD"
+                }
+            },
+            "event": {
+                "status": {
+                    "column_name": "",
+                    "column_description": "One of three values indicating if the event is in planning, is opened, or is closed",
+                    "value_description": "Open/ Closed/ Planning"
+                },
+                "event_name": {
+                    "column_name": "event name",
+                    "column_description": "event name",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id",
+                "event_name",
+                "status"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "spent",
+                "remaining",
+                "amount",
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "amount",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "budget": [
+                "link_to_event",
+                "remaining",
+                "event_status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "event": [
+                "event_id",
+                "event_name",
+                "status"
+            ],
+            "budget": [
+                "spent",
+                "remaining",
+                "amount",
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the name of the closed event whose cost has exceeded the budget the most. The hint suggests that we need to focus on closed events (event_name where status = 'Closed') and find the one with the minimum remaining value (MIN(remaining) where remaining < 0). This requires us to analyze the budget table, which contains the remaining value for each event. We also need to consider the event table to get the event name for the selected event. Finally, we need to join the attendance table to filter out events that have not exceeded their budget.",
+        "selected_tables": [
+            "event",
+            "budget",
+            "attendance"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "budget": [
+                "link_to_event",
+                "remaining",
+                "event_status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "status"
+            ],
+            "budget": [
+                "remaining",
+                "link_to_event"
+            ]
+        },
+        "model_selected_columns": {
+            "event": [
+                "event_name",
+                "status"
+            ],
+            "budget": [
+                "remaining",
+                "link_to_event"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question is asking for the name of the closed event whose cost has exceeded the budget the most. The hint suggests that we need to focus on closed events (event_name where status = 'Closed') and find the one with the minimum remaining value (MIN(remaining) where remaining < 0).",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'event'.'event_id'",
+            "'budget'.'event_status'"
+        ],
+        "correct_columns": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "budget": [
+                "link_to_event",
+                "remaining",
+                "event_status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.status = 'Closed' ORDER BY T2.remaining LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns and tables involved in the question. I noticed that the question is asking for the name of the closed event whose cost has exceeded the budget the most. This means I need to find the event with the minimum remaining amount in the budget table where the remaining amount is less than 0. I then used the instructions provided to write the SQL query. I joined the event and budget tables on the event_id column, filtered the results to only include closed events, and ordered the results by the remaining amount in the budget table. I then used the LIMIT 1 clause to get the event with the minimum remaining amount.",
+        "SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.status = 'Closed' AND T2.remaining < 0 ORDER BY T2.remaining LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Indicate the name of the closed event whose cost has exceeded the budget the most.",
+            "Evidence": "closed events refers to event_name where status = 'Closed'; exceed the budget the most refers to MIN(remaining) where remaining < 0",
+            "GOLD_SQL": "SELECT T2.event_name FROM budget AS T1 INNER JOIN event AS T2 ON T2.event_id = T1.link_to_event WHERE T1.event_status = 'Closed' AND T1.remaining < 0 ORDER BY T1.remaining LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.status = 'Closed' ORDER BY T2.remaining LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Indicate the name of the closed event whose cost has exceeded the budget the most.",
+            "Evidence": "closed events refers to event_name where status = 'Closed'; exceed the budget the most refers to MIN(remaining) where remaining < 0",
+            "GOLD_SQL": "SELECT T2.event_name FROM budget AS T1 INNER JOIN event AS T2 ON T2.event_id = T1.link_to_event WHERE T1.event_status = 'Closed' AND T1.remaining < 0 ORDER BY T1.remaining LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.status = 'Closed' AND T2.remaining < 0 ORDER BY T2.remaining LIMIT 1"
+        },
+        "status": "success"
+    }
+]

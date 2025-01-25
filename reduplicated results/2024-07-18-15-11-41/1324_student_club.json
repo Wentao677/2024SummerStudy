@@ -1,0 +1,287 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average attendance",
+            "meetings",
+            "2020",
+            "type",
+            "Meeting",
+            "event_date",
+            "event_id",
+            "event_name",
+            "DIVIDE",
+            "COUNT",
+            "COUNT(DISTINCT)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "event": [
+                "type",
+                "event_date",
+                "event_id",
+                "event_name"
+            ],
+            "zip_code": [
+                "county"
+            ]
+        },
+        "similar_values": {
+            "event": {
+                "type": [
+                    "Meeting"
+                ],
+                "event_name": [
+                    "April Meeting"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "budget": {
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                },
+                "category": {
+                    "column_name": "",
+                    "column_description": "The area for which the amount is budgeted, such as, advertisement, food, parking",
+                    "value_description": ""
+                },
+                "event_status": {
+                    "column_name": "event status",
+                    "column_description": "the status of the event",
+                    "value_description": "Closed / Open/ Planning    \u2022 Closed: It means that the event is closed. The spent and the remaining won't change anymore. \u2022 Open: It means that the event is already opened. The spent and the remaining will change with new expenses. \u2022 Planning: The event is not started yet but is planning. The spent and the remaining won't change at this stage."
+                }
+            },
+            "event": {
+                "event_date": {
+                    "column_name": "event date",
+                    "column_description": "The date the event took place or is scheduled to take place",
+                    "value_description": "e.g. 2020-03-10T12:00:00"
+                },
+                "type": {
+                    "column_name": "",
+                    "column_description": "The kind of event, such as game, social, election",
+                    "value_description": ""
+                },
+                "event_id": {
+                    "column_name": "event id",
+                    "column_description": "A unique identifier for the event",
+                    "value_description": ""
+                }
+            },
+            "member": {
+                "phone": {
+                    "column_name": "",
+                    "column_description": "The best telephone at which to contact the member",
+                    "value_description": ""
+                }
+            },
+            "expense": {
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                }
+            },
+            "attendance": {
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event which was attended",
+                    "value_description": "References the Event table"
+                },
+                "link_to_member": {
+                    "column_name": "link to member",
+                    "column_description": "The unique identifier of the member who attended the event",
+                    "value_description": "References the Member table"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_date",
+                "type",
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "county",
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "budget_id",
+                "link_to_event"
+            ],
+            "expense": [
+                "expense_id",
+                "link_to_member",
+                "link_to_budget"
+            ],
+            "income": [
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "event": [
+                "event_id",
+                "type",
+                "event_date"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_date",
+                "type",
+                "event_id"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ],
+            "zip_code": [
+                "county",
+                "zip_code"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average attendance of meetings in 2020. The hint provides a clear direction by specifying the type of event (Meeting) and the year (2020). This information is crucial for filtering the events. The hint also provides the formula for calculating the average attendance, which involves counting the number of events and distinct event names. This suggests that we need to join the event table with the attendance table to get the required information. The zip_code and major tables are not directly related to the question, so they can be ignored. The budget and expense tables are also not relevant, as they provide information about financial aspects, not attendance. The income table is not mentioned in the question or hint, so it's not necessary. The member table is not directly related to the question, but it's possible that the attendance table references it. Therefore, we need to include the event, attendance, and member tables in our SQL query.",
+        "selected_tables": [
+            "event",
+            "attendance",
+            "member"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "event": [
+                "event_id",
+                "type",
+                "event_date"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "event": [
+                "event_id",
+                "event_date",
+                "type"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ]
+        },
+        "model_selected_columns": {
+            "event": [
+                "event_id",
+                "event_date",
+                "type"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average attendance of meetings in 2020. The hint provides a clear direction to focus on the 'Meeting' type and events that took place in 2020. The 'event_date' column is necessary to filter events by year, and the 'event_name' column is required to calculate the average attendance. The 'attendance' table is essential to count the number of attendees for each meeting.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "event": [
+                "event_id",
+                "type",
+                "event_date"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(COUNT(T1.event_id) AS REAL) / COUNT(DISTINCT T1.event_id) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.type = 'Meeting' AND STRFTIME('%Y', T1.event_date) = '2020' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to create a query that meets the requirements. I used the correct conditions to filter the meetings in 2020 and then calculated the average attendance by dividing the count of event_id by the count of distinct event_name.",
+        "SQL": "SELECT CAST(COUNT(T1.event_id) AS REAL) / COUNT(DISTINCT T1.event_id) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.type = 'Meeting' AND STRFTIME('%Y', T1.event_date) = '2020'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average attendance of meetings in 2020?",
+            "Evidence": "meetings in 2020 refers to type = 'Meeting' where YEAR(event_date) = 2020; average = DIVIDE(COUNT(event_id), COUNT(DISTINCT event_name))",
+            "GOLD_SQL": "SELECT CAST(COUNT(T2.link_to_event) AS REAL) / COUNT(DISTINCT T2.link_to_event) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE SUBSTR(T1.event_date, 1, 4) = '2020' AND T1.type = 'Meeting'",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(T1.event_id) AS REAL) / COUNT(DISTINCT T1.event_id) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.type = 'Meeting' AND STRFTIME('%Y', T1.event_date) = '2020' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average attendance of meetings in 2020?",
+            "Evidence": "meetings in 2020 refers to type = 'Meeting' where YEAR(event_date) = 2020; average = DIVIDE(COUNT(event_id), COUNT(DISTINCT event_name))",
+            "GOLD_SQL": "SELECT CAST(COUNT(T2.link_to_event) AS REAL) / COUNT(DISTINCT T2.link_to_event) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE SUBSTR(T1.event_date, 1, 4) = '2020' AND T1.type = 'Meeting'",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(T1.event_id) AS REAL) / COUNT(DISTINCT T1.event_id) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.type = 'Meeting' AND STRFTIME('%Y', T1.event_date) = '2020'"
+        },
+        "status": "success"
+    }
+]

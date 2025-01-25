@@ -1,0 +1,259 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "superheroes",
+            "full names",
+            "super powers",
+            "15 super powers",
+            "COUNT(full_name)",
+            "over 15"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "superhero": [
+                "full_name"
+            ]
+        },
+        "similar_values": {
+            "superhero": {
+                "superhero_name": [
+                    "Power Man"
+                ]
+            },
+            "superpower": {
+                "power_name": [
+                    "Power Sense"
+                ]
+            },
+            "attribute": {
+                "attribute_name": [
+                    "Power"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "superhero": {
+                "full_name": {
+                    "column_name": "full name",
+                    "column_description": "the full name of the superhero",
+                    "value_description": "The full name of a person typically consists of their given name, also known as their first name or personal name, and their surname, also known as their last name or family name. For example, if someone's given name is \"John\" and their surname is \"Smith,\" their full name would be \"John Smith.\""
+                },
+                "superhero_name": {
+                    "column_name": "superhero name",
+                    "column_description": "the name of the superhero",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the unique identifier of the superhero",
+                    "value_description": ""
+                }
+            },
+            "superpower": {
+                "power_name": {
+                    "column_name": "power name",
+                    "column_description": "the superpower name",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the unique identifier of the superpower",
+                    "value_description": ""
+                }
+            },
+            "hero_power": {
+                "power_id": {
+                    "column_name": "power id",
+                    "column_description": "the id of the power Maps to superpower(id)",
+                    "value_description": "In general, a superhero's attributes provide the foundation for their abilities and help to define who they are, while their powers are the specific abilities that they use to fight crime and protect others."
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "alignment": [
+                "id"
+            ],
+            "attribute": [
+                "attribute_name",
+                "id"
+            ],
+            "colour": [
+                "id"
+            ],
+            "gender": [
+                "id"
+            ],
+            "publisher": [
+                "id"
+            ],
+            "race": [
+                "id"
+            ],
+            "superhero": [
+                "superhero_name",
+                "full_name",
+                "id",
+                "gender_id",
+                "eye_colour_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "race_id",
+                "publisher_id",
+                "alignment_id"
+            ],
+            "hero_attribute": [
+                "hero_id",
+                "attribute_id"
+            ],
+            "superpower": [
+                "id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "full_name",
+                "id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "superhero": [
+                "superhero_name",
+                "full_name",
+                "id",
+                "gender_id",
+                "eye_colour_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "race_id",
+                "publisher_id",
+                "alignment_id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ],
+            "superpower": [
+                "id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the full names of superheroes with over 15 superpowers. The hint suggests that we need to count the number of superpowers for each superhero. This implies that we need to join the superhero table with the hero_power table to get the list of superpowers for each superhero. We also need to join the hero_power table with the superpower table to get the actual superpowers. Additionally, we need the superhero table to get the full names of the superheroes. Finally, we need the alignment table to get the full names of the superheroes, but this is not necessary for the question, so we can ignore it.",
+        "selected_tables": [
+            "superhero",
+            "hero_power",
+            "superpower"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "full_name",
+                "id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "superhero": [
+                "full_name"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "model_selected_columns": {
+            "superhero": [
+                "full_name"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the full names of superheroes with over 15 super powers. The hint suggests that the count of full names should be greater than 15. This implies that we need to join the superhero table with the hero_power table to get the count of super powers for each superhero. We also need the full_name column from the superhero table to get the names of the superheroes.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'superhero'.'id'"
+        ],
+        "correct_columns": {
+            "superhero": [
+                "full_name",
+                "id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.full_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.full_name HAVING COUNT(T1.full_name) > 15 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition specified in the question, which is to find the full names of all superheroes with over 15 superpowers. I then thought about how to join the tables to achieve this. I joined the superhero table with the hero_power table to get the list of superpowers for each superhero. I then grouped the results by the superhero's full name and counted the number of superpowers for each. Finally, I used the having clause to filter the results to only include superheroes with more than 15 superpowers.",
+        "SQL": "SELECT T1.full_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.full_name HAVING COUNT(T2.power_id) > 15",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Please list the full names of all the superheroes with over 15 super powers.",
+            "Evidence": "15 super powers refers to COUNT(full_name) > 15",
+            "GOLD_SQL": "SELECT DISTINCT T1.full_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.full_name HAVING COUNT(T2.power_id) > 15",
+            "PREDICTED_SQL": "SELECT T1.full_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.full_name HAVING COUNT(T1.full_name) > 15 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please list the full names of all the superheroes with over 15 super powers.",
+            "Evidence": "15 super powers refers to COUNT(full_name) > 15",
+            "GOLD_SQL": "SELECT DISTINCT T1.full_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.full_name HAVING COUNT(T2.power_id) > 15",
+            "PREDICTED_SQL": "SELECT T1.full_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.full_name HAVING COUNT(T2.power_id) > 15"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,299 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average height",
+            "non-human superhero",
+            "Dark Horse Comics",
+            "AVG(height_cm)",
+            "race",
+            "Human",
+            "publisher_name",
+            "Dark Horse Comics"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "race": [
+                "race"
+            ],
+            "publisher": [
+                "publisher_name"
+            ]
+        },
+        "similar_values": {
+            "superhero": {
+                "superhero_name": [
+                    "Darkman"
+                ]
+            },
+            "race": {
+                "race": [
+                    "Human"
+                ]
+            },
+            "publisher": {
+                "publisher_name": [
+                    "Dark Horse Comics"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "superhero": {
+                "height_cm": {
+                    "column_name": "height cm",
+                    "column_description": "the height of the superhero",
+                    "value_description": "The unit of height is centimeter. If the height_cm is NULL or 0, it means the height of the superhero is missing."
+                },
+                "weight_kg": {
+                    "column_name": "weight kg",
+                    "column_description": "the weight of the superhero",
+                    "value_description": "The unit of weight is kilogram. If the weight_kg is NULL or 0, it means the weight of the superhero is missing."
+                },
+                "full_name": {
+                    "column_name": "full name",
+                    "column_description": "the full name of the superhero",
+                    "value_description": "The full name of a person typically consists of their given name, also known as their first name or personal name, and their surname, also known as their last name or family name. For example, if someone's given name is \"John\" and their surname is \"Smith,\" their full name would be \"John Smith.\""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the unique identifier of the superhero",
+                    "value_description": ""
+                },
+                "race_id": {
+                    "column_name": "race id",
+                    "column_description": "the id of the superhero's race",
+                    "value_description": ""
+                },
+                "superhero_name": {
+                    "column_name": "superhero name",
+                    "column_description": "the name of the superhero",
+                    "value_description": ""
+                }
+            },
+            "hero_attribute": {
+                "attribute_value": {
+                    "column_name": "attribute value",
+                    "column_description": "the attribute value",
+                    "value_description": "If a superhero has a higher attribute value on a particular attribute, it means that they are more skilled or powerful in that area compared to other superheroes. For example, if a superhero has a higher attribute value for strength, they may be able to lift heavier objects or deliver more powerful punches than other superheroes."
+                }
+            },
+            "attribute": {
+                "attribute_name": {
+                    "column_name": "attribute name",
+                    "column_description": "the attribute",
+                    "value_description": "A superhero's attribute is a characteristic or quality that defines who they are and what they are capable of. This could be a physical trait, such as superhuman strength or the ability to fly, or a personal trait, such as extraordinary intelligence or exceptional bravery."
+                }
+            },
+            "race": {
+                "race": {
+                    "column_name": "",
+                    "column_description": "the race of the superhero",
+                    "value_description": "In the context of superheroes, a superhero's race would refer to the particular group of people that the superhero belongs to base on these physical characteristics"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "alignment": [
+                "id"
+            ],
+            "attribute": [
+                "id"
+            ],
+            "colour": [
+                "id"
+            ],
+            "gender": [
+                "id"
+            ],
+            "publisher": [
+                "publisher_name",
+                "id"
+            ],
+            "race": [
+                "race",
+                "id"
+            ],
+            "superhero": [
+                "race_id",
+                "publisher_id",
+                "height_cm",
+                "id",
+                "gender_id",
+                "eye_colour_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "alignment_id"
+            ],
+            "hero_attribute": [
+                "hero_id",
+                "attribute_id"
+            ],
+            "superpower": [
+                "id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "height_cm",
+                "publisher_id",
+                "race_id"
+            ],
+            "publisher": [
+                "id",
+                "publisher_name"
+            ],
+            "race": [
+                "id",
+                "race"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "superhero": [
+                "race_id",
+                "publisher_id",
+                "height_cm",
+                "id",
+                "gender_id",
+                "eye_colour_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "alignment_id"
+            ],
+            "race": [
+                "race",
+                "id"
+            ],
+            "publisher": [
+                "publisher_name",
+                "id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average height of a non-human superhero in Dark Horse Comics. The hint clarifies that 'non-human superhero' refers to race <> 'Human' and 'Dark Horse Comics' refers to publisher_name = 'Dark Horse Comics'. This requires identifying superheroes that belong to a non-human race and are published by Dark Horse Comics. The tables needed to answer this question are those that contain information about superheroes, their races, and publishers. The tables 'superhero', 'race', and 'publisher' are necessary to identify the desired superheroes. The 'superhero' table contains information about the superheroes, including their race and publisher. The 'race' table contains information about the different races, including the race 'Human'. The 'publisher' table contains information about the publishers, including Dark Horse Comics. The 'alignment' table is not necessary for this question, as it only contains information about the alignment of the superheroes, which is not relevant to the question. The 'attribute', 'colour', 'gender', 'superpower', and 'hero_power' tables are also not necessary, as they do not contain information about the race or publisher of the superheroes.",
+        "selected_tables": [
+            "superhero",
+            "race",
+            "publisher"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "height_cm",
+                "publisher_id",
+                "race_id"
+            ],
+            "publisher": [
+                "id",
+                "publisher_name"
+            ],
+            "race": [
+                "id",
+                "race"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "superhero": [
+                "height_cm",
+                "race_id"
+            ],
+            "publisher": [
+                "id"
+            ]
+        },
+        "model_selected_columns": {
+            "superhero": [
+                "height_cm",
+                "race_id"
+            ],
+            "publisher": [
+                "id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average height of a non-human superhero in Dark Horse Comics. The hint provides the necessary information to identify the columns. We need to filter superheroes by race (non-human) and publisher (Dark Horse Comics). We also need to calculate the average height. The table names and columns selected are based on the provided schema and hint.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "race"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'superhero'.'publisher_id'",
+            "'publisher'.'publisher_name'"
+        ],
+        "correct_columns": {
+            "superhero": [
+                "height_cm",
+                "publisher_id",
+                "race_id"
+            ],
+            "publisher": [
+                "id",
+                "publisher_name"
+            ],
+            "race": [
+                "id",
+                "race"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.race_id != 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns needed for the query: average height of a non-human superhero in Dark Horse Comics. I then used the hint provided to identify the conditions: race <> 'Human' and publisher_name = 'Dark Horse Comics'. I joined the superhero table with the publisher table to filter by publisher name. I then filtered the results by race_id != 1 to exclude human superheroes. Finally, I used the AVG function to calculate the average height.",
+        "SQL": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.race_id != 1 AND T2.publisher_name = 'Dark Horse Comics'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the average height of a non-human superhero in Dark Horse Comics?",
+            "Evidence": "average = AVG(height_cm); non-human superhero refers to race <> 'Human'; Dark Horse Comics refers to publisher_name = 'Dark Horse Comics';",
+            "GOLD_SQL": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id INNER JOIN race AS T3 ON T1.race_id = T3.id WHERE T2.publisher_name = 'Dark Horse Comics' AND T3.race != 'Human'",
+            "PREDICTED_SQL": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.race_id != 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the average height of a non-human superhero in Dark Horse Comics?",
+            "Evidence": "average = AVG(height_cm); non-human superhero refers to race <> 'Human'; Dark Horse Comics refers to publisher_name = 'Dark Horse Comics';",
+            "GOLD_SQL": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id INNER JOIN race AS T3 ON T1.race_id = T3.id WHERE T2.publisher_name = 'Dark Horse Comics' AND T3.race != 'Human'",
+            "PREDICTED_SQL": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.race_id != 1 AND T2.publisher_name = 'Dark Horse Comics'"
+        },
+        "status": "success"
+    }
+]

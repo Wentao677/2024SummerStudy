@@ -1,0 +1,235 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "legendary frame effect cards",
+            "online game variations",
+            "percentage",
+            "isOnlineOnly",
+            "frameEffects",
+            "id",
+            "cards"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "cards": [
+                "variations",
+                "isOnlineOnly",
+                "frameEffects",
+                "id"
+            ]
+        },
+        "similar_values": {
+            "cards": {
+                "frameEffects": [
+                    "legendary"
+                ],
+                "supertypes": [
+                    "Legendary"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "cards": {
+                "isonlineonly": {
+                    "column_name": "is Online Only",
+                    "column_description": "If the card is only available in online game variations.",
+                    "value_description": "0: is not 1: is"
+                },
+                "frameversion": {
+                    "column_name": "frame Version",
+                    "column_description": "The version of the card frame style.",
+                    "value_description": "\"1993\", \"1997\", \"2003\", \"2015\", \"future\""
+                },
+                "types": {
+                    "column_name": "",
+                    "column_description": "A list of all card types of the card, including Un\u2011sets and gameplay variants.",
+                    "value_description": ""
+                },
+                "number": {
+                    "column_name": "",
+                    "column_description": "The number of the card",
+                    "value_description": ""
+                },
+                "dueldeck": {
+                    "column_name": "duel Deck",
+                    "column_description": "The indicator for which duel deck the card is in.",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "unique id number identifying the cards",
+                    "column_description": "",
+                    "value_description": ""
+                }
+            },
+            "sets": {
+                "totalsetsize": {
+                    "column_name": "total Set Size",
+                    "column_description": "The total number of cards in the set, including promotional and related supplemental products but excluding Alchemy modifications - however those cards are included in the set itself.",
+                    "value_description": ""
+                },
+                "isonlineonly": {
+                    "column_name": "is Online Only",
+                    "column_description": "If the set is only available in online game variations.",
+                    "value_description": ""
+                },
+                "basesetsize": {
+                    "column_name": "base Set Size",
+                    "column_description": "The number of cards in the set.",
+                    "value_description": ""
+                },
+                "mcmidextras": {
+                    "column_name": "magic card market ID Extras",
+                    "column_description": "The split Magic Card Market set identifier if a set is printed in two sets. This identifier represents the second set's identifier.",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "availability",
+                "frameEffects",
+                "isOnlineOnly",
+                "type",
+                "variations",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "id",
+                "uuid"
+            ],
+            "legalities": [
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "isOnlineOnly",
+                "id",
+                "code"
+            ],
+            "set_translations": [
+                "id",
+                "setCode"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "frameeffects",
+                "id",
+                "isonlineonly"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "cards": [
+                "availability",
+                "frameEffects",
+                "isOnlineOnly",
+                "type",
+                "variations",
+                "id",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of legendary frame effect cards that are only available in online game variations. The hint provides a clear direction on how to approach this question. It highlights the importance of 'isOnlineOnly' and 'frameEffects' columns. The 'isOnlineOnly' column is used to filter cards that are only available in online game variations, and the 'frameEffects' column is used to identify legendary frame effect cards. The question also requires a count of these cards, which can be achieved by counting the number of rows that meet the specified conditions. Therefore, the necessary tables are 'cards' and 'foreign_data' (if any) to filter and count the required cards.",
+        "selected_tables": [
+            "cards"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "frameeffects",
+                "id",
+                "isonlineonly"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "cards": [
+                "id",
+                "frameEffects",
+                "isOnlineOnly"
+            ]
+        },
+        "model_selected_columns": {
+            "cards": [
+                "id",
+                "frameEffects",
+                "isOnlineOnly"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of legendary frame effect cards that are only available in online game variations. The hint provides the necessary values for the frame effect and online availability. We need to filter the cards by these conditions and then calculate the percentage.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "frameeffects",
+                "id",
+                "isonlineonly"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN isOnlineOnly = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards WHERE frameEffects = 'legendary' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question, which is asking for the percentage of legendary frame effect cards that are only available in online game variations. I then looked at the database schema and identified the relevant columns: isOnlineOnly, frameEffects, and id. I used the hint provided to determine that isOnlineOnly = 1 refers to cards that are only available in online game variations, and frameEffects = 'legendary' refers to legendary frame effect cards. I then used the COUNT function to count the number of cards that meet both conditions, and divided that by the total number of cards to get the percentage.",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN isOnlineOnly = 1 AND frameEffects = 'legendary' THEN 1 ELSE NULL END) AS REAL) * 100 / COUNT(id) FROM cards",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What percentage of legendary frame effect cards that are only available in online game variations?",
+            "Evidence": "only available in online game variationsrefer to isOnlineOnly =1 ; legendary frame effect cards refer to frameEffects = 'legendary'; percentage refer to DIVIDE(COUNT(isOnlineOnly=1), COUNT(id)) from cards where frameEffects = 'legendary'",
+            "GOLD_SQL": "SELECT SUM(CASE WHEN isOnlineOnly = 1 THEN 1.0 ELSE 0 END) / COUNT(id) * 100 FROM cards WHERE frameEffects = 'legendary'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN isOnlineOnly = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards WHERE frameEffects = 'legendary' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What percentage of legendary frame effect cards that are only available in online game variations?",
+            "Evidence": "only available in online game variationsrefer to isOnlineOnly =1 ; legendary frame effect cards refer to frameEffects = 'legendary'; percentage refer to DIVIDE(COUNT(isOnlineOnly=1), COUNT(id)) from cards where frameEffects = 'legendary'",
+            "GOLD_SQL": "SELECT SUM(CASE WHEN isOnlineOnly = 1 THEN 1.0 ELSE 0 END) / COUNT(id) * 100 FROM cards WHERE frameEffects = 'legendary'",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(CASE WHEN isOnlineOnly = 1 AND frameEffects = 'legendary' THEN 1 ELSE NULL END) AS REAL) * 100 / COUNT(id) FROM cards"
+        },
+        "status": "success"
+    }
+]

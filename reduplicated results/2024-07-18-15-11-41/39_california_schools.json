@@ -1,0 +1,283 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average number",
+            "test takers",
+            "Fresno schools",
+            "1/1/1980",
+            "12/31/1980",
+            "1980",
+            "between 1/1/1980 and 12/31/1980",
+            "year"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "School"
+            ]
+        },
+        "similar_values": {
+            "schools": {
+                "School": [
+                    "Fresno ROP"
+                ],
+                "District": [
+                    "Fresno ROP"
+                ],
+                "County": [
+                    "Fresno"
+                ],
+                "MailCity": [
+                    "Fresno"
+                ],
+                "City": [
+                    "Fresno"
+                ]
+            },
+            "satscores": {
+                "cname": [
+                    "Fresno"
+                ],
+                "sname": [
+                    "Fresno High"
+                ]
+            },
+            "frpm": {
+                "County Name": [
+                    "Fresno"
+                ],
+                "School Name": [
+                    "Fresno High"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "satscores": {
+                "numtsttakr": {
+                    "column_name": "Number of Test Takers",
+                    "column_description": "Number of Test Takers in this school",
+                    "value_description": "number of test takers in each school"
+                },
+                "numge1500": {
+                    "column_name": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500",
+                    "column_description": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500",
+                    "value_description": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500    Excellence Rate = NumGE1500 / NumTstTakr"
+                },
+                "avgscrmath": {
+                    "column_name": "average scores in Math",
+                    "column_description": "average scores in Math",
+                    "value_description": "average scores in Math"
+                },
+                "cds": {
+                    "column_name": "",
+                    "column_description": "California Department Schools",
+                    "value_description": ""
+                },
+                "sname": {
+                    "column_name": "school name",
+                    "column_description": "school name",
+                    "value_description": ""
+                }
+            },
+            "frpm": {
+                "academic year": {
+                    "column_name": "",
+                    "column_description": "Academic Year",
+                    "value_description": ""
+                },
+                "frpm count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free or Reduced Price Meal Count (K-12)",
+                    "value_description": "eligible FRPM rate = FRPM / Enrollment"
+                }
+            },
+            "schools": {
+                "opendate": {
+                    "column_name": "",
+                    "column_description": "The date the school opened.",
+                    "value_description": ""
+                },
+                "closeddate": {
+                    "column_name": "",
+                    "column_description": "The date the school closed.",
+                    "value_description": ""
+                },
+                "longitude": {
+                    "column_name": "",
+                    "column_description": "The angular distance (expressed in degrees) between the location of the school, district, or administrative authority and the prime meridian (Greenwich, England) measured from west to east.",
+                    "value_description": "The angular distance (expressed in degrees) between the location of the school, district, or administrative authority and the prime meridian (Greenwich, England) measured from west to east."
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Academic Year",
+                "School Name",
+                "Enrollment (K-12)",
+                "Enrollment (Ages 5-17)"
+            ],
+            "satscores": [
+                "sname",
+                "cname",
+                "NumTstTakr",
+                "cds"
+            ],
+            "schools": [
+                "CDSCode",
+                "NCESDist",
+                "NCESSchool",
+                "County",
+                "District",
+                "School",
+                "City",
+                "MailCity",
+                "OpenDate"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "satscores": [
+                "numtsttakr",
+                "cds"
+            ],
+            "schools": [
+                "cdscode",
+                "county",
+                "opendate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "schools": [
+                "CDSCode",
+                "NCESDist",
+                "NCESSchool",
+                "County",
+                "District",
+                "School",
+                "City",
+                "MailCity",
+                "OpenDate"
+            ],
+            "satscores": [
+                "sname",
+                "cname",
+                "NumTstTakr",
+                "cds"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the schools that opened between 1/1/1980 and 12/31/1980, and then find the average number of test takers from those schools. The hint helps us focus on the year 1980. We can find the schools that opened in 1980 by joining the 'schools' table with itself, using the 'OpenDate' column. Then, we can join this result with the 'satscores' table to find the test takers for those schools. Finally, we can calculate the average number of test takers.",
+        "selected_tables": [
+            "schools",
+            "satscores"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "satscores": [
+                "numtsttakr",
+                "cds"
+            ],
+            "schools": [
+                "cdscode",
+                "county",
+                "opendate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "schools": [
+                "OpenDate",
+                "County"
+            ],
+            "satscores": [
+                "cds",
+                "NumTstTakr"
+            ]
+        },
+        "model_selected_columns": {
+            "schools": [
+                "OpenDate",
+                "County"
+            ],
+            "satscores": [
+                "cds",
+                "NumTstTakr"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average number of test takers from Fresno schools that opened between 1/1/1980 and 12/31/1980. The hint indicates that the year is 1980, so we need to filter schools by their open date and location. We also need the number of test takers for each school. The table names and columns selected are based on this reasoning.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'cdscode'"
+        ],
+        "correct_columns": {
+            "satscores": [
+                "numtsttakr",
+                "cds"
+            ],
+            "schools": [
+                "cdscode",
+                "county",
+                "opendate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(T2.NumTstTakr) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.County = 'Fresno' AND STRFTIME('%Y', T1.OpenDate) = '1980' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns relevant to the question. The question asks for the average number of test takers from Fresno schools that opened between 1/1/1980 and 12/31/1980. This means I need to join the schools table with the satscores table and filter the results based on the county and open date. I used the STRFTIME function to extract the year from the open date and compared it to 1980. Finally, I used the AVG function to calculate the average number of test takers.",
+        "SQL": "SELECT AVG(T2.NumTstTakr) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.County = 'Fresno' AND STRFTIME('%Y', T1.OpenDate) = '1980'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average number of test takers from Fresno schools that opened between 1/1/1980 and 12/31/1980?",
+            "Evidence": "between 1/1/1980 and 12/31/1980 means the year = 1980",
+            "GOLD_SQL": "SELECT AVG(T1.NumTstTakr) FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE strftime('%Y', T2.OpenDate) = '1980' AND T2.County = 'Fresno'",
+            "PREDICTED_SQL": "SELECT AVG(T2.NumTstTakr) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.County = 'Fresno' AND STRFTIME('%Y', T1.OpenDate) = '1980' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average number of test takers from Fresno schools that opened between 1/1/1980 and 12/31/1980?",
+            "Evidence": "between 1/1/1980 and 12/31/1980 means the year = 1980",
+            "GOLD_SQL": "SELECT AVG(T1.NumTstTakr) FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE strftime('%Y', T2.OpenDate) = '1980' AND T2.County = 'Fresno'",
+            "PREDICTED_SQL": "SELECT AVG(T2.NumTstTakr) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.County = 'Fresno' AND STRFTIME('%Y', T1.OpenDate) = '1980'"
+        },
+        "status": "success"
+    }
+]

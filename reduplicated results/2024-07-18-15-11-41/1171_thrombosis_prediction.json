@@ -1,0 +1,199 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "underage patients",
+            "three-year period",
+            "1990",
+            "1993",
+            "year(Birthday)",
+            "year(Examination Date)",
+            "Examination Date",
+            "Birthday"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Examination": [
+                "Examination Date",
+                "Examination Date"
+            ],
+            "Patient": [
+                "Birthday"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "ID"
+            ],
+            "Patient": [
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "examination": [
+                "id",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Birthday",
+                "ID"
+            ],
+            "Examination": [
+                "Examination Date",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of underage patients who were examined during a three-year period from 1990 to 1993. The hint clarifies that underage patients are those with a birthday before 18 years old, and the examination date falls within the specified three-year period. To answer this question, we need to identify the patients who were examined during this period and are underage. This requires information from the Patient table to determine the age of each patient, and the Examination table to determine the examination dates. The Laboratory table is not necessary for this question, as it only provides additional information about laboratory tests, which is not relevant to the question.",
+        "selected_tables": [
+            "Patient",
+            "Examination"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "examination": [
+                "id",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Birthday"
+            ],
+            "Examination": [
+                "Examination Date"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "Birthday"
+            ],
+            "Examination": [
+                "Examination Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for underage patients examined during a three-year period. The hint provides the criteria for underage patients (year(Birthday) < 18) and the three-year period (year(Examination Date) between '1990' and '1993'). We need columns that store patient birthdays and examination dates to filter and match these criteria.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'patient'.'id'",
+            "'examination'.'id'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "examination": [
+                "id",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday > 18 AND STRFTIME('%Y', T2.`Examination Date`) BETWEEN '1990' AND '1993' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question and the given hints. The question asks for the number of underage patients who were examined during the three-year period from 1990 to 1993. The hint suggests that underage patients refer to those with a birthday less than 18, and the three-year period refers to the examination dates between 1990 and 1993. I then constructed the SQL query by joining the Patient and Examination tables, filtering the patients with a birthday less than 18 and examination dates between 1990 and 1993, and finally counting the distinct IDs of these patients.",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE YEAR(T1.Birthday) < 18 AND YEAR(T2.`Examination Date`) BETWEEN 1990 AND 1993",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How many underage patients were examined during the course of the three-year period from 1990 to 1993?",
+            "Evidence": "underage patients refers to year(Birthday) < 18; three-year period from 1990 to 1993 refers to year(`Examination Date`) between '1990' and '1993'",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T2.`Examination Date`) BETWEEN '1990' AND '1993' AND STRFTIME('%Y', T2.`Examination Date`) - STRFTIME('%Y', T1.Birthday) < 18",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Birthday > 18 AND STRFTIME('%Y', T2.`Examination Date`) BETWEEN '1990' AND '1993' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such function: YEAR",
+            "Question": "How many underage patients were examined during the course of the three-year period from 1990 to 1993?",
+            "Evidence": "underage patients refers to year(Birthday) < 18; three-year period from 1990 to 1993 refers to year(`Examination Date`) between '1990' and '1993'",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T2.`Examination Date`) BETWEEN '1990' AND '1993' AND STRFTIME('%Y', T2.`Examination Date`) - STRFTIME('%Y', T1.Birthday) < 18",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE YEAR(T1.Birthday) < 18 AND YEAR(T2.`Examination Date`) BETWEEN 1990 AND 1993"
+        },
+        "status": "success"
+    }
+]

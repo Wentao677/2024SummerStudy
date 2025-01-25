@@ -1,0 +1,216 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "percentage",
+            "borderless cards",
+            "borderColor",
+            "id",
+            "borderless"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "cards": [
+                "borderColor",
+                "id"
+            ]
+        },
+        "similar_values": {
+            "cards": {
+                "borderColor": [
+                    "borderless"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "cards": {
+                "number": {
+                    "column_name": "",
+                    "column_description": "The number of the card",
+                    "value_description": ""
+                },
+                "colors": {
+                    "column_name": "",
+                    "column_description": "A list of all the colors in manaCost and colorIndicator.",
+                    "value_description": "Some cards may not have values, such as cards with \"Devoid\" in its text."
+                },
+                "rarity": {
+                    "column_name": "",
+                    "column_description": "The card printing rarity.",
+                    "value_description": ""
+                },
+                "bordercolor": {
+                    "column_name": "border Color",
+                    "column_description": "The color of the card border.",
+                    "value_description": "\"black\", \"borderless\", \"gold\", \"silver\", \"white\""
+                },
+                "side": {
+                    "column_name": "",
+                    "column_description": "The identifier of the card side.",
+                    "value_description": "Used on cards with multiple faces on the same card.  if this value is empty, then it means this card doesn't have multiple faces on the same card."
+                },
+                "id": {
+                    "column_name": "unique id number identifying the cards",
+                    "column_description": "",
+                    "value_description": ""
+                },
+                "loyalty": {
+                    "column_name": "",
+                    "column_description": "The starting loyalty value of the card.",
+                    "value_description": "Used only on cards with \"Planeswalker\" in its types. empty means unkown"
+                }
+            },
+            "sets": {
+                "basesetsize": {
+                    "column_name": "base Set Size",
+                    "column_description": "The number of cards in the set.",
+                    "value_description": ""
+                },
+                "totalsetsize": {
+                    "column_name": "total Set Size",
+                    "column_description": "The total number of cards in the set, including promotional and related supplemental products but excluding Alchemy modifications - however those cards are included in the set itself.",
+                    "value_description": ""
+                },
+                "mcmidextras": {
+                    "column_name": "magic card market ID Extras",
+                    "column_description": "The split Magic Card Market set identifier if a set is printed in two sets. This identifier represents the second set's identifier.",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "borderColor",
+                "type",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "id",
+                "uuid"
+            ],
+            "legalities": [
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "id",
+                "code"
+            ],
+            "set_translations": [
+                "id",
+                "setCode"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "id",
+                "bordercolor"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "cards": [
+                "borderColor",
+                "type",
+                "id",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of borderless cards, which is defined as cards with borderColor = 'borderless'. The hint provides a formula to calculate this percentage. To apply this formula, we need to count the total number of cards and the number of borderless cards. The borderColor column is present in the cards table, which implies that we need to access this table to filter cards based on their border color. The hint also mentions the id column, which is present in the cards table. The id column is used to count the total number of cards. The formula also requires the total number of cards, which can be obtained by counting the id column in the cards table. Therefore, we need to access the cards table to answer the question.",
+        "selected_tables": [
+            "cards"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "id",
+                "bordercolor"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "cards": [
+                "id",
+                "borderColor"
+            ]
+        },
+        "model_selected_columns": {
+            "cards": [
+                "id",
+                "borderColor"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of borderless cards, which is defined as borderColor = 'borderless'. The hint provides a formula to calculate the percentage, which involves counting the number of borderless cards and dividing it by the total number of cards. Therefore, we need to select the id column to count the total number of cards and the borderColor column to filter for borderless cards.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "id",
+                "bordercolor"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN borderColor = 'borderless' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question which asks for the percentage of borderless cards. I then looked at the database schema and found the column 'borderColor' which is used to identify borderless cards. I used the SUM and COUNT functions to calculate the percentage. I also used the CAST function to convert the SUM to REAL type for the division operation.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN borderColor = 'borderless' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of borderless cards?",
+            "Evidence": "borderless card refers to borderColor = 'borderless'; percentage = Divide(Count (id) where borderColor = 'borderless', Count(id)) *100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN borderColor = 'borderless' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN borderColor = 'borderless' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of borderless cards?",
+            "Evidence": "borderless card refers to borderColor = 'borderless'; percentage = Divide(Count (id) where borderColor = 'borderless', Count(id)) *100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN borderColor = 'borderless' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN borderColor = 'borderless' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(id) FROM cards"
+        },
+        "status": "success"
+    }
+]

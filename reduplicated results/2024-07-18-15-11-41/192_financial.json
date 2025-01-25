@@ -1,0 +1,279 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average amount",
+            "loan",
+            "running contract",
+            "statement issuance",
+            "each transaction",
+            "status",
+            "C",
+            "D",
+            "client in debt",
+            "POPLATEK PO OBRATU"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "loan": [
+                "amount",
+                "status"
+            ]
+        },
+        "similar_values": {
+            "account": {
+                "frequency": [
+                    "POPLATEK PO OBRATU"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "loan": {
+                "duration": {
+                    "column_name": "",
+                    "column_description": "loan duration",
+                    "value_description": "unit\uff1amonth"
+                },
+                "status": {
+                    "column_name": "",
+                    "column_description": "repayment status",
+                    "value_description": "'A' stands for contract finished, no problems; 'B' stands for contract finished, loan not paid; 'C' stands for running contract, OK so far; 'D' stands for running contract, client in debt"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "the date when the loan is approved",
+                    "value_description": ""
+                },
+                "payments": {
+                    "column_name": "monthly payments",
+                    "column_description": "monthly payments",
+                    "value_description": "unit\uff1amonth"
+                }
+            },
+            "trans": {
+                "k_symbol": {
+                    "column_name": "characterization of the transaction",
+                    "column_description": "",
+                    "value_description": "\"POJISTNE\": stands for insurrance payment \"SLUZBY\": stands for payment for statement \"UROK\": stands for interest credited \"SANKC. UROK\": sanction interest if negative balance \"SIPO\": stands for household \"DUCHOD\": stands for old-age pension \"UVER\": stands for loan payment"
+                },
+                "type": {
+                    "column_name": "+/- transaction",
+                    "column_description": "+/- transaction",
+                    "value_description": "\"PRIJEM\" stands for credit \"VYDAJ\" stands for withdrawal"
+                },
+                "balance": {
+                    "column_name": "balance after transaction",
+                    "column_description": "balance after transaction",
+                    "value_description": "Unit\uff1aUSD"
+                }
+            },
+            "order": {
+                "k_symbol": {
+                    "column_name": "characterization of the payment",
+                    "column_description": "purpose of the payment",
+                    "value_description": "\"POJISTNE\" stands for insurance payment \"SIPO\" stands for household payment \"LEASING\" stands for leasing \"UVER\" stands for loan payment"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id"
+            ],
+            "loan": [
+                "amount",
+                "duration",
+                "payments",
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "order_id",
+                "amount",
+                "k_symbol",
+                "account_id"
+            ],
+            "trans": [
+                "date",
+                "type",
+                "amount",
+                "balance",
+                "k_symbol",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'account'.'frequency'"
+        ],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "account_id",
+                "status"
+            ],
+            "account": [
+                "account_id",
+                "frequency"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "loan": [
+                "amount",
+                "duration",
+                "payments",
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "trans": [
+                "date",
+                "type",
+                "amount",
+                "balance",
+                "k_symbol",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average amount of loan that are still on running contract with statement issuance after each transaction. The hint provides information about the status of running contracts ('C' and 'D') and the issuance after transaction ('POPLATEK PO OBRATU'). This hint suggests that we need to focus on the loan table, which has a status column, and the trans table, which has a column for transaction issuance. We also need the account table to link the loan and trans tables. The district table is not necessary for this question. The client and disp tables are also not necessary because they do not provide any relevant information for this question.",
+        "selected_tables": [
+            "account",
+            "loan",
+            "trans"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'account'.'frequency'"
+        ],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "account_id",
+                "status"
+            ],
+            "account": [
+                "account_id",
+                "frequency"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "loan": [
+                "status"
+            ],
+            "trans": [
+                "trans_id",
+                "type",
+                "amount"
+            ]
+        },
+        "model_selected_columns": {
+            "loan": [
+                "status"
+            ],
+            "trans": [
+                "trans_id",
+                "type",
+                "amount"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average amount of loan that are still on running contract with statement issuance after each transaction. The hint mentions 'POPLATEK PO OBRATU' which stands for issuance after transaction. This suggests that we need to focus on transactions that are related to loan issuance. The status column in the loan table indicates whether a loan is still running or not. We need to filter loans with status 'C' or 'D' which means they are still running. The trans table contains information about transactions, including the type of transaction and the amount. We need to filter transactions that are related to loan issuance, which is indicated by the type 'POJISTNE' or 'UVER'. Finally, we need to calculate the average amount of these loans.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "account"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'loan'.'amount'",
+            "'loan'.'account_id'"
+        ],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "account_id",
+                "status"
+            ],
+            "account": [
+                "account_id",
+                "frequency"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(T1.amount) FROM loan AS T1 INNER JOIN trans AS T2 ON T1.loan_id = T2.trans_id WHERE T1.status IN ('C', 'D') AND T2.type = 'PRIJEM' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns and tables needed to solve the problem. I noticed that the status 'C' and 'D' indicate running contracts, and 'POPLATEK PO OBRATU' stands for issuance after transaction. I joined the loan and trans tables to get the loan amount and transaction type. I filtered the results to only include loans with status 'C' or 'D' and transactions of type 'PRIJEM'. Finally, I calculated the average amount of these loans.",
+        "SQL": "SELECT AVG(T1.amount) FROM loan AS T1 INNER JOIN trans AS T2 ON T1.loan_id = T2.trans_id WHERE T1.status IN ('C', 'D') AND T2.type = 'PRIJEM' AND T2.frequency = 'POPLATEK PO OBRATU'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the average amount of loan which are still on running contract with statement issuance after each transaction?",
+            "Evidence": "status = 'C' stands for running contract, OK so far; status = 'D' stands for running contract, client in debt. 'POPLATEK PO OBRATU' stands for issuance after transaction",
+            "GOLD_SQL": "SELECT AVG(T2.amount) FROM account AS T1 INNER JOIN loan AS T2 ON T1.account_id = T2.account_id WHERE T2.status IN ('C', 'D') AND T1.frequency = 'POPLATEK PO OBRATU'",
+            "PREDICTED_SQL": "SELECT AVG(T1.amount) FROM loan AS T1 INNER JOIN trans AS T2 ON T1.loan_id = T2.trans_id WHERE T1.status IN ('C', 'D') AND T2.type = 'PRIJEM' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such column: T2.frequency",
+            "Question": "What is the average amount of loan which are still on running contract with statement issuance after each transaction?",
+            "Evidence": "status = 'C' stands for running contract, OK so far; status = 'D' stands for running contract, client in debt. 'POPLATEK PO OBRATU' stands for issuance after transaction",
+            "GOLD_SQL": "SELECT AVG(T2.amount) FROM account AS T1 INNER JOIN loan AS T2 ON T1.account_id = T2.account_id WHERE T2.status IN ('C', 'D') AND T1.frequency = 'POPLATEK PO OBRATU'",
+            "PREDICTED_SQL": "SELECT AVG(T1.amount) FROM loan AS T1 INNER JOIN trans AS T2 ON T1.loan_id = T2.trans_id WHERE T1.status IN ('C', 'D') AND T2.type = 'PRIJEM' AND T2.frequency = 'POPLATEK PO OBRATU'"
+        },
+        "status": "success"
+    }
+]

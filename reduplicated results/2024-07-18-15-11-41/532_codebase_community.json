@@ -1,0 +1,243 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "display names",
+            "users",
+            "accounts",
+            "created",
+            "year",
+            "2011",
+            "CreationDate",
+            "account created in the year 2011"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "DisplayName",
+                "CreationDate"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "user",
+                    "name"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "comments": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the comment",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "displayname": {
+                    "column_name": "Display Name",
+                    "column_description": "the user's display name",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the user account",
+                    "value_description": ""
+                },
+                "lastaccessdate": {
+                    "column_name": "Last Access Date",
+                    "column_description": "the last access date of the user account",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the vote",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "creaiondate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Date",
+                "Id"
+            ],
+            "comments": [
+                "CreationDate",
+                "UserDisplayName",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "CreationDate",
+                "UserId",
+                "UserDisplayName",
+                "Id",
+                "PostId"
+            ],
+            "postLinks": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "OwnerUserId",
+                "OwnerDisplayName",
+                "LastEditorDisplayName",
+                "Id",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "CreationDate",
+                "DisplayName",
+                "Id"
+            ],
+            "votes": [
+                "CreationDate",
+                "UserId",
+                "Id",
+                "PostId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "users": [
+                "CreationDate",
+                "DisplayName",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the display names of users whose accounts were created in the year 2011. The hint clarifies that 'account created in the year 2011' refers to year(CreationDate) = 2011. This suggests that we need to focus on the CreationDate column in the users table. Additionally, we need to retrieve the display names of these users, which are stored in the DisplayName column of the users table. Therefore, we need to select the users table.",
+        "selected_tables": [
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "users": [
+                "CreationDate",
+                "DisplayName"
+            ]
+        },
+        "model_selected_columns": {
+            "users": [
+                "CreationDate",
+                "DisplayName"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the display names of users whose accounts were created in the year 2011. The hint provides a clear direction to focus on the 'CreationDate' column to extract the year. The 'DisplayName' column is necessary to retrieve the desired information. Therefore, the columns required for the SQL query are those that provide the necessary information for filtering and retrieving the desired data.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DisplayName FROM users WHERE STRFTIME('%Y', CreationDate) = '2011' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to create a query that selects the display names of all users whose accounts were created in the year 2011. I used the STRFTIME function to extract the year from the CreationDate column, and then filtered the results to only include users with a creation year of 2011.",
+        "SQL": "SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please list the display names of all the users whose accounts were created in the year 2011.",
+            "Evidence": "account created in the year 2011 refers to year(CreationDate) = 2011",
+            "GOLD_SQL": "SELECT DisplayName FROM users WHERE STRFTIME('%Y', CreationDate) = '2011'",
+            "PREDICTED_SQL": "SELECT DisplayName FROM users WHERE STRFTIME('%Y', CreationDate) = '2011' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please list the display names of all the users whose accounts were created in the year 2011.",
+            "Evidence": "account created in the year 2011 refers to year(CreationDate) = 2011",
+            "GOLD_SQL": "SELECT DisplayName FROM users WHERE STRFTIME('%Y', CreationDate) = '2011'",
+            "PREDICTED_SQL": "SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'"
+        },
+        "status": "success"
+    }
+]

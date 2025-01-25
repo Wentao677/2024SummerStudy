@@ -1,0 +1,267 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "born",
+            "1936",
+            "1956",
+            "male",
+            "patients",
+            "creatinine phosphokinase",
+            "normal range",
+            "CPK",
+            "250",
+            "DISTINCT",
+            "year(Birthday)",
+            "sex",
+            "M"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "CPK"
+            ],
+            "Patient": [
+                "SEX"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1250"
+                ]
+            },
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Patient": {
+                "Diagnosis": [
+                    "CPK !"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "cpk": {
+                    "column_name": "creatinine phosphokinase",
+                    "column_description": "creatinine phosphokinase",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "cre": {
+                    "column_name": "creatinine",
+                    "column_description": "creatinine",
+                    "value_description": "Commonsense evidence:  Normal range: N < 1.5"
+                },
+                "u-pro": {
+                    "column_name": "proteinuria",
+                    "column_description": "proteinuria",
+                    "value_description": "Commonsense evidence:  Normal range: 0 < N < 30"
+                },
+                "ua": {
+                    "column_name": "uric acid",
+                    "column_description": "uric acid",
+                    "value_description": "Commonsense evidence:  Normal range: N > 8.0 (Male)N > 6.5 (Female)"
+                }
+            },
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID"
+            ],
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "ID",
+                "CRE",
+                "CPK",
+                "RF",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "cpk"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "ID",
+                "CRE",
+                "CPK",
+                "RF",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients born between 1936-1956, who are male, and have creatinine phosphokinase beyond the normal range. The hint provides specific values for the year, sex, and CPK range. To answer this question, we need to identify patients who match these criteria. The 'Patient' table provides information about patients' birthdays, sex, and IDs. The 'Laboratory' table contains information about laboratory tests, including creatinine phosphokinase values. The 'Examination' table is not necessary for this question, as it only references the 'Patient' table and does not provide any additional information. Therefore, we need to use the 'Patient' and 'Laboratory' tables to answer the question.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "cpk"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "CPK"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "CPK"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients born between 1936-1956, who are male and have creatinine phosphokinase beyond the normal range. The hint provides specific values for each condition, which helps identify the relevant columns. We need to filter patients by birth year, sex, and CPK value. The examples provided in the schema help us identify the exact columns to use.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "cpk"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.CPK >= 250 AND strftime('%Y', T1.Birthday) BETWEEN '1936' AND '1956' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the conditions specified in the question: patient born between 1936-1956, male patients, and creatinine phosphokinase beyond the normal range. I then used the hint provided to translate these conditions into SQL syntax. I joined the Patient and Laboratory tables on the ID column, filtered the results to only include male patients born between 1936-1956, and then filtered the results to only include patients with creatinine phosphokinase beyond the normal range. Finally, I used the COUNT(DISTINCT) function to count the number of unique patients that meet these conditions.",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.CPK >= 250 AND strftime('%Y', T1.Birthday) BETWEEN '1936' AND '1956'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For patient born between 1936-1956, how many male patients have creatinine phosphokinase beyond the normal range?",
+            "Evidence": "born between 1936-1956 refers to year(Birthday) BETWEEN '1936' AND '1956'; male patients refers to sex = 'M'; creatinine phosphokinase beyond the normal range refers to CPK > = 250; Should consider DISTINCT in the final result;",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.Birthday) BETWEEN '1936' AND '1956' AND T1.SEX = 'M' AND T2.CPK >= 250",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.CPK >= 250 AND strftime('%Y', T1.Birthday) BETWEEN '1936' AND '1956' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For patient born between 1936-1956, how many male patients have creatinine phosphokinase beyond the normal range?",
+            "Evidence": "born between 1936-1956 refers to year(Birthday) BETWEEN '1936' AND '1956'; male patients refers to sex = 'M'; creatinine phosphokinase beyond the normal range refers to CPK > = 250; Should consider DISTINCT in the final result;",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.Birthday) BETWEEN '1936' AND '1956' AND T1.SEX = 'M' AND T2.CPK >= 250",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.CPK >= 250 AND strftime('%Y', T1.Birthday) BETWEEN '1936' AND '1956'"
+        },
+        "status": "success"
+    }
+]

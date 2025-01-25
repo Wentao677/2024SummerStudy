@@ -1,0 +1,244 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "SME",
+            "customer",
+            "least",
+            "June",
+            "2012",
+            "yearmonth.date",
+            "consumed"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {},
+        "similar_values": {
+            "customers": {
+                "Segment": [
+                    "SME"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "yearmonth": {
+                "consumption": {
+                    "column_name": "",
+                    "column_description": "consumption",
+                    "value_description": ""
+                },
+                "customerid": {
+                    "column_name": "Customer ID",
+                    "column_description": "Customer ID",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "customers": {
+                "customerid": {
+                    "column_name": "",
+                    "column_description": "identification of the customer",
+                    "value_description": ""
+                },
+                "currency": {
+                    "column_name": "",
+                    "column_description": "Currency",
+                    "value_description": ""
+                }
+            },
+            "transactions_1k": {
+                "customerid": {
+                    "column_name": "Customer ID",
+                    "column_description": "Customer ID",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                },
+                "price": {
+                    "column_name": "",
+                    "column_description": "Price",
+                    "value_description": "total price = Amount x Price"
+                },
+                "transactionid": {
+                    "column_name": "Transaction ID",
+                    "column_description": "Transaction ID",
+                    "value_description": ""
+                },
+                "time": {
+                    "column_name": "",
+                    "column_description": "Time",
+                    "value_description": ""
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "Amount",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "customers": [
+                "CustomerID",
+                "Segment"
+            ],
+            "gasstations": [
+                "GasStationID"
+            ],
+            "products": [
+                "ProductID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "CustomerID",
+                "Amount",
+                "TransactionID"
+            ],
+            "yearmonth": [
+                "CustomerID",
+                "Date",
+                "Consumption"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "segment"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "CustomerID",
+                "Date",
+                "Consumption"
+            ],
+            "customers": [
+                "CustomerID",
+                "Segment"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the SME customer who consumed the least in June 2012. The hint provides the specific date '201206' which is present in the yearmonth table. This table is necessary to identify the consumption for each customer in June 2012. The customers table is necessary to identify the SME customers. The transactions_1k table is not necessary as it contains transactions from all dates, not just June 2012. The gasstations and products tables are not necessary as they do not provide any information about customer consumption.",
+        "selected_tables": [
+            "yearmonth",
+            "customers"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "segment"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ],
+            "customers": [
+                "CustomerID",
+                "Segment"
+            ]
+        },
+        "model_selected_columns": {
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ],
+            "customers": [
+                "CustomerID",
+                "Segment"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the SME customer who consumed the least in June 2012. To answer this, we need to filter by the date '201206' in the yearmonth table, and then find the customer with the minimum consumption. We also need to filter by the segment 'SME' in the customers table. Therefore, we need columns that allow us to do these two tasks.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'yearmonth'.'customerid'"
+        ],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "segment"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '201206' AND T1.Segment = 'SME' ORDER BY T2.Consumption ASC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant tables and columns based on the question. I noticed that the question is asking for the SME customer who consumed the least in June 2012, so I focused on the yearmonth table and the customers table. I joined the two tables on the CustomerID column and filtered the results to only include rows where the Date column is '201206' and the Segment column is 'SME'. I then sorted the results by the Consumption column in ascending order and limited the results to only the first row, which corresponds to the customer who consumed the least.",
+        "SQL": "SELECT T2.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '201206' AND T1.Segment = 'SME' ORDER BY T2.Consumption ASC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Which SME customer consumed the least in June 2012?",
+            "Evidence": "June 2012 refers to yearmonth.date = '201206'",
+            "GOLD_SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '201206' AND T1.Segment = 'SME' GROUP BY T1.CustomerID ORDER BY SUM(T2.Consumption) ASC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T2.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '201206' AND T1.Segment = 'SME' ORDER BY T2.Consumption ASC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Which SME customer consumed the least in June 2012?",
+            "Evidence": "June 2012 refers to yearmonth.date = '201206'",
+            "GOLD_SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '201206' AND T1.Segment = 'SME' GROUP BY T1.CustomerID ORDER BY SUM(T2.Consumption) ASC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T2.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '201206' AND T1.Segment = 'SME' ORDER BY T2.Consumption ASC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

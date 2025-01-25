@@ -1,0 +1,256 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "names of sets",
+            "Japanese translation",
+            "Korean translation",
+            "name",
+            "language",
+            "Korean",
+            "Japanese"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "sets": [
+                "name",
+                "name"
+            ],
+            "set_translations": [
+                "translation",
+                "translation",
+                "language"
+            ]
+        },
+        "similar_values": {
+            "cards": {
+                "watermark": [
+                    "set"
+                ]
+            },
+            "set_translations": {
+                "language": [
+                    "Japanese",
+                    "Korean"
+                ]
+            },
+            "foreign_data": {
+                "language": [
+                    "Japanese",
+                    "Korean"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "sets": {
+                "name": {
+                    "column_name": "",
+                    "column_description": "The name of the set.",
+                    "value_description": ""
+                },
+                "block": {
+                    "column_name": "",
+                    "column_description": "The block name the set was in.",
+                    "value_description": ""
+                },
+                "code": {
+                    "column_name": "",
+                    "column_description": "The set code for the set.",
+                    "value_description": ""
+                },
+                "isforeignonly": {
+                    "column_name": "is Foreign Only",
+                    "column_description": "If the set is available only outside the United States of America.",
+                    "value_description": ""
+                }
+            },
+            "set_translations": {
+                "translation": {
+                    "column_name": "",
+                    "column_description": "translation of this card set",
+                    "value_description": ""
+                },
+                "language": {
+                    "column_name": "",
+                    "column_description": "language of this card set",
+                    "value_description": ""
+                },
+                "setcode": {
+                    "column_name": "set code",
+                    "column_description": "the set code for this set",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "asciiName",
+                "faceName",
+                "name",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "language",
+                "name",
+                "id",
+                "uuid"
+            ],
+            "legalities": [
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "block",
+                "code",
+                "mcmName",
+                "name",
+                "id"
+            ],
+            "set_translations": [
+                "language",
+                "setCode",
+                "translation",
+                "id"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "sets": [
+                "name",
+                "code"
+            ],
+            "set_translations": [
+                "setcode",
+                "language"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "set_translations": [
+                "language",
+                "setCode",
+                "translation",
+                "id"
+            ],
+            "sets": [
+                "block",
+                "code",
+                "mcmName",
+                "name",
+                "id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for sets that don't have Japanese translations but have Korean translations. The hint provides specific values for the language columns. We need to find sets that have a Korean translation but no Japanese translation. This requires joining the set_translations table with the sets table, and filtering the results based on the language conditions.",
+        "selected_tables": [
+            "set_translations",
+            "sets"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "sets": [
+                "name",
+                "code"
+            ],
+            "set_translations": [
+                "setcode",
+                "language"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "set_translations": [
+                "language",
+                "setCode"
+            ],
+            "sets": [
+                "name"
+            ]
+        },
+        "model_selected_columns": {
+            "set_translations": [
+                "language",
+                "setCode"
+            ],
+            "sets": [
+                "name"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question requires finding sets that do not have Japanese translations but have Korean translations. The hint suggests focusing on the 'language' column in the 'set_translations' table and the 'name' column in the 'sets' table. The 'setCode' column in the 'set_translations' table is also necessary to link the translations to the corresponding sets.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'sets'.'code'"
+        ],
+        "correct_columns": {
+            "sets": [
+                "name",
+                "code"
+            ],
+            "set_translations": [
+                "setcode",
+                "language"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.name FROM set_translations AS T1 INNER JOIN sets AS T2 ON T1.setCode = T2.code WHERE T1.language = 'Korean' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns relevant to the question. I noticed that the question asks for the names of sets that don't have Japanese translations but have Korean translations. I then used the set_translations table to find sets with Korean translations and the language column to filter out sets with Japanese translations. Finally, I joined the set_translations table with the sets table to get the names of the sets.",
+        "SQL": "SELECT T2.name FROM set_translations AS T1 INNER JOIN sets AS T2 ON T1.setCode = T2.code WHERE T1.language = 'Korean' AND T1.language NOT LIKE '%Japanese%'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Find and list the names of sets which doesn't have Japanese translation but have Korean translation.",
+            "Evidence": "names of sets refers to name; doesn't have Japanese translation refers to language not like '%Japanese%'; have Korean translation refers to language = 'Korean'",
+            "GOLD_SQL": "SELECT name FROM sets WHERE code IN ( SELECT setCode FROM set_translations WHERE language = 'Korean' AND language NOT LIKE '%Japanese%' )",
+            "PREDICTED_SQL": "SELECT T2.name FROM set_translations AS T1 INNER JOIN sets AS T2 ON T1.setCode = T2.code WHERE T1.language = 'Korean' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Find and list the names of sets which doesn't have Japanese translation but have Korean translation.",
+            "Evidence": "names of sets refers to name; doesn't have Japanese translation refers to language not like '%Japanese%'; have Korean translation refers to language = 'Korean'",
+            "GOLD_SQL": "SELECT name FROM sets WHERE code IN ( SELECT setCode FROM set_translations WHERE language = 'Korean' AND language NOT LIKE '%Japanese%' )",
+            "PREDICTED_SQL": "SELECT T2.name FROM set_translations AS T1 INNER JOIN sets AS T2 ON T1.setCode = T2.code WHERE T1.language = 'Korean' AND T1.language NOT LIKE '%Japanese%'"
+        },
+        "status": "success"
+    }
+]

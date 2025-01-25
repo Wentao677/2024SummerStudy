@@ -1,0 +1,265 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "loans contracts",
+            "district",
+            "state",
+            "percentage unemployment rate",
+            "increment",
+            "year",
+            "1995",
+            "1996",
+            "client",
+            "debt",
+            "status",
+            "D",
+            "unemployment rate",
+            "A12",
+            "A13",
+            "2015",
+            "2016"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "loan": [
+                "status"
+            ],
+            "district": [
+                "A12",
+                "A13"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "district": {
+                "a12": {
+                    "column_name": "unemployment rate 1995",
+                    "column_description": "unemployment rate 1995",
+                    "value_description": ""
+                },
+                "a13": {
+                    "column_name": "unemployment rate 1996",
+                    "column_description": "unemployment rate 1996",
+                    "value_description": ""
+                }
+            },
+            "loan": {
+                "status": {
+                    "column_name": "",
+                    "column_description": "repayment status",
+                    "value_description": "'A' stands for contract finished, no problems; 'B' stands for contract finished, loan not paid; 'C' stands for running contract, OK so far; 'D' stands for running contract, client in debt"
+                },
+                "loan_id": {
+                    "column_name": "",
+                    "column_description": "the id number identifying the loan data",
+                    "value_description": ""
+                },
+                "duration": {
+                    "column_name": "",
+                    "column_description": "loan duration",
+                    "value_description": "unit\uff1amonth"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "district_id",
+                "account_id"
+            ],
+            "card": [
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "A2",
+                "A12",
+                "A13",
+                "district_id"
+            ],
+            "loan": [
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "a12",
+                "district_id",
+                "a13"
+            ],
+            "loan": [
+                "account_id",
+                "status"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "account": [
+                "district_id",
+                "account_id"
+            ],
+            "loan": [
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "district": [
+                "A2",
+                "A12",
+                "A13",
+                "district_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the district and the percentage unemployment rate increment from year 1995 to 1996 for loans contracts which are still running where client are in debt. The hint provides the formula for calculating the unemployment increment rate. The status column in the loan table indicates whether the loan is still running or not. The district_id in the account table links the account to the district. The A12 and A13 columns in the district table provide the unemployment rates for 1995 and 1996 respectively. Therefore, the necessary tables are account, loan, and district.",
+        "selected_tables": [
+            "account",
+            "loan",
+            "district"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "a12",
+                "district_id",
+                "a13"
+            ],
+            "loan": [
+                "account_id",
+                "status"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "account": [
+                "account_id"
+            ],
+            "loan": [
+                "status"
+            ],
+            "district": [
+                "district_id",
+                "A12",
+                "A13"
+            ]
+        },
+        "model_selected_columns": {
+            "account": [
+                "account_id"
+            ],
+            "loan": [
+                "status"
+            ],
+            "district": [
+                "district_id",
+                "A12",
+                "A13"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the district of the loans contracts which are still running where client are in debt, and the state the percentage unemployment rate increment from year 1995 to 1996. The hint provides the formula for calculating the unemployment increment rate, which involves the unemployment rate 1995 (A12) and unemployment rate 1996 (A13). The status column in the loan table indicates whether the client is in debt or not. Therefore, we need to select columns from the account, loan, and district tables.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'loan'.'account_id'",
+            "'account'.'district_id'"
+        ],
+        "correct_columns": {
+            "district": [
+                "a12",
+                "district_id",
+                "a13"
+            ],
+            "loan": [
+                "account_id",
+                "status"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.district_id, T3.A13 - T3.A12 FROM account AS T1 INNER JOIN loan AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T1.district_id = T3.district_id WHERE T2.status = 'D' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns required for the query. The question asks for the district and the state of the percentage unemployment rate increment from year 1995 to 1996. This information is available in the district table. The loan status is 'D' for clients who are in debt. The unemployment rate increment is calculated as [(unemployment rate 1996 - unemployment rate 1995) / unemployment rate 1995] * 100. I then joined the account, loan, and district tables to get the required information and calculated the unemployment rate increment. Finally, I filtered the results to only include the districts where the client is in debt.",
+        "SQL": "SELECT T1.district_id, (T3.A13 - T3.A12) / T3.A12 * 100 AS unemployment_rate_increment FROM account AS T1 INNER JOIN loan AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T1.district_id = T3.district_id WHERE T2.status = 'D'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For loans contracts which are still running where client are in debt, list the district of the and the state the percentage unemployment rate increment from year 1995 to 1996.",
+            "Evidence": "Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'",
+            "GOLD_SQL": "SELECT CAST((T3.A13 - T3.A12) AS REAL) * 100 / T3.A12 FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'",
+            "PREDICTED_SQL": "SELECT T1.district_id, T3.A13 - T3.A12 FROM account AS T1 INNER JOIN loan AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T1.district_id = T3.district_id WHERE T2.status = 'D' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For loans contracts which are still running where client are in debt, list the district of the and the state the percentage unemployment rate increment from year 1995 to 1996.",
+            "Evidence": "Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'",
+            "GOLD_SQL": "SELECT CAST((T3.A13 - T3.A12) AS REAL) * 100 / T3.A12 FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'",
+            "PREDICTED_SQL": "SELECT T1.district_id, (T3.A13 - T3.A12) / T3.A12 * 100 AS unemployment_rate_increment FROM account AS T1 INNER JOIN loan AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T1.district_id = T3.district_id WHERE T2.status = 'D'"
+        },
+        "status": "success"
+    }
+]

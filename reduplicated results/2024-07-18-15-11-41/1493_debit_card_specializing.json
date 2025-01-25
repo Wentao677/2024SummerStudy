@@ -1,0 +1,223 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "February",
+            "2012",
+            "customers",
+            "consumed",
+            "more",
+            "528.3",
+            "yearmonth",
+            "date",
+            "year",
+            "month"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "yearmonth": [
+                "Date"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "yearmonth": {
+                "consumption": {
+                    "column_name": "",
+                    "column_description": "consumption",
+                    "value_description": ""
+                },
+                "customerid": {
+                    "column_name": "Customer ID",
+                    "column_description": "Customer ID",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "transactions_1k": {
+                "amount": {
+                    "column_name": "",
+                    "column_description": "Amount",
+                    "value_description": ""
+                },
+                "price": {
+                    "column_name": "",
+                    "column_description": "Price",
+                    "value_description": "total price = Amount x Price"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                },
+                "customerid": {
+                    "column_name": "Customer ID",
+                    "column_description": "Customer ID",
+                    "value_description": ""
+                }
+            },
+            "customers": {
+                "currency": {
+                    "column_name": "",
+                    "column_description": "Currency",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "customers": [
+                "CustomerID"
+            ],
+            "gasstations": [
+                "GasStationID"
+            ],
+            "products": [
+                "ProductID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "Amount",
+                "Price",
+                "TransactionID",
+                "CustomerID"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "yearmonth": [
+                "date",
+                "customerid",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ],
+            "customers": [
+                "CustomerID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "Amount",
+                "Price",
+                "TransactionID",
+                "CustomerID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the percentage of customers who consumed more than 528.3 in February 2012. The hint helps to identify the relevant date format in the yearmonth table as '201202'. This suggests that the yearmonth table is crucial for filtering the date. The question also mentions customers, which implies that the customers table is necessary for identifying the customer IDs. Finally, the transactions_1k table is required to find the consumption data for each customer. The yearmonth table provides the date information, customers table provides the customer IDs, and transactions_1k table provides the consumption data.",
+        "selected_tables": [
+            "yearmonth",
+            "customers",
+            "transactions_1k"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "yearmonth": [
+                "date",
+                "customerid",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ],
+            "customers": [
+                "CustomerID"
+            ]
+        },
+        "model_selected_columns": {
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ],
+            "customers": [
+                "CustomerID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of customers who consumed more than 528.3 in February 2012. The hint helps identify the relevant date format in the yearmonth table as 'YYYYMM'. We need to filter customers who consumed more than 528.3 in February 2012, which requires the Date and Consumption columns. The CustomerID column is necessary to group customers and count those who meet the condition.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'yearmonth'.'customerid'"
+        ],
+        "correct_columns": {
+            "yearmonth": [
+                "date",
+                "customerid",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.Consumption > 528.3 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.CustomerID) FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date = '201202' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question which asks for the percentage of customers who consumed more than 528.3 in February 2012. I then looked at the yearmonth table and realized that the date '201202' represents February 2012. I joined the yearmonth table with the customers table to get the customer information. I used a CASE statement to count the number of customers who consumed more than 528.3. Finally, I calculated the percentage by dividing the count by the total number of customers and multiplying by 100.",
+        "SQL": "SELECT 100.0 * SUM(CASE WHEN T1.Consumption > 528.3 THEN 1 ELSE 0 END) / COUNT(DISTINCT T1.CustomerID) FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date = '201202'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "In February 2012, what percentage of customers consumed more than 528.3?",
+            "Evidence": "February 2012 refers to '201202' in yearmonth.date; The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month.",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(Consumption > 528.3, 1, 0)) AS FLOAT) * 100 / COUNT(CustomerID) FROM yearmonth WHERE Date = '201202'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.Consumption > 528.3 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.CustomerID) FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date = '201202' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "In February 2012, what percentage of customers consumed more than 528.3?",
+            "Evidence": "February 2012 refers to '201202' in yearmonth.date; The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month.",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(Consumption > 528.3, 1, 0)) AS FLOAT) * 100 / COUNT(CustomerID) FROM yearmonth WHERE Date = '201202'",
+            "PREDICTED_SQL": "SELECT 100.0 * SUM(CASE WHEN T1.Consumption > 528.3 THEN 1 ELSE 0 END) / COUNT(DISTINCT T1.CustomerID) FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date = '201202'"
+        },
+        "status": "success"
+    }
+]

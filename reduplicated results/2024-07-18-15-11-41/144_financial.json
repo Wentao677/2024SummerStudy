@@ -1,0 +1,294 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average amount",
+            "credit card",
+            "account holders",
+            "month",
+            "2021",
+            "Operation",
+            "VYBER KARTOU",
+            "withdrawn"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "trans": [
+                "amount",
+                "account",
+                "operation"
+            ]
+        },
+        "similar_values": {
+            "trans": {
+                "operation": [
+                    "VYBER KARTOU",
+                    "VYBER"
+                ],
+                "type": [
+                    "VYBER"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "card": {
+                "issued": {
+                    "column_name": "",
+                    "column_description": "the date when the credit card issued",
+                    "value_description": "in the form YYMMDD"
+                },
+                "type": {
+                    "column_name": "",
+                    "column_description": "type of credit card",
+                    "value_description": "\"junior\": junior class of credit card;  \"classic\": standard class of credit card;  \"gold\": high-level credit card"
+                },
+                "card_id": {
+                    "column_name": "credit card id",
+                    "column_description": "id number of credit card",
+                    "value_description": ""
+                }
+            },
+            "loan": {
+                "payments": {
+                    "column_name": "monthly payments",
+                    "column_description": "monthly payments",
+                    "value_description": "unit\uff1amonth"
+                },
+                "duration": {
+                    "column_name": "",
+                    "column_description": "loan duration",
+                    "value_description": "unit\uff1amonth"
+                }
+            },
+            "trans": {
+                "operation": {
+                    "column_name": "mode of transaction",
+                    "column_description": "mode of transaction",
+                    "value_description": "\"VYBER KARTOU\": credit card withdrawal \"VKLAD\": credit in cash \"PREVOD Z UCTU\" :collection from another bank \"VYBER\": withdrawal in cash \"PREVOD NA UCET\": remittance to another bank"
+                },
+                "type": {
+                    "column_name": "+/- transaction",
+                    "column_description": "+/- transaction",
+                    "value_description": "\"PRIJEM\" stands for credit \"VYDAJ\" stands for withdrawal"
+                },
+                "k_symbol": {
+                    "column_name": "characterization of the transaction",
+                    "column_description": "",
+                    "value_description": "\"POJISTNE\": stands for insurrance payment \"SLUZBY\": stands for payment for statement \"UROK\": stands for interest credited \"SANKC. UROK\": sanction interest if negative balance \"SIPO\": stands for household \"DUCHOD\": stands for old-age pension \"UVER\": stands for loan payment"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id"
+            ],
+            "loan": [
+                "amount",
+                "payments",
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "amount",
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "date",
+                "type",
+                "operation",
+                "amount",
+                "balance",
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "trans": [
+                "amount",
+                "account_id",
+                "operation",
+                "date"
+            ],
+            "card": [
+                "disp_id"
+            ],
+            "disp": [
+                "disp_id",
+                "account_id"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "trans": [
+                "date",
+                "type",
+                "operation",
+                "amount",
+                "balance",
+                "account",
+                "trans_id",
+                "account_id"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average amount in credit card made by account holders in a month, in year 2021. The hint 'Operation = 'VYBER KARTOU' refers to credit card withdrawn' helps to identify the specific type of transaction. To answer this question, we need to find the total amount of credit card withdrawals made by account holders in 2021 and then calculate the average. This requires data from the 'trans' table, which contains information about transactions, including the operation type, date, and amount. We also need to link this data to the 'account' table to get the account holder information. Finally, we need to filter the data to only include transactions in 2021.",
+        "selected_tables": [
+            "trans",
+            "account"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "card",
+            "disp"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "trans": [
+                "amount",
+                "account_id",
+                "operation",
+                "date"
+            ],
+            "card": [
+                "disp_id"
+            ],
+            "disp": [
+                "disp_id",
+                "account_id"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "trans": [
+                "trans_id",
+                "date",
+                "operation",
+                "amount"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "model_selected_columns": {
+            "trans": [
+                "trans_id",
+                "date",
+                "operation",
+                "amount"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the average amount of credit card transactions made by account holders in a month, in year 2021. The hint suggests that 'VYBER KARTOU' refers to credit card transactions. We need to filter the transactions by operation type, date, and account holders. We also need to calculate the average amount of these transactions.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "card",
+            "disp"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'trans'.'account_id'"
+        ],
+        "correct_columns": {
+            "trans": [
+                "amount",
+                "account_id",
+                "operation",
+                "date"
+            ],
+            "card": [
+                "disp_id"
+            ],
+            "disp": [
+                "disp_id",
+                "account_id"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(T1.amount) FROM trans AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T1.operation = 'VYBER KARTOU' AND STRFTIME('%Y', T1.date) = '2021' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant tables and columns based on the question. I noticed that the operation 'VYBER KARTOU' refers to credit card withdrawal, so I focused on the 'trans' table. I joined the 'trans' table with the 'account' table to get the account information. I filtered the results to only include transactions in the year 2021 and with the operation 'VYBER KARTOU'. Finally, I calculated the average amount of these transactions.",
+        "SQL": "SELECT AVG(T1.amount) FROM trans AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T1.operation = 'VYBER KARTOU' AND strftime('%Y', T1.date) = '2021'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How much is the average amount in credit card made by account holders in a month, in year 2021?",
+            "Evidence": "Operation = 'VYBER KARTOU' refers to credit card withdrawn",
+            "GOLD_SQL": "SELECT AVG(T4.amount) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id INNER JOIN account AS T3 ON T2.account_id = T3.account_id INNER JOIN trans AS T4 ON T3.account_id = T4.account_id WHERE STRFTIME('%Y', T4.date) = '1998' AND T4.operation = 'VYBER KARTOU'",
+            "PREDICTED_SQL": "SELECT AVG(T1.amount) FROM trans AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T1.operation = 'VYBER KARTOU' AND STRFTIME('%Y', T1.date) = '2021' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How much is the average amount in credit card made by account holders in a month, in year 2021?",
+            "Evidence": "Operation = 'VYBER KARTOU' refers to credit card withdrawn",
+            "GOLD_SQL": "SELECT AVG(T4.amount) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id INNER JOIN account AS T3 ON T2.account_id = T3.account_id INNER JOIN trans AS T4 ON T3.account_id = T4.account_id WHERE STRFTIME('%Y', T4.date) = '1998' AND T4.operation = 'VYBER KARTOU'",
+            "PREDICTED_SQL": "SELECT AVG(T1.amount) FROM trans AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T1.operation = 'VYBER KARTOU' AND strftime('%Y', T1.date) = '2021'"
+        },
+        "status": "success"
+    }
+]

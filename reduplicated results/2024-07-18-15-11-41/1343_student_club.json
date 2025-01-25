@@ -1,0 +1,229 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "biggest budget",
+            "Food",
+            "remaining",
+            "budget",
+            "MAX(budget.amount)",
+            "category",
+            "'Food'"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "budget": [
+                "remaining",
+                "category"
+            ]
+        },
+        "similar_values": {
+            "zip_code": {
+                "city": [
+                    "Biggers"
+                ]
+            },
+            "event": {
+                "type": [
+                    "Budget"
+                ]
+            },
+            "budget": {
+                "category": [
+                    "Food"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "budget": {
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                },
+                "category": {
+                    "column_name": "",
+                    "column_description": "The area for which the amount is budgeted, such as, advertisement, food, parking",
+                    "value_description": ""
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                }
+            },
+            "expense": {
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                },
+                "expense_description": {
+                    "column_name": "expense description",
+                    "column_description": "A textual description of what the money was spend for",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "type",
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "category",
+                "spent",
+                "remaining",
+                "amount",
+                "event_status",
+                "budget_id",
+                "link_to_event"
+            ],
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "amount",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "amount",
+                "category",
+                "remaining"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "budget": [
+                "category",
+                "spent",
+                "remaining",
+                "amount",
+                "event_status",
+                "budget_id",
+                "link_to_event"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the remaining budget for the 'Food' category, which is related to the budget table. The hint provides a crucial clue, stating that the biggest budget for 'Food' refers to MAX(budget.amount) where category = 'Food'. This implies that we need to find the maximum budget amount for the 'Food' category. The remaining budget is also mentioned, which is a column in the budget table. Therefore, we need to join the budget table with itself to find the maximum budget amount for 'Food' and then find the remaining budget for that specific budget.",
+        "selected_tables": [
+            "budget"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "amount",
+                "category",
+                "remaining"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "budget": [
+                "category",
+                "amount",
+                "remaining"
+            ]
+        },
+        "model_selected_columns": {
+            "budget": [
+                "category",
+                "amount",
+                "remaining"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the remaining of the biggest budget for 'Food'. The hint suggests that we need to find the maximum budget for 'Food' and then find the remaining for that budget. We can achieve this by selecting the 'amount' column from the 'budget' table where 'category' is 'Food' and then finding the maximum 'amount'. We also need the 'remaining' column to get the remaining of the biggest budget.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "amount",
+                "category",
+                "remaining"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT remaining FROM budget WHERE category = 'Food' ORDER BY amount DESC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the query. I used the hint to determine that the biggest budget for 'Food' refers to MAX(budget.amount) where category = 'Food'. I then used the ORDER BY + LIMIT 1 to get the remaining of the biggest budget. I made sure to only include the column 'remaining' in the SELECT clause and only the necessary conditions in the WHERE clause.",
+        "SQL": "SELECT remaining FROM budget WHERE category = 'Food' ORDER BY amount DESC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "With the biggest budget for the \"Food\", what was the remaining of it?",
+            "Evidence": "remaining of budget refers to remaining, biggest budget for 'Food' refers to MAX(budget.amount) where category = 'Food'",
+            "GOLD_SQL": "SELECT remaining FROM budget WHERE category = 'Food' AND amount = ( SELECT MAX(amount) FROM budget WHERE category = 'Food' )",
+            "PREDICTED_SQL": "SELECT remaining FROM budget WHERE category = 'Food' ORDER BY amount DESC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "With the biggest budget for the \"Food\", what was the remaining of it?",
+            "Evidence": "remaining of budget refers to remaining, biggest budget for 'Food' refers to MAX(budget.amount) where category = 'Food'",
+            "GOLD_SQL": "SELECT remaining FROM budget WHERE category = 'Food' AND amount = ( SELECT MAX(amount) FROM budget WHERE category = 'Food' )",
+            "PREDICTED_SQL": "SELECT remaining FROM budget WHERE category = 'Food' ORDER BY amount DESC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

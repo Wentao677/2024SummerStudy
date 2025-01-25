@@ -1,0 +1,245 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patients",
+            "outpatient clinic",
+            "laboratory test",
+            "October 1991",
+            "total blood bilirubin level",
+            "normal range",
+            "Admission",
+            "Date",
+            "T-BIL",
+            "2.0"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Admission"
+            ],
+            "Laboratory": [
+                "Date",
+                "T-BIL"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "t-bil": {
+                    "column_name": "total bilirubin",
+                    "column_description": "total bilirubin",
+                    "value_description": "Commonsense evidence:  Normal range: N < 2.0"
+                },
+                "hgb": {
+                    "column_name": "Hemoglobin",
+                    "column_description": "Hemoglobin",
+                    "value_description": "Commonsense evidence:  Normal range: 10 < N < 17"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "First Date",
+                "Admission"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-BIL",
+                "T-CHO",
+                "HCT",
+                "PIC",
+                "TAT2",
+                "RF",
+                "SSB"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "date",
+                "T-BIL"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "First Date",
+                "Admission"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-BIL",
+                "T-CHO",
+                "HCT",
+                "PIC",
+                "TAT2",
+                "RF",
+                "SSB"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients who were followed up at the outpatient clinic, underwent a laboratory test in October 1991, and had a total blood bilirubin level within the normal range. The hint provides specific values for these conditions. The Admission column in the Patient table indicates whether a patient was followed up at the outpatient clinic, and the Date column in the Laboratory table specifies the date of the laboratory test. The T-BIL column in the Laboratory table provides the total blood bilirubin level. By combining these conditions, we can identify the required patients.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "date",
+                "T-BIL"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Admission"
+            ],
+            "Laboratory": [
+                "Date",
+                "T-BIL"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "Admission"
+            ],
+            "Laboratory": [
+                "Date",
+                "T-BIL"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients who were followed up at the outpatient clinic, underwent a laboratory test in October 1991, and had a total blood bilirubin level within the normal range. The hint provides specific values for each condition, which helps identify the relevant columns. We need columns that match these conditions, specifically Admission, Date, and T-BIL.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'patient'.'id'",
+            "'laboratory'.'id'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "date",
+                "T-BIL"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.Date LIKE '1991-10%' AND T2.`T-BIL` < 2.0 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the conditions mentioned in the question: patients who were followed up at the outpatient clinic, underwent a laboratory test in October 1991, and had a total blood bilirubin level within the normal range. I then translated these conditions into SQL queries, using the provided hints to guide my query. I joined the Patient and Laboratory tables on the ID column, filtered the results to match the conditions, and finally selected the distinct patient IDs.",
+        "SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.Date LIKE '1991-10%' AND T2.`T-BIL` < 2.0",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all patients who were followed up at the outpatient clinic who underwent a laboratory test in October 1991 and had a total blood bilirubin level within the normal range.",
+            "Evidence": "followed up at the outpatient clinic refers to Admission = '-'; laboratory test in April 1981 refers to Date like '1991-10%'; blood bilirubin level within the normal range refers to T-BIL < 2.0; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.`T-BIL` < 2.0 AND T2.Date LIKE '1991-10-%'",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.Date LIKE '1991-10%' AND T2.`T-BIL` < 2.0 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all patients who were followed up at the outpatient clinic who underwent a laboratory test in October 1991 and had a total blood bilirubin level within the normal range.",
+            "Evidence": "followed up at the outpatient clinic refers to Admission = '-'; laboratory test in April 1981 refers to Date like '1991-10%'; blood bilirubin level within the normal range refers to T-BIL < 2.0; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.`T-BIL` < 2.0 AND T2.Date LIKE '1991-10-%'",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.Date LIKE '1991-10%' AND T2.`T-BIL` < 2.0"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,201 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "purchase",
+            "cards",
+            "promotional type",
+            "bundle",
+            "promoTypes",
+            "bundle",
+            "purchaseUrls"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "cards": [
+                "types",
+                "promoTypes",
+                "purchaseUrls"
+            ]
+        },
+        "similar_values": {
+            "sets": {
+                "name": [
+                    "Promotional Planes"
+                ],
+                "type": [
+                    "promo"
+                ]
+            },
+            "cards": {
+                "promoTypes": [
+                    "bundle"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "cards": {
+                "promotypes": {
+                    "column_name": "promo Types",
+                    "column_description": "A list of promotional types for a card.",
+                    "value_description": "\"arenaleague\", \"boosterfun\", \"boxtopper\", \"brawldeck\", \"bundle\", \"buyabox\", \"convention\", \"datestamped\", \"draculaseries\", \"draftweekend\", \"duels\", \"event\", \"fnm\", \"gameday\", \"gateway\", \"giftbox\", \"gilded\", \"godzillaseries\", \"instore\", \"intropack\", \"jpwalker\", \"judgegift\", \"league\", \"mediainsert\", \"neonink\", \"openhouse\", \"planeswalkerstamped\", \"playerrewards\", \"playpromo\", \"premiereshop\", \"prerelease\", \"promopack\", \"release\", \"setpromo\", \"stamped\", \"textured\", \"themepack\", \"thick\", \"tourney\", \"wizardsplaynetwork\""
+                },
+                "purchaseurls": {
+                    "column_name": "purchase Urls",
+                    "column_description": "Links that navigate to websites where the card can be purchased.",
+                    "value_description": ""
+                },
+                "flavorname": {
+                    "column_name": "flavor Name",
+                    "column_description": "The promotional card name printed above the true card name on special cards that has no game function.",
+                    "value_description": "The promotional card name printed above the true card name on special cards that has no game function."
+                },
+                "ispromo": {
+                    "column_name": "is Promotion",
+                    "column_description": "If the card is a promotional printing.",
+                    "value_description": "0: is not 1: is"
+                },
+                "originaltype": {
+                    "column_name": "",
+                    "column_description": "original Type",
+                    "value_description": "The type of the card as originally printed. Includes any supertypes and subtypes."
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "promoTypes",
+                "purchaseUrls",
+                "types",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "id",
+                "uuid"
+            ],
+            "legalities": [
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "id",
+                "code"
+            ],
+            "set_translations": [
+                "id",
+                "setCode"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "purchaseurls",
+                "promotypes"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "cards": [
+                "promoTypes",
+                "purchaseUrls",
+                "types",
+                "id",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the websites where cards with the promotional type 'bundle' can be purchased. The hint points to the 'promoTypes' column in the 'cards' table and the 'purchaseUrls' column in the same table. This suggests that the 'cards' table is a crucial starting point. The 'foreign_data' table is not relevant to this question as it seems to be a separate entity. The 'legalities', 'sets', and 'set_translations' tables do not contain information about promotional types or purchase URLs. The 'rulings' table is also not relevant as it seems to be related to card rulings rather than purchase information. Therefore, the 'cards' table is the only necessary table.",
+        "selected_tables": [
+            "cards"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "purchaseurls",
+                "promotypes"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "cards": [
+                "promoTypes",
+                "purchaseUrls"
+            ]
+        },
+        "model_selected_columns": {
+            "cards": [
+                "promoTypes",
+                "purchaseUrls"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for websites where cards with promotional type 'bundle' can be purchased. The hint points to promoTypes and purchaseUrls as relevant columns. The promoTypes column has 'bundle' as an example, making it a suitable filter. The purchaseUrls column contains the websites where cards can be purchased, making it necessary for the query.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "purchaseurls",
+                "promotypes"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT purchaseUrls FROM cards WHERE promoTypes = 'bundle' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "status": "error",
+        "error": "<class 'TypeError'>: <'NoneType' object is not subscriptable>"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please list the websites where I can purchase the cards that have the promotional type of \"bundle\".",
+            "Evidence": "promotional type of \"bundle\" refers to promoTypes = 'bundle'; websites refers to purchaseUrls",
+            "GOLD_SQL": "SELECT DISTINCT purchaseUrls FROM cards WHERE promoTypes = 'bundle'",
+            "PREDICTED_SQL": "SELECT purchaseUrls FROM cards WHERE promoTypes = 'bundle' "
+        },
+        "revision": {
+            "exec_res": "generation error",
+            "exec_err": "<class 'TypeError'>: <'NoneType' object is not subscriptable>",
+            "Question": "Please list the websites where I can purchase the cards that have the promotional type of \"bundle\".",
+            "Evidence": "promotional type of \"bundle\" refers to promoTypes = 'bundle'; websites refers to purchaseUrls",
+            "GOLD_SQL": "SELECT DISTINCT purchaseUrls FROM cards WHERE promoTypes = 'bundle'",
+            "PREDICTED_SQL": "--"
+        },
+        "status": "success"
+    }
+]

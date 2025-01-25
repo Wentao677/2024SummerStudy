@@ -1,0 +1,306 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Maryland state",
+            "members",
+            "hometowns",
+            "How many",
+            "members' hometowns",
+            "from",
+            "state"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "zip_code": [
+                "state",
+                "state"
+            ]
+        },
+        "similar_values": {
+            "zip_code": {
+                "city": [
+                    "Many",
+                    "Maryland"
+                ],
+                "state": [
+                    "Maryland"
+                ]
+            },
+            "member": {
+                "position": [
+                    "Member"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "member": {
+                "zip": {
+                    "column_name": "",
+                    "column_description": "the zip code of the member's hometown",
+                    "value_description": ""
+                },
+                "last_name": {
+                    "column_name": "last name",
+                    "column_description": "member's last name",
+                    "value_description": "full name is first_name + last_name. e.g. A member's first name is Angela and last name is Sanders. Thus, his/her full name is Angela Sanders."
+                },
+                "first_name": {
+                    "column_name": "first name",
+                    "column_description": "member's first name",
+                    "value_description": ""
+                },
+                "link_to_major": {
+                    "column_name": "link to major",
+                    "column_description": "The unique identifier of the major of the member. References the Major table",
+                    "value_description": ""
+                },
+                "email": {
+                    "column_name": "",
+                    "column_description": "member's email",
+                    "value_description": ""
+                },
+                "member_id": {
+                    "column_name": "member id",
+                    "column_description": "unique id of member",
+                    "value_description": ""
+                }
+            },
+            "zip_code": {
+                "short_state": {
+                    "column_name": "short state",
+                    "column_description": "The abbreviation of the state to which the ZIP pertains",
+                    "value_description": ""
+                },
+                "state": {
+                    "column_name": "",
+                    "column_description": "The name of the state to which the ZIP pertains",
+                    "value_description": ""
+                },
+                "city": {
+                    "column_name": "",
+                    "column_description": "The city to which the ZIP pertains",
+                    "value_description": ""
+                },
+                "zip_code": {
+                    "column_name": "zip code",
+                    "column_description": "The ZIP code itself. A five-digit number identifying a US post office.",
+                    "value_description": ""
+                }
+            },
+            "major": {
+                "department": {
+                    "column_name": "",
+                    "column_description": "The name of the department that offers the major",
+                    "value_description": ""
+                },
+                "major_id": {
+                    "column_name": "major id",
+                    "column_description": "A unique identifier for each major",
+                    "value_description": ""
+                }
+            },
+            "attendance": {
+                "link_to_member": {
+                    "column_name": "link to member",
+                    "column_description": "The unique identifier of the member who attended the event",
+                    "value_description": "References the Member table"
+                }
+            },
+            "income": {
+                "link_to_member": {
+                    "column_name": "link to member",
+                    "column_description": "link to member",
+                    "value_description": ""
+                },
+                "date_received": {
+                    "column_name": "date received",
+                    "column_description": "the date that the fund received",
+                    "value_description": ""
+                }
+            },
+            "budget": {
+                "budget_id": {
+                    "column_name": "budget id",
+                    "column_description": "A unique identifier for the budget entry",
+                    "value_description": ""
+                }
+            },
+            "event": {
+                "event_id": {
+                    "column_name": "event id",
+                    "column_description": "A unique identifier for the event",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "city",
+                "state",
+                "short_state",
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "budget_id",
+                "link_to_event"
+            ],
+            "expense": [
+                "expense_id",
+                "link_to_member",
+                "link_to_budget"
+            ],
+            "income": [
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "member": [
+                "member_id",
+                "zip"
+            ],
+            "zip_code": [
+                "zip_code",
+                "state"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ],
+            "zip_code": [
+                "city",
+                "state",
+                "short_state",
+                "zip_code"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the members' hometowns from Maryland state. The hint points to the zip_code table, which has a column for state. We need to link this information to the member table, which has a foreign key to zip_code. Additionally, we need to filter the members based on their hometowns being from Maryland. The event and budget tables are not relevant to this question. Therefore, we need to use the member and zip_code tables.",
+        "selected_tables": [
+            "member",
+            "zip_code"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "member": [
+                "member_id",
+                "zip"
+            ],
+            "zip_code": [
+                "zip_code",
+                "state"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "member": [
+                "link_to_major"
+            ],
+            "zip_code": [
+                "state"
+            ]
+        },
+        "model_selected_columns": {
+            "member": [
+                "link_to_major"
+            ],
+            "zip_code": [
+                "state"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the number of members' hometowns from Maryland state. To answer this, we need to identify the members' hometowns and filter them by state. The hint suggests that the state is 'Maryland'. We can find this information in the zip_code table. We also need to link the member's hometown to the member itself, which is done through the link_to_major column in the member table. Finally, we need to filter the members by their hometown's state.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'member'.'member_id'",
+            "'member'.'zip'",
+            "'zip_code'.'zip_code'"
+        ],
+        "correct_columns": {
+            "member": [
+                "member_id",
+                "zip"
+            ],
+            "zip_code": [
+                "zip_code",
+                "state"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN zip_code AS T2 ON T1.zip = T2.zip_code WHERE T2.state = 'Maryland' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the column in the member table that corresponds to the state of the member's hometown, which is the zip_code table. I then joined the member table with the zip_code table on the zip column. I filtered the results to only include rows where the state is 'Maryland'. Finally, I used the COUNT function to count the number of rows that meet the condition.",
+        "SQL": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN zip_code AS T2 ON T1.zip = T2.zip_code WHERE T2.state = 'Maryland'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many of the members' hometowns are from Maryland state?",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT COUNT(T2.member_id) FROM zip_code AS T1 INNER JOIN member AS T2 ON T1.zip_code = T2.zip WHERE T1.state = 'Maryland'",
+            "PREDICTED_SQL": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN zip_code AS T2 ON T1.zip = T2.zip_code WHERE T2.state = 'Maryland' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many of the members' hometowns are from Maryland state?",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT COUNT(T2.member_id) FROM zip_code AS T1 INNER JOIN member AS T2 ON T1.zip_code = T2.zip WHERE T1.state = 'Maryland'",
+            "PREDICTED_SQL": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN zip_code AS T2 ON T1.zip = T2.zip_code WHERE T2.state = 'Maryland'"
+        },
+        "status": "success"
+    }
+]

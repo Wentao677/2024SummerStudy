@@ -1,0 +1,275 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Prague branch",
+            "female",
+            "customers",
+            "accounts",
+            "percentage",
+            "clients",
+            "gender",
+            "F",
+            "A3"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "trans": [
+                "account"
+            ],
+            "client": [
+                "gender"
+            ],
+            "district": [
+                "A3"
+            ]
+        },
+        "similar_values": {
+            "district": {
+                "A3": [
+                    "Prague"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "trans": {
+                "bank": {
+                    "column_name": "bank of the partner",
+                    "column_description": "",
+                    "value_description": "each bank has unique two-letter code"
+                },
+                "account": {
+                    "column_name": "account of the partner",
+                    "column_description": "",
+                    "value_description": ""
+                }
+            },
+            "order": {
+                "bank_to": {
+                    "column_name": "bank of the recipient",
+                    "column_description": "bank of the recipient",
+                    "value_description": ""
+                },
+                "account_id": {
+                    "column_name": "",
+                    "column_description": "id number of account",
+                    "value_description": ""
+                }
+            },
+            "client": {
+                "gender": {
+                    "column_name": "",
+                    "column_description": "",
+                    "value_description": "F\uff1afemale  M\uff1amale"
+                }
+            },
+            "loan": {
+                "status": {
+                    "column_name": "",
+                    "column_description": "repayment status",
+                    "value_description": "'A' stands for contract finished, no problems; 'B' stands for contract finished, loan not paid; 'C' stands for running contract, OK so far; 'D' stands for running contract, client in debt"
+                }
+            },
+            "disp": {
+                "client_id": {
+                    "column_name": "",
+                    "column_description": "id number of client",
+                    "value_description": ""
+                },
+                "account_id": {
+                    "column_name": "",
+                    "column_description": "id number of account",
+                    "value_description": ""
+                }
+            },
+            "district": {
+                "a14": {
+                    "column_name": "no. of entrepreneurs per 1000 inhabitants",
+                    "column_description": "no. of entrepreneurs per 1000 inhabitants",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "gender",
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "A3",
+                "district_id"
+            ],
+            "loan": [
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a3"
+            ],
+            "client": [
+                "district_id",
+                "client_id",
+                "gender"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "district": [
+                "A3",
+                "district_id"
+            ],
+            "client": [
+                "gender",
+                "client_id",
+                "district_id"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "trans": [
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the proportion of female customers who have accounts at the Prague branch. The hint mentions that A3 may contain information about Prague, which is a column in the district table. The question also mentions gender, which is a column in the client table. The account table is necessary to link clients to their accounts. Therefore, the tables needed are district, client, and account.",
+        "selected_tables": [
+            "district",
+            "client",
+            "account"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a3"
+            ],
+            "client": [
+                "district_id",
+                "client_id",
+                "gender"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "district": [
+                "A3"
+            ],
+            "client": [
+                "gender",
+                "district_id"
+            ]
+        },
+        "model_selected_columns": {
+            "district": [
+                "A3"
+            ],
+            "client": [
+                "gender",
+                "district_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the proportion of female customers who have accounts at the Prague branch. The hint mentions that 'Female refers to gender = 'F'' and that A3 may contain information about Prague. This suggests that we need to filter by gender and district. The table client has columns for gender and district_id, which we can use to filter the data. The table district has a column A3, which contains information about Prague. We can use this column to filter the data by district.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'district'.'district_id'",
+            "'client'.'client_id'"
+        ],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a3"
+            ],
+            "client": [
+                "district_id",
+                "client_id",
+                "gender"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(IIF(T2.gender = 'F', 1, 0)) AS REAL) * 100 / COUNT(T2.gender) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A3 = 'Prague' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns relevant to the question. The question asks about customers who have accounts at the Prague branch, so I focused on the district, client, and account tables. I noticed that the district table has a column A3 that may contain information about Prague, so I used that to filter the results. I then joined the client table with the district table to get the gender information. I used a conditional statement to count the number of female clients and divided it by the total number of clients to get the proportion. Finally, I multiplied the result by 100 to convert it to a percentage.",
+        "SQL": "SELECT (COUNT(CASE WHEN T2.gender = 'F' THEN 1 END) / COUNT(T2.client_id)) * 100 FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A3 = 'Prague'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What proportion of customers who have accounts at the Prague branch are female?",
+            "Evidence": "Female refers to gender = 'F'; Percentage of female clients in Prague branch = count[female clients with accounts in Prague branch / count(clients with accounts in Prague branch)] * 100%; A3 may contain information about Prague",
+            "GOLD_SQL": "SELECT CAST(SUM(T2.gender = 'F') AS REAL) / COUNT(T2.client_id) * 100 FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A3 = 'Prague'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(IIF(T2.gender = 'F', 1, 0)) AS REAL) * 100 / COUNT(T2.gender) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A3 = 'Prague' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What proportion of customers who have accounts at the Prague branch are female?",
+            "Evidence": "Female refers to gender = 'F'; Percentage of female clients in Prague branch = count[female clients with accounts in Prague branch / count(clients with accounts in Prague branch)] * 100%; A3 may contain information about Prague",
+            "GOLD_SQL": "SELECT CAST(SUM(T2.gender = 'F') AS REAL) / COUNT(T2.client_id) * 100 FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A3 = 'Prague'",
+            "PREDICTED_SQL": "SELECT (COUNT(CASE WHEN T2.gender = 'F' THEN 1 END) / COUNT(T2.client_id)) * 100 FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A3 = 'Prague'"
+        },
+        "status": "success"
+    }
+]

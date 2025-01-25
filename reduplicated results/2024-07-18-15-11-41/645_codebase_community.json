@@ -1,0 +1,264 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "negative comments",
+            "user ID 13",
+            "Score",
+            "60"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "postHistory": [
+                "Comment"
+            ],
+            "comments": [
+                "Id",
+                "Score"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "user"
+                ],
+                "Location": [
+                    "6"
+                ]
+            },
+            "comments": {
+                "UserDisplayName": [
+                    "user28"
+                ]
+            },
+            "postHistory": {
+                "UserDisplayName": [
+                    "user2915"
+                ]
+            },
+            "posts": {
+                "OwnerDisplayName": [
+                    "user148951"
+                ]
+            },
+            "tags": {
+                "TagName": [
+                    "scores"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "posts": {
+                "commentcount": {
+                    "column_name": "Comment Count",
+                    "column_description": "the total number of comments of the post",
+                    "value_description": ""
+                },
+                "score": {
+                    "column_name": "",
+                    "column_description": "the score of the post",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "score": {
+                    "column_name": "",
+                    "column_description": "rating score",
+                    "value_description": "The score is from 0 to 100. The score more than 60 refers that the comment is a positive comment. The score less than 60 refers that the comment is a negative comment."
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the user who post the comment",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the comment Id",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "comment": {
+                    "column_name": "",
+                    "column_description": "comments of the post",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Id"
+            ],
+            "comments": [
+                "Score",
+                "UserId",
+                "Id",
+                "PostId"
+            ],
+            "postHistory": [
+                "Comment",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Score",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Id"
+            ],
+            "votes": [
+                "UserId",
+                "Id",
+                "PostId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "comments": [
+                "id",
+                "userid",
+                "score"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "comments": [
+                "Score",
+                "UserId",
+                "Id",
+                "PostId"
+            ],
+            "users": [
+                "Id"
+            ],
+            "postHistory": [
+                "Comment",
+                "Id",
+                "UserId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the number of negative comments given by user ID 13. The hint clarifies that negative comments refer to Score < 60. This information helps to identify the relevant tables. The 'comments' table contains the Score column, which is used to determine whether a comment is negative or not. The 'UserId' column in the 'comments' table is used to link comments to the corresponding user. The 'users' table contains the user IDs, which are used to match the user ID 13. Therefore, the necessary tables are 'comments' and 'users'.",
+        "selected_tables": [
+            "comments",
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "comments": [
+                "id",
+                "userid",
+                "score"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "comments": [
+                "Id",
+                "Score",
+                "UserId"
+            ],
+            "users": [
+                "Id"
+            ]
+        },
+        "model_selected_columns": {
+            "comments": [
+                "Id",
+                "Score",
+                "UserId"
+            ],
+            "users": [
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of negative comments given by user ID 13. The hint clarifies that negative comments refer to Score < 60. Therefore, we need to identify the comments with a Score less than 60 and also associate them with user ID 13. We can achieve this by filtering the comments based on Score and UserId.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "comments": [
+                "id",
+                "userid",
+                "score"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(Score) FROM comments WHERE UserId = 13 AND Score < 60 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition for a negative comment, which is Score < 60. Then, I filtered the comments by the user ID 13 using the WHERE clause. Finally, I counted the number of comments that meet the condition using the COUNT function.",
+        "SQL": "SELECT COUNT(*) FROM comments WHERE UserId = 13 AND Score < 60",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many negative comments were given by user ID 13?",
+            "Evidence": "negative comments refer to Score < 60;",
+            "GOLD_SQL": "SELECT COUNT(Id) FROM comments WHERE UserId = 13 AND Score < 60",
+            "PREDICTED_SQL": "SELECT COUNT(Score) FROM comments WHERE UserId = 13 AND Score < 60 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many negative comments were given by user ID 13?",
+            "Evidence": "negative comments refer to Score < 60;",
+            "GOLD_SQL": "SELECT COUNT(Id) FROM comments WHERE UserId = 13 AND Score < 60",
+            "PREDICTED_SQL": "SELECT COUNT(*) FROM comments WHERE UserId = 13 AND Score < 60"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,293 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "name of events",
+            "event_name",
+            "less than average",
+            "parking cost",
+            "cost",
+            "DIVIDE(SUM(cost), COUNT(event_id))",
+            "category",
+            "Parking"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "event": [
+                "event_name"
+            ],
+            "expense": [
+                "cost",
+                "cost"
+            ],
+            "budget": [
+                "category"
+            ]
+        },
+        "similar_values": {
+            "zip_code": {
+                "city": [
+                    "Cost"
+                ]
+            },
+            "budget": {
+                "category": [
+                    "Parking"
+                ]
+            },
+            "expense": {
+                "expense_description": [
+                    "Parking"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "event": {
+                "event_name": {
+                    "column_name": "event name",
+                    "column_description": "event name",
+                    "value_description": ""
+                },
+                "location": {
+                    "column_name": "",
+                    "column_description": "Address where the event was held or is to be held or the name of such a location",
+                    "value_description": ""
+                }
+            },
+            "budget": {
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                },
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "category": {
+                    "column_name": "",
+                    "column_description": "The area for which the amount is budgeted, such as, advertisement, food, parking",
+                    "value_description": ""
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                }
+            },
+            "expense": {
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                }
+            },
+            "attendance": {
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event which was attended",
+                    "value_description": "References the Event table"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "category",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "expense_description",
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "expense": [
+                "cost",
+                "link_to_budget"
+            ],
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "budget": [
+                "link_to_event",
+                "budget_id",
+                "category"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "expense": [
+                "expense_description",
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "budget": [
+                "category",
+                "link_to_event",
+                "budget_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the name of events with less than average parking cost. The hint provides the formula for calculating the average parking cost, which involves summing the cost of all parking expenses and dividing it by the count of events. This formula requires the expense table, which contains the cost of each expense. The event table is necessary to get the event names. The budget table is necessary because it links expenses to events and categories, and we're interested in the 'Parking' category. The hint also mentions the category 'Parking', which is present in the budget table. Therefore, the necessary tables are event, expense, and budget.",
+        "selected_tables": [
+            "event",
+            "expense",
+            "budget"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "expense": [
+                "cost",
+                "link_to_budget"
+            ],
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "budget": [
+                "link_to_event",
+                "budget_id",
+                "category"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name"
+            ],
+            "expense": [
+                "cost"
+            ],
+            "budget": [
+                "category",
+                "link_to_event"
+            ]
+        },
+        "model_selected_columns": {
+            "event": [
+                "event_name"
+            ],
+            "expense": [
+                "cost"
+            ],
+            "budget": [
+                "category",
+                "link_to_event"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for events with less than average parking cost. The hint provides a clear direction, focusing on the 'event_name' column for the event names and the 'cost' column for the parking cost. The 'category' column is also crucial, as it helps filter the 'cost' column for parking costs only. The 'event_id' column is necessary for grouping the costs by event. Finally, the 'budget' table is required to get the total parking cost for all events, which is used to calculate the average parking cost.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'expense'.'link_to_budget'",
+            "'event'.'event_id'",
+            "'budget'.'budget_id'"
+        ],
+        "correct_columns": {
+            "expense": [
+                "cost",
+                "link_to_budget"
+            ],
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "budget": [
+                "link_to_event",
+                "budget_id",
+                "category"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T3.event_name FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN event AS T3 ON T2.link_to_event = T3.event_id WHERE T2.category = 'Parking' GROUP BY T3.event_id HAVING SUM(T1.cost) < ( SELECT AVG(T1.cost) FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id WHERE T2.category = 'Parking' ) ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns related to the question. I noticed that the question is asking for the name of events with less than average parking cost, which is related to the 'Parking' category. I then joined the 'expense' table with the 'budget' table to get the total cost for each event. I also joined the 'event' table to get the event name. I used the AVG function to calculate the average parking cost and then used the HAVING clause to filter the events with less than average parking cost. Finally, I selected the event name from the 'event' table.",
+        "SQL": "SELECT event_name FROM event WHERE event_id IN (SELECT link_to_event FROM budget WHERE category = 'Parking' AND amount < (SELECT AVG(cost) FROM expense WHERE expense_description = 'Parking'))",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List the name of events with less than average parking cost.",
+            "Evidence": "name of events refers to event_name; less than average parking cost refers to cost < DIVIDE(SUM(cost), COUNT(event_id)) where category = 'Parking'",
+            "GOLD_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event INNER JOIN expense AS T3 ON T2.budget_id = T3.link_to_budget WHERE T2.category = 'Parking' AND T3.cost < (SELECT AVG(cost) FROM expense)",
+            "PREDICTED_SQL": "SELECT T3.event_name FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN event AS T3 ON T2.link_to_event = T3.event_id WHERE T2.category = 'Parking' GROUP BY T3.event_id HAVING SUM(T1.cost) < ( SELECT AVG(T1.cost) FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id WHERE T2.category = 'Parking' ) "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List the name of events with less than average parking cost.",
+            "Evidence": "name of events refers to event_name; less than average parking cost refers to cost < DIVIDE(SUM(cost), COUNT(event_id)) where category = 'Parking'",
+            "GOLD_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event INNER JOIN expense AS T3 ON T2.budget_id = T3.link_to_budget WHERE T2.category = 'Parking' AND T3.cost < (SELECT AVG(cost) FROM expense)",
+            "PREDICTED_SQL": "SELECT event_name FROM event WHERE event_id IN (SELECT link_to_event FROM budget WHERE category = 'Parking' AND amount < (SELECT AVG(cost) FROM expense WHERE expense_description = 'Parking'))"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,253 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "creation date",
+            "maximum number of votes",
+            "CreationDate",
+            "Max(Count(Id))"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "votes": [
+                "CreationDate",
+                "CreationDate"
+            ]
+        },
+        "similar_values": {
+            "tags": {
+                "TagName": [
+                    "maximum"
+                ]
+            },
+            "users": {
+                "DisplayName": [
+                    "Maxim"
+                ]
+            },
+            "posts": {
+                "OwnerDisplayName": [
+                    "Maxim.K"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "votes": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the vote",
+                    "value_description": ""
+                },
+                "votetypeid": {
+                    "column_name": "Vote Type Id",
+                    "column_description": "the id of the vote type",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the vote id",
+                    "value_description": ""
+                },
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the id of the post that is voted",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the comment",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the user account",
+                    "value_description": ""
+                },
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "creaiondate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Date",
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "PostId",
+                "CreationDate",
+                "Id",
+                "UserId"
+            ],
+            "postHistory": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "Id",
+                "CreationDate",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "ViewCount",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Count",
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Id",
+                "CreationDate",
+                "UpVotes"
+            ],
+            "votes": [
+                "Id",
+                "CreationDate",
+                "UserId",
+                "PostId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "votes": [
+                "creationdate",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "votes": [
+                "Id",
+                "CreationDate",
+                "UserId",
+                "PostId"
+            ],
+            "users": [
+                "Id",
+                "CreationDate",
+                "UpVotes"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the creation date of the maximum number of votes, which implies that we need to find the maximum count of votes. The hint suggests that we should look for the CreationDate where Max(Count(Id)). This implies that we need to count the votes and find the maximum count. The votes table contains the creation date of each vote, so we need to use this table. Additionally, we need to join this table with the users table to get the creation date of the user who cast the vote, which is necessary to find the maximum count of votes. Therefore, we need to use the votes and users tables.",
+        "selected_tables": [
+            "votes",
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "votes": [
+                "creationdate",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "votes": [
+                "CreationDate"
+            ]
+        },
+        "model_selected_columns": {
+            "votes": [
+                "CreationDate"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the creation date of the maximum number of votes, which is related to the CreationDate column in the votes table. The hint suggests using the COUNT function to count the number of votes, which is possible by grouping the votes by CreationDate. Therefore, we need to select the CreationDate column from the votes table to get the desired result.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'votes'.'id'"
+        ],
+        "correct_columns": {
+            "votes": [
+                "creationdate",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CreationDate FROM votes GROUP BY CreationDate ORDER BY COUNT(Id) DESC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to find the creation date of the maximum number of votes. I used the ORDER BY + LIMIT 1 approach instead of MAX/MIN within subqueries, as instructed. I also only included the column used for sorting in the SELECT clause, as instructed. I made sure to only output the information asked in the question, which is the creation date of the maximum number of votes.",
+        "SQL": "SELECT CreationDate FROM votes GROUP BY CreationDate ORDER BY COUNT(*) DESC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Indicate the creation date of the maximum number of votes.",
+            "Evidence": "the creation date of the maximum number of votes refers to CreationDate where Max(Count(Id))",
+            "GOLD_SQL": "SELECT CreationDate FROM votes GROUP BY CreationDate ORDER BY COUNT(Id) DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT CreationDate FROM votes GROUP BY CreationDate ORDER BY COUNT(Id) DESC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Indicate the creation date of the maximum number of votes.",
+            "Evidence": "the creation date of the maximum number of votes refers to CreationDate where Max(Count(Id))",
+            "GOLD_SQL": "SELECT CreationDate FROM votes GROUP BY CreationDate ORDER BY COUNT(Id) DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT CreationDate FROM votes GROUP BY CreationDate ORDER BY COUNT(*) DESC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

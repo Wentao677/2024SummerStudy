@@ -1,0 +1,311 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "post ID",
+            "score",
+            "60",
+            "user ID",
+            "created",
+            "Score > 60"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "votes": [
+                "PostId",
+                "UserId"
+            ],
+            "posts": [
+                "Score",
+                "Score"
+            ]
+        },
+        "similar_values": {
+            "tags": {
+                "TagName": [
+                    "scores"
+                ]
+            },
+            "users": {
+                "Location": [
+                    "6"
+                ],
+                "DisplayName": [
+                    "user"
+                ]
+            },
+            "comments": {
+                "UserDisplayName": [
+                    "user28"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "posts": {
+                "score": {
+                    "column_name": "",
+                    "column_description": "the score of the post",
+                    "value_description": ""
+                },
+                "favoritecount": {
+                    "column_name": "Favorite Count",
+                    "column_description": "the total number of favorites of the post",
+                    "value_description": "more favorite count refers to more valuable posts."
+                }
+            },
+            "comments": {
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the unique id of the post",
+                    "value_description": ""
+                },
+                "score": {
+                    "column_name": "",
+                    "column_description": "rating score",
+                    "value_description": "The score is from 0 to 100. The score more than 60 refers that the comment is a positive comment. The score less than 60 refers that the comment is a negative comment."
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the user who post the comment",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the id of the post that is voted",
+                    "value_description": ""
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the voter",
+                    "value_description": ""
+                }
+            },
+            "postlinks": {
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the post id",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the unique id of the post",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the post history id",
+                    "value_description": ""
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the user who post the post",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                }
+            },
+            "badges": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the unique id of the user",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "PostId",
+                "Score",
+                "UserId",
+                "Id"
+            ],
+            "postHistory": [
+                "Id",
+                "PostId",
+                "UserId",
+                "UserDisplayName"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Id",
+                "Score",
+                "OwnerUserId",
+                "OwnerDisplayName",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "WikiPostId",
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Id"
+            ],
+            "votes": [
+                "PostId",
+                "UserId",
+                "Id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posthistory": [
+                "postid",
+                "userid"
+            ],
+            "posts": [
+                "id",
+                "score"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "posts": [
+                "Id",
+                "Score",
+                "OwnerUserId",
+                "OwnerDisplayName",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "votes": [
+                "PostId",
+                "UserId",
+                "Id"
+            ],
+            "users": [
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for post IDs with scores more than 60 and the corresponding user IDs. The hint clarifies that score more than 60 refers to Score > 60. This information helps to focus on the tables that contain post scores and user IDs. The `posts` table has a column for score, and the `votes` table has a foreign key to the `posts` table, which can be used to filter posts with scores more than 60. The `users` table contains user IDs, and the `posts` table has a foreign key to the `users` table, which can be used to link posts to their creators. Therefore, the necessary tables are `posts`, `votes`, and `users`.",
+        "selected_tables": [
+            "posts",
+            "votes",
+            "users"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "posthistory"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posthistory": [
+                "postid",
+                "userid"
+            ],
+            "posts": [
+                "id",
+                "score"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "posts": [
+                "Id",
+                "Score",
+                "OwnerUserId"
+            ],
+            "users": [
+                "Id"
+            ]
+        },
+        "model_selected_columns": {
+            "posts": [
+                "Id",
+                "Score",
+                "OwnerUserId"
+            ],
+            "users": [
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for post IDs with scores more than 60 and the user IDs that created these posts. The hint clarifies that 'score more than 60' refers to Score > 60. This information helps identify the necessary columns. We need the post ID, score, and owner user ID to answer the question.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "posthistory"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posthistory": [
+                "postid",
+                "userid"
+            ],
+            "posts": [
+                "id",
+                "score"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT Id, OwnerUserId FROM posts WHERE Score > 60 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the conditions required. The question asks for post IDs with a score more than 60 and the corresponding user IDs. I then looked at the database schema and identified the relevant tables and columns. I decided to use the posts table to find the post IDs with a score more than 60 and the users table to find the corresponding user IDs. I used the WHERE clause to filter the posts table based on the score condition and then joined the posts table with the users table on the OwnerUserId column to get the corresponding user IDs.",
+        "SQL": "SELECT p.Id, p.OwnerUserId FROM posts p WHERE p.Score > 60",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List out all post ID with score more than 60 and list out all the user ID that created these post.",
+            "Evidence": "score more than 60 refers to Score > 60",
+            "GOLD_SQL": "SELECT PostId, UserId FROM postHistory WHERE PostId IN ( SELECT Id FROM posts WHERE Score > 60 )",
+            "PREDICTED_SQL": "SELECT Id, OwnerUserId FROM posts WHERE Score > 60 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List out all post ID with score more than 60 and list out all the user ID that created these post.",
+            "Evidence": "score more than 60 refers to Score > 60",
+            "GOLD_SQL": "SELECT PostId, UserId FROM postHistory WHERE PostId IN ( SELECT Id FROM posts WHERE Score > 60 )",
+            "PREDICTED_SQL": "SELECT p.Id, p.OwnerUserId FROM posts p WHERE p.Score > 60"
+        },
+        "status": "success"
+    }
+]

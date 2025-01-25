@@ -1,0 +1,310 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average monthly number of links",
+            "2010",
+            "posts",
+            "no more than 2 answers",
+            "Id",
+            "CreationDate",
+            "AnswerCount",
+            "DIVIDE",
+            "COUNT",
+            "YEAR"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "postLinks": [
+                "Id",
+                "CreationDate"
+            ],
+            "posts": [
+                "AnswerCount"
+            ],
+            "tags": [
+                "Count"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "Answer"
+                ]
+            },
+            "tags": {
+                "TagName": [
+                    "average"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "posts": {
+                "answercount": {
+                    "column_name": "Answer Count",
+                    "column_description": "the total number of answers of the post",
+                    "value_description": ""
+                },
+                "viewcount": {
+                    "column_name": "View Count",
+                    "column_description": "the view count of the post",
+                    "value_description": "Higher view count means the post has higher popularity"
+                },
+                "creaiondate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "views": {
+                    "column_name": "",
+                    "column_description": "the number of views",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the user account",
+                    "value_description": ""
+                }
+            },
+            "postlinks": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post link",
+                    "value_description": ""
+                }
+            },
+            "tags": {
+                "count": {
+                    "column_name": "",
+                    "column_description": "the count of posts that contain this tag",
+                    "value_description": "more counts --> this tag is more popular"
+                }
+            },
+            "comments": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the comment",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the vote",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Date",
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "PostId",
+                "CreationDate",
+                "Id",
+                "UserId"
+            ],
+            "postHistory": [
+                "PostId",
+                "CreationDate",
+                "Id",
+                "UserId"
+            ],
+            "postLinks": [
+                "CreationDate",
+                "PostId",
+                "Id",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "AnswerCount",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Count",
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "CreationDate",
+                "Id"
+            ],
+            "votes": [
+                "PostId",
+                "CreationDate",
+                "Id",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "postlinks": [
+                "postid",
+                "id",
+                "creationdate"
+            ],
+            "posts": [
+                "id",
+                "answercount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "postLinks": [
+                "CreationDate",
+                "PostId",
+                "Id",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "AnswerCount",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Count",
+                "Id",
+                "ExcerptPostId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average monthly number of links created in 2010 for posts that have no more than 2 answers. The hint provides a calculation formula that involves the COUNT of links and the YEAR of the CreationDate. This suggests that we need to focus on the postLinks table, which contains the CreationDate and the PostId. The PostId is linked to the posts table, which contains the AnswerCount. Therefore, we need to include the postLinks and posts tables in our query. Additionally, we need to filter the results to only include posts with an AnswerCount less than or equal to 2, which is achieved by joining the posts table with the postLinks table. Finally, we need to group the results by month and calculate the average, which can be done using the YEAR and MONTH functions.",
+        "selected_tables": [
+            "postLinks",
+            "posts"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "postlinks": [
+                "postid",
+                "id",
+                "creationdate"
+            ],
+            "posts": [
+                "id",
+                "answercount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "postLinks": [
+                "Id",
+                "CreationDate",
+                "PostId"
+            ],
+            "posts": [
+                "Id",
+                "CreationDate",
+                "AnswerCount",
+                "PostId"
+            ]
+        },
+        "model_selected_columns": {
+            "postLinks": [
+                "Id",
+                "CreationDate",
+                "PostId"
+            ],
+            "posts": [
+                "Id",
+                "CreationDate",
+                "AnswerCount",
+                "PostId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average monthly number of links created in 2010 for posts that have no more than 2 answers. The hint provides a calculation formula that involves COUNT, YEAR, and AnswerCount. This suggests that we need to filter posts by year and answer count. The CreationDate column is necessary to extract the year, and AnswerCount is necessary to filter posts with 2 or less answers. The Id column is necessary for counting the number of links created. The PostId column is necessary to link the post to the postLinks table. The RelatedPostId column is not necessary for this question.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "postlinks": [
+                "postid",
+                "id",
+                "creationdate"
+            ],
+            "posts": [
+                "id",
+                "answercount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(COUNT(T1.Id) AS REAL) / 12 FROM postLinks AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE STRFTIME('%Y', T1.CreationDate) = '2010' AND T2.AnswerCount <= 2 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to create the query. I used the correct tables and columns, and applied the conditions specified in the question. I also used the correct function to calculate the average monthly number of links created.",
+        "SQL": "SELECT CAST(COUNT(T1.Id) AS REAL) / 12 FROM postLinks AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE strftime('%Y', T1.CreationDate) = '2010' AND T2.AnswerCount <= 2",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average monthly number of links created in 2010 for posts that have no more than 2 answers?",
+            "Evidence": "calculation = DIVIDE(COUNT(Id where YEAR(CreationDate) = 2010 and AnswerCount < = 2), 12)",
+            "GOLD_SQL": "SELECT CAST(COUNT(T1.Id) AS REAL) / 12 FROM postLinks AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE T2.AnswerCount <= 2 AND STRFTIME('%Y', T1.CreationDate) = '2010'",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(T1.Id) AS REAL) / 12 FROM postLinks AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE STRFTIME('%Y', T1.CreationDate) = '2010' AND T2.AnswerCount <= 2 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average monthly number of links created in 2010 for posts that have no more than 2 answers?",
+            "Evidence": "calculation = DIVIDE(COUNT(Id where YEAR(CreationDate) = 2010 and AnswerCount < = 2), 12)",
+            "GOLD_SQL": "SELECT CAST(COUNT(T1.Id) AS REAL) / 12 FROM postLinks AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE T2.AnswerCount <= 2 AND STRFTIME('%Y', T1.CreationDate) = '2010'",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(T1.Id) AS REAL) / 12 FROM postLinks AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE strftime('%Y', T1.CreationDate) = '2010' AND T2.AnswerCount <= 2"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,274 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Yearly Kickoff",
+            "October Meeting",
+            "budget",
+            "Advertisement",
+            "category",
+            "budget table",
+            "amount",
+            "event_name",
+            "DIVIDE",
+            "SUM"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "budget": [
+                "category",
+                "amount"
+            ],
+            "event": [
+                "event_name"
+            ]
+        },
+        "similar_values": {
+            "event": {
+                "event_name": [
+                    "October Meeting",
+                    "Yearly Kickoff"
+                ],
+                "type": [
+                    "Budget",
+                    "Meeting"
+                ]
+            },
+            "budget": {
+                "category": [
+                    "Advertisement"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "budget": {
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                },
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event to which the budget line applies.",
+                    "value_description": "References the Event table"
+                },
+                "category": {
+                    "column_name": "",
+                    "column_description": "The area for which the amount is budgeted, such as, advertisement, food, parking",
+                    "value_description": ""
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                }
+            },
+            "expense": {
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                }
+            },
+            "event": {
+                "event_date": {
+                    "column_name": "event date",
+                    "column_description": "The date the event took place or is scheduled to take place",
+                    "value_description": "e.g. 2020-03-10T12:00:00"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id",
+                "event_name",
+                "type"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "category",
+                "spent",
+                "amount",
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "amount",
+                "source",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "link_to_event",
+                "category",
+                "amount"
+            ],
+            "event": [
+                "event_id",
+                "type",
+                "event_name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "budget": [
+                "category",
+                "spent",
+                "amount",
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "event": [
+                "event_id",
+                "event_name",
+                "type"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the budget in Advertisement for 'Yearly Kickoff' and 'October Meeting'. The hint suggests that we need to consider the 'budget' table for the category 'Advertisement'. Additionally, we need to consider the 'event' table to filter the budget by event name. The 'budget' table is linked to the 'event' table through the 'link_to_event' foreign key. Therefore, we need to include both tables in our SQL query.",
+        "selected_tables": [
+            "budget",
+            "event"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "link_to_event",
+                "category",
+                "amount"
+            ],
+            "event": [
+                "event_id",
+                "type",
+                "event_name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "budget": [
+                "category",
+                "amount",
+                "event_name",
+                "link_to_event"
+            ],
+            "event": [
+                "event_name"
+            ]
+        },
+        "model_selected_columns": {
+            "budget": [
+                "category",
+                "amount",
+                "event_name",
+                "link_to_event"
+            ],
+            "event": [
+                "event_name"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the budget in Advertisement for 'Yearly Kickoff' meeting compared to 'October Meeting'. The hint suggests using SUM(amount) for each event name. The category column in the budget table helps filter the budget in Advertisement. The event_name column in the budget table and event table helps filter the events 'Yearly Kickoff' and 'October Meeting'.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'event'.'event_id'",
+            "'event'.'type'"
+        ],
+        "correct_columns": {
+            "budget": [
+                "link_to_event",
+                "category",
+                "amount"
+            ],
+            "event": [
+                "event_id",
+                "type",
+                "event_name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T2.event_name = 'Yearly Kickoff' THEN T1.amount ELSE 0 END) AS REAL) / SUM(CASE WHEN T2.event_name = 'October Meeting' THEN T1.amount ELSE 0 END) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Advertisement' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question and identifying the relevant tables and columns. I noticed that the question is asking for the ratio of the total budget in Advertisement for 'Yearly Kickoff' to the total budget in Advertisement for 'October Meeting'. I used the budget table and joined it with the event table to filter the events by name. I then used a CASE statement to sum up the amounts for each event name. Finally, I divided the two sums to get the desired ratio.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T2.event_name = 'Yearly Kickoff' THEN T1.amount ELSE 0 END) AS REAL) / SUM(CASE WHEN T2.event_name = 'October Meeting' THEN T1.amount ELSE 0 END) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Advertisement'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many times was the budget in Advertisement for \"Yearly Kickoff\" meeting more than \"October Meeting\"?",
+            "Evidence": "budget in Advertisement refer to category = 'Advertisement' in the budget table; DIVIDE(SUM(amount when event_name = 'Yearly Kickoff'), SUM(amount when event_name = 'October Meeting'))",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN T2.event_name = 'Yearly Kickoff' THEN T1.amount ELSE 0 END) AS REAL) / SUM(CASE WHEN T2.event_name = 'October Meeting' THEN T1.amount ELSE 0 END) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Advertisement' AND T2.type = 'Meeting'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T2.event_name = 'Yearly Kickoff' THEN T1.amount ELSE 0 END) AS REAL) / SUM(CASE WHEN T2.event_name = 'October Meeting' THEN T1.amount ELSE 0 END) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Advertisement' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many times was the budget in Advertisement for \"Yearly Kickoff\" meeting more than \"October Meeting\"?",
+            "Evidence": "budget in Advertisement refer to category = 'Advertisement' in the budget table; DIVIDE(SUM(amount when event_name = 'Yearly Kickoff'), SUM(amount when event_name = 'October Meeting'))",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN T2.event_name = 'Yearly Kickoff' THEN T1.amount ELSE 0 END) AS REAL) / SUM(CASE WHEN T2.event_name = 'October Meeting' THEN T1.amount ELSE 0 END) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Advertisement' AND T2.type = 'Meeting'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T2.event_name = 'Yearly Kickoff' THEN T1.amount ELSE 0 END) AS REAL) / SUM(CASE WHEN T2.event_name = 'October Meeting' THEN T1.amount ELSE 0 END) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Advertisement'"
+        },
+        "status": "success"
+    }
+]

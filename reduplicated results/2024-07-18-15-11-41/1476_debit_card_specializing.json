@@ -1,0 +1,233 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "difference",
+            "gas consumption",
+            "CZK-paying customers",
+            "EUR-paying customers",
+            "2012",
+            "Between 201201 And 201212",
+            "year",
+            "yearmonth table",
+            "CZK customers consumption",
+            "EUR customers consumption"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "yearmonth": [
+                "Consumption",
+                "Consumption",
+                "Consumption"
+            ]
+        },
+        "similar_values": {
+            "customers": {
+                "Currency": [
+                    "CZK",
+                    "EUR"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "transactions_1k": {
+                "gasstationid": {
+                    "column_name": "Gas Station ID",
+                    "column_description": "Gas Station ID",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                },
+                "price": {
+                    "column_name": "",
+                    "column_description": "Price",
+                    "value_description": "total price = Amount x Price"
+                }
+            },
+            "gasstations": {
+                "gasstationid": {
+                    "column_name": "Gas Station ID",
+                    "column_description": "Gas Station ID",
+                    "value_description": ""
+                }
+            },
+            "yearmonth": {
+                "consumption": {
+                    "column_name": "",
+                    "column_description": "consumption",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "customers": {
+                "currency": {
+                    "column_name": "",
+                    "column_description": "Currency",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "customers": [
+                "Currency",
+                "CustomerID"
+            ],
+            "gasstations": [
+                "GasStationID"
+            ],
+            "products": [
+                "ProductID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "TransactionID"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "currency"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "customers": [
+                "Currency",
+                "CustomerID"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the difference in gas consumption between CZK-paying customers and EUR-paying customers in 2012. The hint provides a crucial insight into the representation of the year in the yearmonth table and the calculation of the difference in consumption. Based on this, I need to identify the tables that contain the necessary information to answer the question. The customers table is necessary to filter customers by their currency (CZK or EUR). The yearmonth table is necessary to get the consumption data for each customer in 2012. The transactions_1k table is not necessary as it only contains transaction data, not consumption data. The gasstations and products tables are not relevant to the question as it only asks about consumption, not transactions or gas stations.",
+        "selected_tables": [
+            "customers",
+            "yearmonth"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "currency"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "customers": [
+                "Currency"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ]
+        },
+        "model_selected_columns": {
+            "customers": [
+                "Currency"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the difference in gas consumption between CZK-paying customers and EUR-paying customers in 2012. The hint provides the necessary information to filter the year and currency. The year can be filtered by the first 4 characters of the Date column in the yearmonth table, and the currency can be filtered by the Currency column in the customers table. The Consumption column in the yearmonth table is necessary to calculate the difference in consumption.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'customers'.'customerid'",
+            "'yearmonth'.'customerid'"
+        ],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "currency"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT SUM(CASE WHEN T1.Currency = 'CZK' THEN T2.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Currency = 'EUR' THEN T2.Consumption ELSE 0 END) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date LIKE '2012%' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns required for the query. I noticed that the yearmonth table has a Date column that can be used to filter for the year 2012. I also noticed that the customers table has a Currency column that can be used to filter for CZK and EUR paying customers. I then used a CASE statement to sum up the consumption for each group of customers. Finally, I subtracted the two sums to get the difference in consumption.",
+        "SQL": "SELECT SUM(CASE WHEN T1.Currency = 'CZK' THEN T2.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Currency = 'EUR' THEN T2.Consumption ELSE 0 END) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date BETWEEN '201201' AND '201212' AND T1.Currency IN ('CZK', 'EUR')",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What was the difference in gas consumption between CZK-paying customers and EUR-paying customers in 2012?",
+            "Evidence": "Year 2012 can be presented as Between 201201 And 201212; The first 4 strings of the Date values in the yearmonth table can represent year; Difference in Consumption = CZK customers consumption in 2012 - EUR customers consumption in 2012",
+            "GOLD_SQL": "SELECT SUM(IIF(T1.Currency = 'CZK', T2.Consumption, 0)) - SUM(IIF(T1.Currency = 'EUR', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.Date, 1, 4) = '2012'",
+            "PREDICTED_SQL": "SELECT SUM(CASE WHEN T1.Currency = 'CZK' THEN T2.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Currency = 'EUR' THEN T2.Consumption ELSE 0 END) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date LIKE '2012%' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What was the difference in gas consumption between CZK-paying customers and EUR-paying customers in 2012?",
+            "Evidence": "Year 2012 can be presented as Between 201201 And 201212; The first 4 strings of the Date values in the yearmonth table can represent year; Difference in Consumption = CZK customers consumption in 2012 - EUR customers consumption in 2012",
+            "GOLD_SQL": "SELECT SUM(IIF(T1.Currency = 'CZK', T2.Consumption, 0)) - SUM(IIF(T1.Currency = 'EUR', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.Date, 1, 4) = '2012'",
+            "PREDICTED_SQL": "SELECT SUM(CASE WHEN T1.Currency = 'CZK' THEN T2.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Currency = 'EUR' THEN T2.Consumption ELSE 0 END) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date BETWEEN '201201' AND '201212' AND T1.Currency IN ('CZK', 'EUR')"
+        },
+        "status": "success"
+    }
+]

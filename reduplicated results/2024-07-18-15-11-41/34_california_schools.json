@@ -1,0 +1,271 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "free rate",
+            "students",
+            "ages 5-17",
+            "Kacey Gibson",
+            "school",
+            "Free Meal Count",
+            "Enrollment",
+            "Ages 5-17"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "School",
+                "County"
+            ]
+        },
+        "similar_values": {
+            "schools": {
+                "AdmLName1": [
+                    "Gibson",
+                    "Free"
+                ],
+                "GSserved": [
+                    "5-11"
+                ],
+                "GSoffered": [
+                    "5-12"
+                ],
+                "Street": [
+                    "287 Gibson"
+                ],
+                "MailStrAbr": [
+                    "287 Gibson"
+                ],
+                "StreetAbr": [
+                    "287 Gibson"
+                ],
+                "MailStreet": [
+                    "287 Gibson"
+                ],
+                "AdmFName1": [
+                    "Kacey"
+                ],
+                "AdmLName2": [
+                    "Agee"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "frpm": {
+                "enrollment (ages 5-17)": {
+                    "column_name": "",
+                    "column_description": "Enrollment (Ages 5-17)",
+                    "value_description": ""
+                },
+                "free meal count (ages 5-17)": {
+                    "column_name": "",
+                    "column_description": "Free Meal Count (Ages 5-17)",
+                    "value_description": "eligible free rate = Free Meal Count / Enrollment"
+                },
+                "free meal count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free Meal Count (K-12)",
+                    "value_description": "eligible free rate = Free Meal Count / Enrollment"
+                },
+                "frpm count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free or Reduced Price Meal Count (K-12)",
+                    "value_description": "eligible FRPM rate = FRPM / Enrollment"
+                }
+            },
+            "satscores": {
+                "enroll12": {
+                    "column_name": "enrollment (1st-12nd grade)",
+                    "column_description": "enrollment (1st-12nd grade)",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)",
+                "Percent (%) Eligible Free (K-12)",
+                "FRPM Count (K-12)",
+                "Percent (%) Eligible FRPM (K-12)",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)",
+                "Percent (%) Eligible Free (Ages 5-17)",
+                "FRPM Count (Ages 5-17)",
+                "Percent (%) Eligible FRPM (Ages 5-17)"
+            ],
+            "satscores": [
+                "sname",
+                "cds"
+            ],
+            "schools": [
+                "School",
+                "MailStreet",
+                "GSoffered",
+                "GSserved",
+                "AdmLName1",
+                "County",
+                "CDSCode"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'admfname1'"
+        ],
+        "correct_columns": {
+            "frpm": [
+                "Enrollment (Ages 5-17)",
+                "cdscode",
+                "Free Meal Count (Ages 5-17)"
+            ],
+            "schools": [
+                "cdscode",
+                "admfname1",
+                "admlname1"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)",
+                "Percent (%) Eligible Free (K-12)",
+                "FRPM Count (K-12)",
+                "Percent (%) Eligible FRPM (K-12)",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)",
+                "Percent (%) Eligible Free (Ages 5-17)",
+                "FRPM Count (Ages 5-17)",
+                "Percent (%) Eligible FRPM (Ages 5-17)"
+            ],
+            "schools": [
+                "School",
+                "MailStreet",
+                "GSoffered",
+                "GSserved",
+                "AdmLName1",
+                "County",
+                "CDSCode"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the free rate for students between the ages of 5 and 17 at the school run by Kacey Gibson. The hint provides the formula for the eligible free rate, which involves `Free Meal Count (Ages 5-17)` and `Enrollment (Ages 5-17)`. This formula is only applicable to the `frpm` table. Additionally, the question requires the school's information, which is present in the `schools` table. The `satscores` table is not relevant to this question. Therefore, the necessary tables are `frpm` and `schools`.",
+        "selected_tables": [
+            "frpm",
+            "schools"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'admfname1'"
+        ],
+        "correct_columns": {
+            "frpm": [
+                "Enrollment (Ages 5-17)",
+                "cdscode",
+                "Free Meal Count (Ages 5-17)"
+            ],
+            "schools": [
+                "cdscode",
+                "admfname1",
+                "admlname1"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Free Meal Count (Ages 5-17)",
+                "Enrollment (Ages 5-17)"
+            ],
+            "schools": [
+                "CDSCode",
+                "County"
+            ]
+        },
+        "model_selected_columns": {
+            "frpm": [
+                "CDSCode",
+                "Free Meal Count (Ages 5-17)",
+                "Enrollment (Ages 5-17)"
+            ],
+            "schools": [
+                "CDSCode",
+                "County"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the free rate for students between the ages of 5 and 17 at the school run by Kacey Gibson. The hint provides the formula for eligible free rates, which involves `Free Meal Count (Ages 5-17)` and `Enrollment (Ages 5-17)` columns. To find the school run by Kacey Gibson, we need to match the `CDSCode` in the `frpm` table with the `CDSCode` in the `schools` table. The `County` column in the `schools` table is not relevant to this question, but it's included for filtering purposes.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'admfname1'",
+            "'schools'.'admlname1'"
+        ],
+        "correct_columns": {
+            "frpm": [
+                "Enrollment (Ages 5-17)",
+                "cdscode",
+                "Free Meal Count (Ages 5-17)"
+            ],
+            "schools": [
+                "cdscode",
+                "admfname1",
+                "admlname1"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.County = 'Kacey Gibson' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns in the frpm table that are related to the free rate for students between the ages of 5 and 17. I then joined the frpm table with the schools table to filter the results by the school run by Kacey Gibson. Finally, I calculated the free rate by dividing the Free Meal Count (Ages 5-17) by the Enrollment (Ages 5-17).",
+        "SQL": "SELECT T2.`Percent (%) Eligible Free (Ages 5-17)` FROM frpm AS T2 INNER JOIN schools AS T1 ON T1.CDSCode = T2.CDSCode WHERE T1.`AdmFName1` = 'Kacey' AND T1.`AdmLName1` = 'Gibson'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the free rate for students between the ages of 5 and 17 at the school run by Kacey Gibson?",
+            "Evidence": "Eligible free rates for students aged 5-17 = `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)`",
+            "GOLD_SQL": "SELECT CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.AdmFName1 = 'Kacey' AND T1.AdmLName1 = 'Gibson'",
+            "PREDICTED_SQL": "SELECT CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.County = 'Kacey Gibson' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the free rate for students between the ages of 5 and 17 at the school run by Kacey Gibson?",
+            "Evidence": "Eligible free rates for students aged 5-17 = `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)`",
+            "GOLD_SQL": "SELECT CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.AdmFName1 = 'Kacey' AND T1.AdmLName1 = 'Gibson'",
+            "PREDICTED_SQL": "SELECT T2.`Percent (%) Eligible Free (Ages 5-17)` FROM frpm AS T2 INNER JOIN schools AS T1 ON T1.CDSCode = T2.CDSCode WHERE T1.`AdmFName1` = 'Kacey' AND T1.`AdmLName1` = 'Gibson'"
+        },
+        "status": "success"
+    }
+]

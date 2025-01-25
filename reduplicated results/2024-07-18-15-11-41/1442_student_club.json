@@ -1,0 +1,228 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "percentage",
+            "events",
+            "went over budget",
+            "remaining",
+            "0",
+            "event_id",
+            "SUM",
+            "COUNT",
+            "DIVIDE",
+            "100"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "budget": [
+                "remaining"
+            ],
+            "event": [
+                "event_id"
+            ],
+            "zip_code": [
+                "county"
+            ]
+        },
+        "similar_values": {
+            "event": {
+                "type": [
+                    "Budget"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "budget": {
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                },
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event to which the budget line applies.",
+                    "value_description": "References the Event table"
+                }
+            },
+            "expense": {
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "county",
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "spent",
+                "remaining",
+                "amount",
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "budget_id",
+                "remaining"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "budget": [
+                "spent",
+                "remaining",
+                "amount",
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "event": [
+                "event_id"
+            ],
+            "zip_code": [
+                "county",
+                "zip_code"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of events that went over budget, which is defined as remaining < 0. The hint provides a formula to calculate this percentage. To calculate this percentage, we need to count the number of events that went over budget (remaining < 0) and divide it by the total number of events. The budget table contains the remaining value, which is used to determine if an event went over budget. The event table contains the event_id, which is used to count the total number of events. Therefore, we need to use the budget and event tables to answer the question.",
+        "selected_tables": [
+            "budget",
+            "event"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "budget_id",
+                "remaining"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "budget": [
+                "remaining"
+            ],
+            "event": [
+                "event_id"
+            ]
+        },
+        "model_selected_columns": {
+            "budget": [
+                "remaining"
+            ],
+            "event": [
+                "event_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of events that went over budget, which is defined as remaining < 0. The hint provides a formula to calculate this percentage. We need to identify the columns that will help us calculate this percentage. The budget table has the remaining column, which is the key to determining whether an event went over budget. The event table has the event_id column, which is necessary for counting the number of events. The zip_code table is not relevant to this question, so we can ignore it.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'budget'.'budget_id'"
+        ],
+        "correct_columns": {
+            "budget": [
+                "budget_id",
+                "remaining"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.remaining < 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.link_to_event) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question, which asks for the percentage of events that went over budget. I then analyzed the hint provided, which suggests that 'went over budget' refers to the remaining value being less than 0. I used this information to create a case statement in the SELECT clause to count the number of events that went over budget. I then used the COUNT function to count the total number of events and divided the result by the total count to get the percentage.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.remaining < 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.link_to_event) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of the events that went over budget?",
+            "Evidence": "went over budget refers to remaining < 0; percentage = DIVIDE(SUM(remaining < 0), COUNT(event_id)) * 100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN remaining < 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(budget_id) FROM budget",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.remaining < 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.link_to_event) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of the events that went over budget?",
+            "Evidence": "went over budget refers to remaining < 0; percentage = DIVIDE(SUM(remaining < 0), COUNT(event_id)) * 100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN remaining < 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(budget_id) FROM budget",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.remaining < 0 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.link_to_event) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id"
+        },
+        "status": "success"
+    }
+]

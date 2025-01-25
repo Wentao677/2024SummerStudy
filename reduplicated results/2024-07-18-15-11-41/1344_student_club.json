@@ -1,0 +1,237 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "notes",
+            "fundraising",
+            "2019/9/14",
+            "2019-09-14",
+            "source",
+            "Fundraising",
+            "date_received"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "income": [
+                "notes",
+                "source",
+                "date_received"
+            ]
+        },
+        "similar_values": {
+            "income": {
+                "source": [
+                    "Fundraising"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "income": {
+                "date_received": {
+                    "column_name": "date received",
+                    "column_description": "the date that the fund received",
+                    "value_description": ""
+                },
+                "source": {
+                    "column_name": "",
+                    "column_description": "A value indicating where the funds come from such as dues, or the annual university allocation",
+                    "value_description": ""
+                },
+                "notes": {
+                    "column_name": "",
+                    "column_description": "A free-text value giving any needed details about the receipt of funds",
+                    "value_description": ""
+                }
+            },
+            "expense": {
+                "expense_description": {
+                    "column_name": "expense description",
+                    "column_description": "A textual description of what the money was spend for",
+                    "value_description": ""
+                },
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                },
+                "expense_date": {
+                    "column_name": "expense date",
+                    "column_description": "The date the expense was incurred",
+                    "value_description": "e.g. YYYY-MM-DD"
+                }
+            },
+            "event": {
+                "event_date": {
+                    "column_name": "event date",
+                    "column_description": "The date the event took place or is scheduled to take place",
+                    "value_description": "e.g. 2020-03-10T12:00:00"
+                }
+            },
+            "budget": {
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_date",
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "expense_date",
+                "expense_id",
+                "link_to_member",
+                "link_to_budget"
+            ],
+            "income": [
+                "date_received",
+                "source",
+                "notes",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "income": [
+                "notes",
+                "source",
+                "date_received"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "income": [
+                "date_received",
+                "source",
+                "notes",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the notes of a specific fundraising event on a specific date. The hint provides the source and date received, which helps to identify the relevant tables. The 'Fundraising' source in the hint indicates that we need to focus on the 'income' table, as it contains records with this source. The date '2019-09-14' in the hint suggests that we need to filter the records by date received. The 'member' table is not directly relevant to the question, but it is necessary to link the income records to the corresponding members. The 'income' table is the primary source of information for this question, and the 'member' table provides the necessary link to the member who received the funds.",
+        "selected_tables": [
+            "income",
+            "member"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "income": [
+                "notes",
+                "source",
+                "date_received"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "income": [
+                "income_id",
+                "date_received",
+                "source",
+                "notes"
+            ]
+        },
+        "model_selected_columns": {
+            "income": [
+                "income_id",
+                "date_received",
+                "source",
+                "notes"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the notes of a specific fundraising event on a specific date. The hint provides the source and date received, which helps identify the relevant rows in the income table. The link_to_member column is not necessary as it's not mentioned in the question. The zip column in the member table is also not relevant. The link_to_major column is not mentioned in the question, so it's not necessary either.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "income": [
+                "notes",
+                "source",
+                "date_received"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT notes FROM income WHERE source = 'Fundraising' AND date_received = '2019-09-14' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the key phrases 'fundraising on 2019/9/14' which refers to 'source = 'Fundraising' where date_received = '2019-09-14''. I then looked at the database schema and identified the income table as the relevant table for this question. I used the instructions to write the SQL query, making sure to only include the columns asked in the question and not to concatenate columns.",
+        "SQL": "SELECT notes FROM income WHERE source = 'Fundraising' AND date_received = '2019-09-14'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What was the notes of the fundraising on 2019/9/14?",
+            "Evidence": "fundraising on 2019/9/14 refers to source = 'Fundraising' where date_received = '2019-09-14'",
+            "GOLD_SQL": "SELECT notes FROM income WHERE source = 'Fundraising' AND date_received = '2019-09-14'",
+            "PREDICTED_SQL": "SELECT notes FROM income WHERE source = 'Fundraising' AND date_received = '2019-09-14' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What was the notes of the fundraising on 2019/9/14?",
+            "Evidence": "fundraising on 2019/9/14 refers to source = 'Fundraising' where date_received = '2019-09-14'",
+            "GOLD_SQL": "SELECT notes FROM income WHERE source = 'Fundraising' AND date_received = '2019-09-14'",
+            "PREDICTED_SQL": "SELECT notes FROM income WHERE source = 'Fundraising' AND date_received = '2019-09-14'"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,269 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Post Cards, Posters",
+            "event",
+            "2019/8/20",
+            "expense description",
+            "expense_date",
+            "event_status"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "expense": [
+                "expense_description",
+                "expense_date"
+            ],
+            "budget": [
+                "event_status"
+            ]
+        },
+        "similar_values": {
+            "expense": {
+                "expense_description": [
+                    "Posters",
+                    "Post Cards, Posters"
+                ]
+            },
+            "zip_code": {
+                "city": [
+                    "Post"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "budget": {
+                "event_status": {
+                    "column_name": "event status",
+                    "column_description": "the status of the event",
+                    "value_description": "Closed / Open/ Planning    \u2022 Closed: It means that the event is closed. The spent and the remaining won't change anymore. \u2022 Open: It means that the event is already opened. The spent and the remaining will change with new expenses. \u2022 Planning: The event is not started yet but is planning. The spent and the remaining won't change at this stage."
+                }
+            },
+            "event": {
+                "event_date": {
+                    "column_name": "event date",
+                    "column_description": "The date the event took place or is scheduled to take place",
+                    "value_description": "e.g. 2020-03-10T12:00:00"
+                },
+                "location": {
+                    "column_name": "",
+                    "column_description": "Address where the event was held or is to be held or the name of such a location",
+                    "value_description": ""
+                },
+                "event_name": {
+                    "column_name": "event name",
+                    "column_description": "event name",
+                    "value_description": ""
+                }
+            },
+            "income": {
+                "date_received": {
+                    "column_name": "date received",
+                    "column_description": "the date that the fund received",
+                    "value_description": ""
+                }
+            },
+            "expense": {
+                "expense_description": {
+                    "column_name": "expense description",
+                    "column_description": "A textual description of what the money was spend for",
+                    "value_description": ""
+                },
+                "expense_date": {
+                    "column_name": "expense date",
+                    "column_description": "The date the expense was incurred",
+                    "value_description": "e.g. YYYY-MM-DD"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id",
+                "event_name",
+                "event_date",
+                "status"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "expense_description",
+                "expense_date",
+                "expense_id",
+                "link_to_member",
+                "link_to_budget"
+            ],
+            "income": [
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "event_status",
+                "budget_id"
+            ],
+            "expense": [
+                "link_to_budget",
+                "expense_description",
+                "expense_date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "expense": [
+                "expense_description",
+                "expense_date",
+                "expense_id",
+                "link_to_member",
+                "link_to_budget"
+            ],
+            "budget": [
+                "event_status",
+                "link_to_event",
+                "budget_id"
+            ],
+            "event": [
+                "event_id",
+                "event_name",
+                "event_date",
+                "status"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the status of an event that incurred an expense with a specific description on a specific date. The hint highlights the importance of the expense description, date, and event status. By analyzing the database schema, I identified the tables that contain the necessary information. The 'expense' table has the expense description and date, while the 'budget' table has the link to the event and its status. The 'event' table has the event ID, which is linked to the budget table through the 'link_to_event' foreign key. Therefore, I concluded that the necessary tables are 'expense', 'budget', and 'event'.",
+        "selected_tables": [
+            "expense",
+            "budget",
+            "event"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "event_status",
+                "budget_id"
+            ],
+            "expense": [
+                "link_to_budget",
+                "expense_description",
+                "expense_date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "expense": [
+                "expense_id",
+                "expense_date",
+                "expense_description"
+            ],
+            "event": [
+                "event_id",
+                "event_status"
+            ]
+        },
+        "model_selected_columns": {
+            "expense": [
+                "expense_id",
+                "expense_date",
+                "expense_description"
+            ],
+            "event": [
+                "event_id",
+                "event_status"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the status of an event that incurred an expense with a specific description on a specific date. The hint points to the expense description, expense date, and event status. We need to find the event_id that matches the expense description and date, and then retrieve the event_status for that event_id.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "budget"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'expense'.'link_to_budget'"
+        ],
+        "correct_columns": {
+            "budget": [
+                "event_status",
+                "budget_id"
+            ],
+            "expense": [
+                "link_to_budget",
+                "expense_description",
+                "expense_date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.event_status FROM expense AS T1 INNER JOIN event AS T2 ON T1.expense_id = T2.event_id WHERE T1.expense_description = 'Post Cards, Posters' AND T1.expense_date = '2019-8-20' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I analyzed the question and understood that I need to find the status of the event which bought 'Post Cards, Posters' on 2019/8/20. I used the hint provided to identify the relevant columns. I joined the expense table with the event table on the expense_id and event_id columns. I filtered the results to only include the rows where the expense description is 'Post Cards, Posters' and the expense date is '2019-8-20'. Finally, I selected the event_status column from the joined tables.",
+        "SQL": "SELECT event_status FROM expense INNER JOIN budget ON expense.link_to_budget = budget.link_to_event INNER JOIN event ON budget.link_to_event = event.event_id WHERE expense_description = 'Post Cards, Posters' AND expense_date = '2019-8-20'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "no such column: T2.event_status",
+            "Question": "What is the status of the event which bought \"Post Cards, Posters\" on 2019/8/20?",
+            "Evidence": "'Post Cards, Posters' is an expense description; on 2019/8/20 refers to expense_date = '2019-8-20'; status of event refers to event_status",
+            "GOLD_SQL": "SELECT T1.event_status FROM budget AS T1 INNER JOIN expense AS T2 ON T1.budget_id = T2.link_to_budget WHERE T2.expense_description = 'Post Cards, Posters' AND T2.expense_date = '2019-08-20'",
+            "PREDICTED_SQL": "SELECT T2.event_status FROM expense AS T1 INNER JOIN event AS T2 ON T1.expense_id = T2.event_id WHERE T1.expense_description = 'Post Cards, Posters' AND T1.expense_date = '2019-8-20' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the status of the event which bought \"Post Cards, Posters\" on 2019/8/20?",
+            "Evidence": "'Post Cards, Posters' is an expense description; on 2019/8/20 refers to expense_date = '2019-8-20'; status of event refers to event_status",
+            "GOLD_SQL": "SELECT T1.event_status FROM budget AS T1 INNER JOIN expense AS T2 ON T1.budget_id = T2.link_to_budget WHERE T2.expense_description = 'Post Cards, Posters' AND T2.expense_date = '2019-08-20'",
+            "PREDICTED_SQL": "SELECT event_status FROM expense INNER JOIN budget ON expense.link_to_budget = budget.link_to_event INNER JOIN event ON budget.link_to_event = event.event_id WHERE expense_description = 'Post Cards, Posters' AND expense_date = '2019-8-20'"
+        },
+        "status": "success"
+    }
+]

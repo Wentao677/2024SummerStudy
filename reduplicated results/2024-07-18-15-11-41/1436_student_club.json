@@ -1,0 +1,282 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "links",
+            "events",
+            "members",
+            "paid",
+            "more",
+            "than",
+            "50",
+            "dollar",
+            "cost",
+            "50"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "expense": [
+                "cost"
+            ]
+        },
+        "similar_values": {
+            "member": {
+                "position": [
+                    "Member"
+                ]
+            },
+            "zip_code": {
+                "city": [
+                    "Cost"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "attendance": {
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event which was attended",
+                    "value_description": "References the Event table"
+                }
+            },
+            "budget": {
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event to which the budget line applies.",
+                    "value_description": "References the Event table"
+                },
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                }
+            },
+            "expense": {
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                },
+                "cost": {
+                    "column_name": "",
+                    "column_description": "The dollar amount of the expense",
+                    "value_description": "the unit is dollar"
+                },
+                "expense_description": {
+                    "column_name": "expense description",
+                    "column_description": "A textual description of what the money was spend for",
+                    "value_description": ""
+                },
+                "link_to_member": {
+                    "column_name": "link to member",
+                    "column_description": "The member who incurred the expense",
+                    "value_description": ""
+                }
+            },
+            "event": {
+                "notes": {
+                    "column_name": "",
+                    "column_description": "A free text field for any notes about the event",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "spent",
+                "amount",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "amount",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "expense": [
+                "link_to_member",
+                "cost"
+            ],
+            "member": [
+                "member_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "event": [
+                "event_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for links to events for members who have paid more than 50 dollars. The hint clarifies that 'have paid more than 50 dollar' refers to the 'cost' in the expense table. This implies that we need to find members who have incurred expenses greater than 50 dollars. We can identify these members by joining the expense table with the member table, as the expense table references the member table. Additionally, we need to link the expenses to the events, which is done by joining the expense table with the attendance table, as the expense table references the attendance table. Finally, we need to get the event IDs from the attendance table, which is linked to the event table. Therefore, we need to use the expense, attendance, and event tables to answer the question.",
+        "selected_tables": [
+            "expense",
+            "attendance",
+            "event"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "member"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "expense": [
+                "link_to_member",
+                "cost"
+            ],
+            "member": [
+                "member_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "expense": [
+                "expense_id",
+                "link_to_member",
+                "cost"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "model_selected_columns": {
+            "expense": [
+                "expense_id",
+                "link_to_member",
+                "cost"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for links to events for members who have paid more than 50 dollars. The hint clarifies that 'have paid more than 50 dollar' refers to cost > 50. This means we need to filter expenses by cost and then link the member to the event. The link_to_member column in the expense table connects the expense to the member, and the link_to_event column in the attendance table connects the event to the attendance.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "member"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'attendance'.'link_to_member'"
+        ],
+        "correct_columns": {
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "expense": [
+                "link_to_member",
+                "cost"
+            ],
+            "member": [
+                "member_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT link_to_event FROM attendance WHERE link_to_member IN ( SELECT link_to_member FROM expense WHERE cost > 50 ) ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "The question asks for links to events for members who have paid more than 50 dollars. This means we need to find the members who have incurred expenses greater than 50 dollars. We can do this by joining the attendance table with the expense table, and then filtering the results to only include those with expenses greater than 50. We then select the link_to_event column from the attendance table to get the desired result.",
+        "SQL": "SELECT DISTINCT link_to_event FROM attendance WHERE link_to_member IN (SELECT link_to_member FROM expense WHERE cost > 50)",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please provide links to events for members who have paid more than 50 dollar.",
+            "Evidence": "have paid more than 50 dollar refers to cost > 50",
+            "GOLD_SQL": "SELECT DISTINCT T3.link_to_event FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id INNER JOIN attendance AS T3 ON T2.member_id = T3.link_to_member WHERE T1.cost > 50",
+            "PREDICTED_SQL": "SELECT DISTINCT link_to_event FROM attendance WHERE link_to_member IN ( SELECT link_to_member FROM expense WHERE cost > 50 ) "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please provide links to events for members who have paid more than 50 dollar.",
+            "Evidence": "have paid more than 50 dollar refers to cost > 50",
+            "GOLD_SQL": "SELECT DISTINCT T3.link_to_event FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id INNER JOIN attendance AS T3 ON T2.member_id = T3.link_to_member WHERE T1.cost > 50",
+            "PREDICTED_SQL": "SELECT DISTINCT link_to_event FROM attendance WHERE link_to_member IN (SELECT link_to_member FROM expense WHERE cost > 50)"
+        },
+        "status": "success"
+    }
+]

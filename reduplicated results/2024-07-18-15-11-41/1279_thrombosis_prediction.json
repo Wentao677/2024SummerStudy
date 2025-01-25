@@ -1,0 +1,218 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "abnormal level",
+            "glutamic oxaloacetic transaminase",
+            "GOT",
+            "SLE",
+            "percentage",
+            "MULTIPLY",
+            "DIVIDE",
+            "COUNT",
+            "ID",
+            "Diagnosis"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "GOT"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "SLE"
+                ]
+            },
+            "Patient": {
+                "Diagnosis": [
+                    "SLE"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "got": {
+                    "column_name": "AST glutamic oxaloacetic transaminase",
+                    "column_description": "AST glutamic oxaloacetic transaminase",
+                    "value_description": "Commonsense evidence:  Normal range: N < 60"
+                },
+                "gpt": {
+                    "column_name": "ALT glutamic pyruvic transaminase",
+                    "column_description": "ALT glutamic pyruvic transaminase",
+                    "value_description": "Commonsense evidence:  Normal range: N < 60"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "GOT",
+                "GPT",
+                "TAT2",
+                "RF",
+                "SM",
+                "SSB",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "GOT"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "ID",
+                "GOT",
+                "GPT",
+                "TAT2",
+                "RF",
+                "SM",
+                "SSB",
+                "Date"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify patients with abnormal GOT levels (GOT >= 60) who are diagnosed with SLE. The hint provides a formula to calculate the percentage, which involves counting the number of patients with abnormal GOT levels and then dividing it by the total number of patients with SLE. The formula also involves counting the total number of patients with abnormal GOT levels. This requires data from the Laboratory table to get the GOT values and the Patient table to get the diagnosis information. Therefore, we need to use both the Laboratory and Patient tables to answer the question.",
+        "selected_tables": [
+            "Laboratory",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "GOT"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "GOT",
+                "Date",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ]
+        },
+        "model_selected_columns": {
+            "Laboratory": [
+                "GOT",
+                "Date",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of patients with abnormal GOT levels and SLE diagnosis. The hint provides the formula to calculate this percentage, which involves counting patients with GOT >= 60 and SLE diagnosis. Therefore, we need columns that store GOT values and patient diagnoses.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "GOT"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T2.GOT >= 60 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'SLE' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question, which asks for the percentage of patients who have an abnormal level of glutamic oxaloacetic transaminase (GOT) and are diagnosed with SLE. I then analyzed the database schema and identified the relevant columns: GOT from the Laboratory table and Diagnosis from the Patient table. I joined the two tables on the ID column and filtered the results to include only patients with a diagnosis of SLE and a GOT level greater than or equal to 60. I then used a CASE statement to count the number of patients with an abnormal GOT level and divided it by the total number of patients with SLE to get the percentage.",
+        "SQL": "SELECT (COUNT(CASE WHEN T2.GOT >= 60 THEN T1.ID ELSE NULL END) / COUNT(T1.ID)) * 100 FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'SLE'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the percentage of patient who has a abnormal level of glutamic oxaloacetic transaminase level, yet he or she is diagnosed with SLE?",
+            "Evidence": "abnormal level of glutamic oxaloacetic transaminase refers to GOT > = 60; percentage = MULTIPLY(DIVIDE(COUNT(ID WHERE GOT > = 60 AND Diagnosis = 'SLE'), COUNT(ID WHERE GOT > = 60)), 1.0);",
+            "GOLD_SQL": "SELECT COUNT(CASE WHEN T1.Diagnosis LIKE '%SLE%' THEN T1.ID ELSE 0 END) / COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.`GOT` >= 60",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T2.GOT >= 60 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'SLE' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the percentage of patient who has a abnormal level of glutamic oxaloacetic transaminase level, yet he or she is diagnosed with SLE?",
+            "Evidence": "abnormal level of glutamic oxaloacetic transaminase refers to GOT > = 60; percentage = MULTIPLY(DIVIDE(COUNT(ID WHERE GOT > = 60 AND Diagnosis = 'SLE'), COUNT(ID WHERE GOT > = 60)), 1.0);",
+            "GOLD_SQL": "SELECT COUNT(CASE WHEN T1.Diagnosis LIKE '%SLE%' THEN T1.ID ELSE 0 END) / COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.`GOT` >= 60",
+            "PREDICTED_SQL": "SELECT (COUNT(CASE WHEN T2.GOT >= 60 THEN T1.ID ELSE NULL END) / COUNT(T1.ID)) * 100 FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'SLE'"
+        },
+        "status": "success"
+    }
+]

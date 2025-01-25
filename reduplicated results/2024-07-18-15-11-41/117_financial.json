@@ -1,0 +1,252 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "loan amount",
+            "fully paid",
+            "no issue",
+            "contract finished",
+            "no problems",
+            "status",
+            "A",
+            "percentage",
+            "accounts by condition",
+            "total amount",
+            "total(amount)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "loan": [
+                "amount",
+                "status",
+                "amount"
+            ],
+            "card": [
+                "issued"
+            ],
+            "trans": [
+                "account"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "loan": {
+                "duration": {
+                    "column_name": "",
+                    "column_description": "loan duration",
+                    "value_description": "unit\uff1amonth"
+                },
+                "status": {
+                    "column_name": "",
+                    "column_description": "repayment status",
+                    "value_description": "'A' stands for contract finished, no problems; 'B' stands for contract finished, loan not paid; 'C' stands for running contract, OK so far; 'D' stands for running contract, client in debt"
+                },
+                "payments": {
+                    "column_name": "monthly payments",
+                    "column_description": "monthly payments",
+                    "value_description": "unit\uff1amonth"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "approved amount",
+                    "value_description": "unit\uff1aUS dollar"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "the date when the loan is approved",
+                    "value_description": ""
+                }
+            },
+            "order": {
+                "k_symbol": {
+                    "column_name": "characterization of the payment",
+                    "column_description": "purpose of the payment",
+                    "value_description": "\"POJISTNE\" stands for insurance payment \"SIPO\" stands for household payment \"LEASING\" stands for leasing \"UVER\" stands for loan payment"
+                },
+                "amount": {
+                    "column_name": "debited amount",
+                    "column_description": "debited amount",
+                    "value_description": ""
+                }
+            },
+            "trans": {
+                "balance": {
+                    "column_name": "balance after transaction",
+                    "column_description": "balance after transaction",
+                    "value_description": "Unit\uff1aUSD"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "issued",
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id"
+            ],
+            "loan": [
+                "amount",
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "amount",
+                "k_symbol",
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "type",
+                "amount",
+                "k_symbol",
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "loan": [
+                "amount",
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "issued",
+                "card_id"
+            ],
+            "trans": [
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of loan amount that has been fully paid with no issue, which is defined as 'contract finished, no problems' or status = 'A'. This condition is related to the loan table, which contains information about the loan status. The hint also mentions the total amount, which is relevant to the loan table. Additionally, the hint suggests using the total amount and the condition to calculate the percentage. Therefore, the necessary tables for answering the question are the loan table and possibly the account table to get the total amount.",
+        "selected_tables": [
+            "loan",
+            "account"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "loan": [
+                "loan_id",
+                "amount",
+                "status"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "model_selected_columns": {
+            "loan": [
+                "loan_id",
+                "amount",
+                "status"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of loan amount that has been fully paid with no issue. The hint provides a formula to calculate this percentage, which involves filtering loans with status 'A' (contract finished, no problems) and then calculating the total amount of these loans. The table 'loan' contains the necessary information, including the loan amount and status. The table 'account' is also necessary to filter loans by account. The table 'trans' is not necessary for this question.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.status = 'A' THEN T1.amount ELSE 0 END) AS REAL) * 100 / SUM(T1.amount) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question which asks for the percentage of loan amount that has been fully paid with no issue. I noticed that 'no issue' means 'status = 'A'' and 'fully paid' means 'contract finished, no problems'. I then used a CASE statement to sum up the amount of loans that have been fully paid with no issue. I joined the loan table with the account table to get the account_id. I used the SUM function to calculate the total amount of loans and the total amount of loans that have been fully paid with no issue. Finally, I divided the sum of fully paid loans by the total amount of loans and multiplied by 100 to get the percentage.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.status = 'A' THEN T1.amount ELSE 0 END) AS REAL) * 100 / SUM(T1.amount) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of loan amount that has been fully paid with no issue.",
+            "Evidence": "Loan paid with no issue means contract finished, no problems; status = 'A' means contract finished, no problems; Percentage of accounts by condition = [(total(amount) & condition) / (total amount)] * 100%",
+            "GOLD_SQL": "SELECT (CAST(SUM(CASE WHEN status = 'A' THEN amount ELSE 0 END) AS REAL) * 100) / SUM(amount) FROM loan",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.status = 'A' THEN T1.amount ELSE 0 END) AS REAL) * 100 / SUM(T1.amount) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of loan amount that has been fully paid with no issue.",
+            "Evidence": "Loan paid with no issue means contract finished, no problems; status = 'A' means contract finished, no problems; Percentage of accounts by condition = [(total(amount) & condition) / (total amount)] * 100%",
+            "GOLD_SQL": "SELECT (CAST(SUM(CASE WHEN status = 'A' THEN amount ELSE 0 END) AS REAL) * 100) / SUM(amount) FROM loan",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.status = 'A' THEN T1.amount ELSE 0 END) AS REAL) * 100 / SUM(T1.amount) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id"
+        },
+        "status": "success"
+    }
+]

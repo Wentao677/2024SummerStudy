@@ -1,0 +1,232 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "thrombosis",
+            "patients",
+            "1997",
+            "women",
+            "most serious thrombosis",
+            "Thrombosis",
+            "sex",
+            "F"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Examination": [
+                "Thrombosis",
+                "Thrombosis",
+                "Thrombosis"
+            ],
+            "Patient": [
+                "SEX"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "thrombosis"
+                ],
+                "Symptoms": [
+                    "thrombophlebitis"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            },
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "sex": {
+                    "column_name": "",
+                    "column_description": "Sex",
+                    "value_description": "F: female; M: male"
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "laboratory": {
+                "plt": {
+                    "column_name": "platelet",
+                    "column_description": "platelet",
+                    "value_description": "Commonsense evidence:  Normal range: 100 < N < 400"
+                },
+                "fg": {
+                    "column_name": "fibrinogen",
+                    "column_description": "fibrinogen",
+                    "value_description": "Commonsense evidence:  Normal range: 150 < N < 450"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "Thrombosis",
+                "ID"
+            ],
+            "Patient": [
+                "SEX",
+                "First Date",
+                "Admission",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex"
+            ],
+            "examination": [
+                "id",
+                "thrombosis",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "Thrombosis",
+                "ID"
+            ],
+            "Patient": [
+                "SEX",
+                "First Date",
+                "Admission",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of patients with the most serious thrombosis cases examined in 1997 who are women. The hint clarifies that the most serious thrombosis refers to Thrombosis = '1' and women refer to sex = 'F'. To answer this question, we need to identify patients with Thrombosis = '1' examined in 1997 and filter them by sex = 'F'. This requires information from the Examination table to get the thrombosis level and examination date, and the Patient table to get the sex information. The Laboratory table is not necessary as it only provides additional information about laboratory tests, which is not relevant to this question.",
+        "selected_tables": [
+            "Examination",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex"
+            ],
+            "examination": [
+                "id",
+                "thrombosis",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Thrombosis"
+            ],
+            "Patient": [
+                "ID",
+                "SEX",
+                "First Date"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Thrombosis"
+            ],
+            "Patient": [
+                "ID",
+                "SEX",
+                "First Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with the most serious thrombosis cases (Thrombosis = 1) examined in 1997, and we need to filter by sex (F) to find women. We also need to filter by examination date to ensure it's in 1997. Therefore, we need columns that provide these filters.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex"
+            ],
+            "examination": [
+                "id",
+                "thrombosis",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` LIKE '1997%' AND T2.Thrombosis = '1' AND T1.SEX = 'F' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the key phrases mentioned in the question, which are 'the most serious thrombosis cases' and 'women'. I then looked at the database schema and found that the most serious thrombosis cases refer to Thrombosis = '1' and women refer to sex = 'F'. I then constructed the SQL query by joining the Patient and Examination tables, filtering the results to only include patients with Thrombosis = '1' and sex = 'F', and counting the number of patients.",
+        "SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` LIKE '1997%' AND T2.Thrombosis = '1' AND T1.SEX = 'F'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many of the patients with the most serious thrombosis cases examined in 1997 are women?",
+            "Evidence": "the most serious thrombosis refers to Thrombosis = '1' (the most severe one); women refers to sex = 'F'",
+            "GOLD_SQL": "SELECT  COUNT(*) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'F' AND STRFTIME('%Y', T2.`Examination Date`) = '1997' AND T2.Thrombosis = 1",
+            "PREDICTED_SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` LIKE '1997%' AND T2.Thrombosis = '1' AND T1.SEX = 'F' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many of the patients with the most serious thrombosis cases examined in 1997 are women?",
+            "Evidence": "the most serious thrombosis refers to Thrombosis = '1' (the most severe one); women refers to sex = 'F'",
+            "GOLD_SQL": "SELECT  COUNT(*) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'F' AND STRFTIME('%Y', T2.`Examination Date`) = '1997' AND T2.Thrombosis = 1",
+            "PREDICTED_SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` LIKE '1997%' AND T2.Thrombosis = '1' AND T1.SEX = 'F'"
+        },
+        "status": "success"
+    }
+]

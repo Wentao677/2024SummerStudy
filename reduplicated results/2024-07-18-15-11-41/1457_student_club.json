@@ -1,0 +1,290 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "full name",
+            "contact number",
+            "members",
+            "average",
+            "expense",
+            "first_name",
+            "last_name",
+            "phone",
+            "cost",
+            "AVG(cost)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "member": [
+                "first_name",
+                "last_name",
+                "phone"
+            ],
+            "expense": [
+                "cost"
+            ]
+        },
+        "similar_values": {
+            "member": {
+                "position": [
+                    "Member"
+                ]
+            },
+            "zip_code": {
+                "city": [
+                    "Cost"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "expense": {
+                "expense_description": {
+                    "column_name": "expense description",
+                    "column_description": "A textual description of what the money was spend for",
+                    "value_description": ""
+                },
+                "link_to_member": {
+                    "column_name": "link to member",
+                    "column_description": "The member who incurred the expense",
+                    "value_description": ""
+                },
+                "cost": {
+                    "column_name": "",
+                    "column_description": "The dollar amount of the expense",
+                    "value_description": "the unit is dollar"
+                },
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                }
+            },
+            "budget": {
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                }
+            },
+            "member": {
+                "last_name": {
+                    "column_name": "last name",
+                    "column_description": "member's last name",
+                    "value_description": "full name is first_name + last_name. e.g. A member's first name is Angela and last name is Sanders. Thus, his/her full name is Angela Sanders."
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "spent",
+                "remaining",
+                "budget_id",
+                "link_to_event"
+            ],
+            "expense": [
+                "cost",
+                "link_to_member",
+                "expense_id",
+                "link_to_budget"
+            ],
+            "income": [
+                "amount",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "first_name",
+                "last_name",
+                "phone",
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "link_to_member"
+            ],
+            "budget": [
+                "budget_id"
+            ],
+            "member": [
+                "member_id",
+                "first_name",
+                "last_name",
+                "phone"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "expense": [
+                "cost",
+                "link_to_member",
+                "expense_id",
+                "link_to_budget"
+            ],
+            "member": [
+                "first_name",
+                "last_name",
+                "phone",
+                "member_id",
+                "zip",
+                "link_to_major"
+            ],
+            "budget": [
+                "spent",
+                "remaining",
+                "budget_id",
+                "link_to_event"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify members who had to spend more than average on each expense. This requires information about the expenses incurred by each member, the average cost of expenses, and the member's contact details. The hint provides guidance on what constitutes 'full name' and 'contact number'. The 'had spent more than average on each expense' condition is met when the cost is greater than the average cost. This condition is applied to the expense table. The member table provides the necessary information for 'full name' and 'contact number'. The budget table is not directly relevant to this question, but it could be used to calculate the average cost of expenses. The zip_code and major tables are not relevant to this question. Therefore, the necessary tables are expense, member, and budget.",
+        "selected_tables": [
+            "expense",
+            "member",
+            "budget"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "link_to_member"
+            ],
+            "budget": [
+                "budget_id"
+            ],
+            "member": [
+                "member_id",
+                "first_name",
+                "last_name",
+                "phone"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "expense": [
+                "link_to_member",
+                "cost"
+            ],
+            "member": [
+                "first_name",
+                "last_name",
+                "phone"
+            ]
+        },
+        "model_selected_columns": {
+            "expense": [
+                "link_to_member",
+                "cost"
+            ],
+            "member": [
+                "first_name",
+                "last_name",
+                "phone"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the full name and contact number of members who had to spend more than average on each expense. The hint clarifies that 'full name' refers to first_name and last_name, and 'contact number' refers to phone. The 'had spent more than average on each expense' part is clarified as cost > AVG(cost).",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "budget"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'expense'.'link_to_budget'",
+            "'member'.'member_id'"
+        ],
+        "correct_columns": {
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "link_to_member"
+            ],
+            "budget": [
+                "budget_id"
+            ],
+            "member": [
+                "member_id",
+                "first_name",
+                "last_name",
+                "phone"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.first_name, T2.last_name, T2.phone FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T1.cost > ( SELECT AVG(cost) FROM expense ) ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns needed in the SELECT clause, which are first_name, last_name, and phone. I then joined the expense table with the member table on the link_to_member column. I used the AVG function to calculate the average cost, and then used this value to filter the results in the WHERE clause. Finally, I used the ORDER BY and LIMIT 1 to get the highest and lowest values.",
+        "SQL": "SELECT T2.first_name, T2.last_name, T2.phone FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T1.cost > (SELECT AVG(T1.cost) FROM expense) ORDER BY T1.cost LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Give the full name and contact number of members who had to spend more than average on each expense.",
+            "Evidence": "full name refers to first_name, last_name; contact number refers to phone; had spent more than average on each expense refers to cost > AVG(cost)",
+            "GOLD_SQL": "SELECT DISTINCT T3.first_name, T3.last_name, T3.phone FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN member AS T3 ON T3.member_id = T1.link_to_member WHERE T1.cost > ( SELECT AVG(T1.cost) FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN member AS T3 ON T3.member_id = T1.link_to_member )",
+            "PREDICTED_SQL": "SELECT T2.first_name, T2.last_name, T2.phone FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T1.cost > ( SELECT AVG(cost) FROM expense ) "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "misuse of aggregate: AVG()",
+            "Question": "Give the full name and contact number of members who had to spend more than average on each expense.",
+            "Evidence": "full name refers to first_name, last_name; contact number refers to phone; had spent more than average on each expense refers to cost > AVG(cost)",
+            "GOLD_SQL": "SELECT DISTINCT T3.first_name, T3.last_name, T3.phone FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN member AS T3 ON T3.member_id = T1.link_to_member WHERE T1.cost > ( SELECT AVG(T1.cost) FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN member AS T3 ON T3.member_id = T1.link_to_member )",
+            "PREDICTED_SQL": "SELECT T2.first_name, T2.last_name, T2.phone FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T1.cost > (SELECT AVG(T1.cost) FROM expense) ORDER BY T1.cost LIMIT 1"
+        },
+        "status": "success"
+    }
+]

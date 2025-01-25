@@ -1,0 +1,226 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "expenses",
+            "fifty dollars",
+            "average",
+            "expense_description",
+            "cost",
+            "expense_id",
+            "SUM(cost)",
+            "COUNT(expense_id)",
+            "DIVIDE"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "expense": [
+                "expense_description",
+                "cost",
+                "expense_id",
+                "expense_id"
+            ]
+        },
+        "similar_values": {
+            "zip_code": {
+                "city": [
+                    "Cost"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "expense": {
+                "expense_description": {
+                    "column_name": "expense description",
+                    "column_description": "A textual description of what the money was spend for",
+                    "value_description": ""
+                },
+                "cost": {
+                    "column_name": "",
+                    "column_description": "The dollar amount of the expense",
+                    "value_description": "the unit is dollar"
+                },
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                },
+                "expense_id": {
+                    "column_name": "expense id",
+                    "column_description": "unique id of income",
+                    "value_description": ""
+                }
+            },
+            "budget": {
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                },
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "spent",
+                "amount",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_description",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "amount",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "expense": [
+                "expense_description",
+                "cost"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_description",
+                "expense_id",
+                "link_to_member"
+            ],
+            "event": [
+                "event_id"
+            ],
+            "budget": [
+                "spent",
+                "amount",
+                "link_to_event",
+                "budget_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for expenses that spend more than fifty dollars on average. The hint suggests that we need to calculate the average cost per expense. This requires the 'cost' column from the 'expense' table. Additionally, we need to count the number of expenses for each event to calculate the average. This requires the 'expense_id' column from the 'expense' table. Furthermore, we need to link the expenses to the corresponding events to calculate the average cost per event. This requires the 'link_to_event' column from the 'expense' table and the 'event_id' column from the 'event' table. Finally, we need to filter the results to only include events with an average cost greater than fifty dollars. This requires the 'event_id' column from the 'event' table and the 'budget_id' column from the 'budget' table to link the expenses to the corresponding budgets.",
+        "selected_tables": [
+            "expense",
+            "event",
+            "budget"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "expense": [
+                "expense_description",
+                "cost"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "expense": [
+                "expense_id",
+                "cost"
+            ]
+        },
+        "model_selected_columns": {
+            "expense": [
+                "expense_id",
+                "cost"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to list expenses that spend more than fifty dollars on average. The hint provides a clear direction to calculate the average cost by dividing the sum of costs by the count of expense IDs. This requires columns from the expense table, specifically expense_id and cost. The event and budget tables are not directly relevant to this calculation, so they are not included in the query.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'expense'.'expense_description'"
+        ],
+        "correct_columns": {
+            "expense": [
+                "expense_description",
+                "cost"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(cost) FROM expense GROUP BY expense_id HAVING AVG(cost) > 50 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "The question asks for expenses that spend more than fifty dollars on average. This means we need to calculate the average cost of each expense and filter those that are greater than 50. We can do this by using the AVG function to calculate the average cost, and then using the HAVING clause to filter the results.",
+        "SQL": "SELECT * FROM expense WHERE cost > (SELECT AVG(cost) FROM expense)",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List the expenses that spend more than fifty dollars on average.",
+            "Evidence": "expense refers to expense_description; spend more than fifty dollars on average refers to DIVIDE( SUM(cost), COUNT(expense_id) ) > 50",
+            "GOLD_SQL": "SELECT expense_description FROM expense GROUP BY expense_description HAVING AVG(cost) > 50",
+            "PREDICTED_SQL": "SELECT AVG(cost) FROM expense GROUP BY expense_id HAVING AVG(cost) > 50 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List the expenses that spend more than fifty dollars on average.",
+            "Evidence": "expense refers to expense_description; spend more than fifty dollars on average refers to DIVIDE( SUM(cost), COUNT(expense_id) ) > 50",
+            "GOLD_SQL": "SELECT expense_description FROM expense GROUP BY expense_description HAVING AVG(cost) > 50",
+            "PREDICTED_SQL": "SELECT * FROM expense WHERE cost > (SELECT AVG(cost) FROM expense)"
+        },
+        "status": "success"
+    }
+]

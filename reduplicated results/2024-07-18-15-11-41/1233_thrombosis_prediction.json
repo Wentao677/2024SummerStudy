@@ -1,0 +1,263 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient's ID",
+            "blood glucose",
+            "GLU",
+            "normal range",
+            "patient's",
+            "data",
+            "1991",
+            "year(Description)",
+            "GLU < 180"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "ID",
+                "Description"
+            ],
+            "Laboratory": [
+                "GLU",
+                "GLU"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "180"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                }
+            },
+            "laboratory": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "glu": {
+                    "column_name": "blood glucose",
+                    "column_description": "blood glucose",
+                    "value_description": "Commonsense evidence: Normal range: N < 180"
+                },
+                "hgb": {
+                    "column_name": "Hemoglobin",
+                    "column_description": "Hemoglobin",
+                    "value_description": "Commonsense evidence:  Normal range: 10 < N < 17"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "ua": {
+                    "column_name": "uric acid",
+                    "column_description": "uric acid",
+                    "value_description": "Commonsense evidence:  Normal range: N > 8.0 (Male)N > 6.5 (Female)"
+                },
+                "fg": {
+                    "column_name": "fibrinogen",
+                    "column_description": "fibrinogen",
+                    "value_description": "Commonsense evidence:  Normal range: 150 < N < 450"
+                },
+                "got": {
+                    "column_name": "AST glutamic oxaloacetic transaminase",
+                    "column_description": "AST glutamic oxaloacetic transaminase",
+                    "value_description": "Commonsense evidence:  Normal range: N < 60"
+                }
+            },
+            "examination": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "UN",
+                "GLU",
+                "RBC",
+                "HCT",
+                "IGA",
+                "RF",
+                "SM"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date"
+            ],
+            "laboratory": [
+                "glu",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "UN",
+                "GLU",
+                "RBC",
+                "HCT",
+                "IGA",
+                "RF",
+                "SM"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for each patient's ID and blood glucose (GLU) index that were within normal range for patients whose data was first recorded in 1991. The hint clarifies that normal range refers to GLU < 180 and data first recorded in 1991 refers to year(Description) = 1991. This requires identifying patients whose first recorded date is in 1991 and then filtering their laboratory test results for blood glucose values less than 180. The tables needed are Examination, Patient, and Laboratory, as they contain the necessary information to answer the question.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date"
+            ],
+            "laboratory": [
+                "glu",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Description"
+            ],
+            "Laboratory": [
+                "ID",
+                "GLU"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Description"
+            ],
+            "Laboratory": [
+                "ID",
+                "GLU"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients whose data was first recorded in 1991 and have a blood glucose (GLU) index within normal range (GLU < 180). The hint provides the necessary information to identify the relevant columns. The 'Description' column in the Patient table provides the year when a patient's data was first recorded, and the 'GLU' column in the Laboratory table provides the blood glucose index. The primary key constraint in the Laboratory table ensures that each patient has a unique combination of ID and Date.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'patient'.'First Date'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date"
+            ],
+            "laboratory": [
+                "glu",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.ID, T2.GLU FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU < 180 AND STRFTIME('%Y', T1.Description) = '1991' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the SQL query. I joined the Patient and Laboratory tables based on the ID column, filtered the results to only include patients whose data was first recorded in 1991, and then filtered the results to only include patients with a blood glucose level less than 180. I used the STRFTIME function to extract the year from the Description column in the Patient table to filter the results to only include patients whose data was first recorded in 1991.",
+        "SQL": "SELECT T1.ID, T2.GLU FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.Description) = '1991' AND T2.GLU < 180",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List each patient's ID and blood glucose (GLU) index that were within normal range for patient's whose data was first recorded in 1991.",
+            "Evidence": "blood glucose (GLU) index that were within normal range refers to GLU < 180; data that was first recorded in 1991 refers to year(Description) = 1991;",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID, T2.GLU FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) = '1991' AND T2.GLU < 180",
+            "PREDICTED_SQL": "SELECT T1.ID, T2.GLU FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU < 180 AND STRFTIME('%Y', T1.Description) = '1991' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "List each patient's ID and blood glucose (GLU) index that were within normal range for patient's whose data was first recorded in 1991.",
+            "Evidence": "blood glucose (GLU) index that were within normal range refers to GLU < 180; data that was first recorded in 1991 refers to year(Description) = 1991;",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID, T2.GLU FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) = '1991' AND T2.GLU < 180",
+            "PREDICTED_SQL": "SELECT T1.ID, T2.GLU FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.Description) = '1991' AND T2.GLU < 180"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,247 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "ID",
+            "age",
+            "laboratory examinations",
+            "hematoclit level",
+            "normal range",
+            "HCT",
+            "52",
+            "Birthday",
+            "current_timestamp",
+            "year"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "HCT"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "54"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "hct": {
+                    "column_name": "Hematoclit",
+                    "column_description": "Hematoclit",
+                    "value_description": "Commonsense evidence: Normal range: 29 < N < 52"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "hgb": {
+                    "column_name": "Hemoglobin",
+                    "column_description": "Hemoglobin",
+                    "value_description": "Commonsense evidence:  Normal range: 10 < N < 17"
+                }
+            },
+            "patient": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "examination": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-BIL",
+                "RBC",
+                "HGB",
+                "HCT",
+                "PIC",
+                "RF",
+                "C3",
+                "C4",
+                "SM",
+                "SSA",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "hct"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-BIL",
+                "RBC",
+                "HGB",
+                "HCT",
+                "PIC",
+                "RF",
+                "C3",
+                "C4",
+                "SM",
+                "SSA",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question requires identifying patients with two or more laboratory examinations, where the hematocrit level exceeded the normal range. The hint provides the necessary conditions: COUNT(ID) > 2 and HCT >= 52. To answer this question, we need to join the Laboratory table with the Patient table to get the patient's ID and age. The Examination table is not necessary as it does not provide any additional information for this question.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "hct"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {},
+        "model_selected_columns": {},
+        "chain_of_thought_reasoning": "",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient",
+            "laboratory"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "hct"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.ID, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM patient AS T1 INNER JOIN lab AS T2 ON T1.ID = T2.PatientID WHERE T2.HCT > 52 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns relevant to the question. I noticed that the question mentions 'laboratory examinations', which led me to the Laboratory table. I also recognized that the question asks for the ID and age of the patient, which led me to the Patient table. I then joined the two tables on the ID column and filtered the results to only include patients with two or more laboratory examinations (COUNT(ID) > 2) and hematoclit levels exceeding the normal range (HCT >= 52). I used the CURRENT_TIMESTAMP and Birthday columns to calculate the age of the patient.",
+        "SQL": "SELECT T1.ID, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.Date IS NOT NULL AND T2.HCT >= 52 GROUP BY T1.ID HAVING COUNT(T2.ID) > 2",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "no such table: lab",
+            "Question": "Name the ID and age of patient with two or more laboratory examinations which show their hematoclit level exceeded the normal range.",
+            "Evidence": "age = SUBTRACT(year(current_timestamp), year(Birthday)); patient with two or more laboratory examinations refers to COUNT(ID) > 2; hematoclit level exceeded the normal range refers to HCT > = 52;",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.ID IN ( SELECT ID FROM Laboratory WHERE HCT >= 52 GROUP BY ID HAVING COUNT(ID) >= 2 )",
+            "PREDICTED_SQL": "SELECT T1.ID, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM patient AS T1 INNER JOIN lab AS T2 ON T1.ID = T2.PatientID WHERE T2.HCT > 52 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Name the ID and age of patient with two or more laboratory examinations which show their hematoclit level exceeded the normal range.",
+            "Evidence": "age = SUBTRACT(year(current_timestamp), year(Birthday)); patient with two or more laboratory examinations refers to COUNT(ID) > 2; hematoclit level exceeded the normal range refers to HCT > = 52;",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.ID IN ( SELECT ID FROM Laboratory WHERE HCT >= 52 GROUP BY ID HAVING COUNT(ID) >= 2 )",
+            "PREDICTED_SQL": "SELECT T1.ID, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.Date IS NOT NULL AND T2.HCT >= 52 GROUP BY T1.ID HAVING COUNT(T2.ID) > 2"
+        },
+        "status": "success"
+    }
+]

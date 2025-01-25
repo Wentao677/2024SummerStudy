@@ -1,0 +1,223 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "severe thrombosis",
+            "normal prothrombin time",
+            "Thrombosis",
+            "PT",
+            "14",
+            "patients"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Examination": [
+                "Thrombosis",
+                "Thrombosis"
+            ],
+            "Laboratory": [
+                "PT"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal",
+                    "thrombosis"
+                ],
+                "Symptoms": [
+                    "thrombophlebitis"
+                ]
+            },
+            "Laboratory": {
+                "U-PRO": [
+                    "30"
+                ],
+                "RF": [
+                    "34"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "pt": {
+                    "column_name": "prothrombin time",
+                    "column_description": "prothrombin time",
+                    "value_description": "Commonsense evidence:  Normal range: N < 14"
+                },
+                "aptt": {
+                    "column_name": "activated partial prothrombin time",
+                    "column_description": "activated partial prothrombin time",
+                    "value_description": "Commonsense evidence:  Normal range: N < 45"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Diagnosis",
+                "Thrombosis",
+                "ID"
+            ],
+            "Patient": [
+                "ID"
+            ],
+            "Laboratory": [
+                "PT",
+                "APTT",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ],
+            "examination": [
+                "id",
+                "thrombosis"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "Diagnosis",
+                "Thrombosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "PT",
+                "APTT",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about patients with severe thrombosis and normal prothrombin time. The hint clarifies that severe thrombosis refers to Thrombosis = 2 or 1, and normal prothrombin time refers to PT < 14. To answer this question, we need to identify patients with these specific conditions. The Examination table provides information about thrombosis, and the Laboratory table provides information about prothrombin time. Therefore, we need to join these two tables to find the desired patients.",
+        "selected_tables": [
+            "Examination",
+            "Laboratory"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ],
+            "examination": [
+                "id",
+                "thrombosis"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "Thrombosis"
+            ],
+            "Laboratory": [
+                "PT"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "Thrombosis"
+            ],
+            "Laboratory": [
+                "PT"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with severe thrombosis and a normal prothrombin time. The hint provides the exact values for severe thrombosis (Thrombosis = 2 or 1) and normal prothrombin time (PT < 14). We need to identify the columns that match these conditions. The Examination table has the Thrombosis column, which matches the severe thrombosis condition. The Laboratory table has the PT column, which matches the normal prothrombin time condition.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'laboratory'.'id'",
+            "'examination'.'id'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ],
+            "examination": [
+                "id",
+                "thrombosis"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.Thrombosis) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis IN (1, 2) AND T2.PT < 14 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the conditions specified in the question: patients with severe thrombosis (Thrombosis = 2 or 1) and a normal prothrombin time (PT < 14). I then joined the Examination and Laboratory tables on the ID column, as both tables have a foreign key referencing the Patient table. I filtered the results to only include patients with severe thrombosis and a normal prothrombin time, and finally counted the number of patients that meet these conditions.",
+        "SQL": "SELECT COUNT(*) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis IN (1, 2) AND T2.PT < 14",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many patients with severe thrombosis have a normal prothrombin time?",
+            "Evidence": "severe thrombosis refers to Thrombosis = 2 or 1; normal prothrombin time refers to PT < 14;",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID INNER JOIN Examination AS T3 ON T1.ID = T3.ID WHERE T2.PT < 14 AND T3.Thrombosis < 3 AND T3.Thrombosis > 0",
+            "PREDICTED_SQL": "SELECT COUNT(T1.Thrombosis) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis IN (1, 2) AND T2.PT < 14 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many patients with severe thrombosis have a normal prothrombin time?",
+            "Evidence": "severe thrombosis refers to Thrombosis = 2 or 1; normal prothrombin time refers to PT < 14;",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID INNER JOIN Examination AS T3 ON T1.ID = T3.ID WHERE T2.PT < 14 AND T3.Thrombosis < 3 AND T3.Thrombosis > 0",
+            "PREDICTED_SQL": "SELECT COUNT(*) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis IN (1, 2) AND T2.PT < 14"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,239 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "adult users",
+            "Age BETWEEN 19 and 65",
+            "over 5000 upvotes",
+            "UpVotes > 5000"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "Age",
+                "UpVotes",
+                "UpVotes"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "user"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "reputation": {
+                    "column_name": "",
+                    "column_description": "the user's reputation",
+                    "value_description": "The user with higher reputation has more influence."
+                },
+                "age": {
+                    "column_name": "",
+                    "column_description": "user's age",
+                    "value_description": "\u0095 teenager: 13-18 \u0095 adult: 19-65 \u0095 elder: > 65"
+                },
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "votetypeid": {
+                    "column_name": "Vote Type Id",
+                    "column_description": "the id of the vote type",
+                    "value_description": ""
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the voter",
+                    "value_description": ""
+                },
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the id of the post that is voted",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "score": {
+                    "column_name": "",
+                    "column_description": "rating score",
+                    "value_description": "The score is from 0 to 100. The score more than 60 refers that the comment is a positive comment. The score less than 60 refers that the comment is a negative comment."
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Id"
+            ],
+            "comments": [
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "UpVotes",
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age",
+                "upvotes"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "users": [
+                "UpVotes",
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of adult users who have cast over 5000 upvotes. The hint clarifies that adult users refer to Age BETWEEN 19 and 65, and over 5000 upvotes refer to UpVotes > 5000. To identify these users, we need to join the users table with the votes table. The users table provides the age information, and the votes table provides the upvote count. We also need to filter the results to include only users with an age between 19 and 65 and upvotes greater than 5000.",
+        "selected_tables": [
+            "users",
+            "votes"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age",
+                "upvotes"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "users": [
+                "Id",
+                "Age"
+            ],
+            "votes": [
+                "UserId",
+                "UpVotes"
+            ]
+        },
+        "model_selected_columns": {
+            "users": [
+                "Id",
+                "Age"
+            ],
+            "votes": [
+                "UserId",
+                "UpVotes"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of adult users who have cast over 5000 upvotes. The hint clarifies that adult users refer to Age BETWEEN 19 and 65, and over 5000 upvotes refer to UpVotes > 5000. Therefore, we need to filter users by their age and upvotes.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'users'.'upvotes'"
+        ],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age",
+                "upvotes"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.Age BETWEEN 19 AND 65 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition for adult users (Age BETWEEN 19 AND 65). Then, I identified the condition for users who have cast over 5000 upvotes (UpVotes > 5000). I joined the users table with the votes table on the UserId column to get the upvote count for each user. Finally, I filtered the results to only include adult users who have cast over 5000 upvotes and counted the number of such users.",
+        "SQL": "SELECT COUNT(*) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.Age BETWEEN 19 AND 65 AND T2.UpVotes > 5000",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Identify the number of adult users who have cast over 5000 upvotes.",
+            "Evidence": "adult users refer to Age BETWEEN 19 and 65; over 5000 upvotes refer to UpVotes > 5000;",
+            "GOLD_SQL": "SELECT COUNT(Id) FROM users WHERE Age BETWEEN 19 AND 65 AND UpVotes > 5000",
+            "PREDICTED_SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.Age BETWEEN 19 AND 65 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such column: T2.UpVotes",
+            "Question": "Identify the number of adult users who have cast over 5000 upvotes.",
+            "Evidence": "adult users refer to Age BETWEEN 19 and 65; over 5000 upvotes refer to UpVotes > 5000;",
+            "GOLD_SQL": "SELECT COUNT(Id) FROM users WHERE Age BETWEEN 19 AND 65 AND UpVotes > 5000",
+            "PREDICTED_SQL": "SELECT COUNT(*) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.Age BETWEEN 19 AND 65 AND T2.UpVotes > 5000"
+        },
+        "status": "success"
+    }
+]

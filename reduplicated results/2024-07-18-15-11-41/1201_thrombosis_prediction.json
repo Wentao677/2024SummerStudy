@@ -1,0 +1,256 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patients",
+            "born in 1980",
+            "RA",
+            "women",
+            "YEAR(BIRTHDAY)",
+            "Diagnosis",
+            "SEX",
+            "F",
+            "SUM",
+            "COUNT",
+            "DIVIDE",
+            "calculation",
+            "percentage"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "RA"
+            ],
+            "Patient": [
+                "Diagnosis",
+                "SEX"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1982.1"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            },
+            "patient": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "sex": {
+                    "column_name": "",
+                    "column_description": "Sex",
+                    "value_description": "F: female; M: male"
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "laboratory": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "rf": {
+                    "column_name": "RAHA",
+                    "column_description": "RAHA",
+                    "value_description": "Commonsense evidence:  Normal range: N < 20"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Diagnosis",
+                "ID"
+            ],
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "RA",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis",
+                "birthday",
+                "sex"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "RA",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of patients who were born in 1980 and were diagnosed with RA, and are women. The hint provides the necessary conditions for the patients, which are YEAR(BIRTHDAY) = '1980', Diagnosis='RA', and SEX = 'F'. To answer this question, we need to identify the patients who meet these conditions. The tables Examination and Patient contain information about patients, but they do not provide the necessary information about the diagnosis. The table Laboratory contains information about laboratory tests, but it does not provide information about the patient's sex. The table Patient contains the necessary information about the patient's sex, and it also contains the patient's ID, which is referenced in the tables Examination and Laboratory. Therefore, we need to use the tables Patient and Patient.",
+        "selected_tables": [
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis",
+                "birthday",
+                "sex"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "Diagnosis",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "Diagnosis",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of patients who were born in 1980 and were diagnosed with RA, and are women. The hint provides the exact values to filter for: YEAR(BIRTHDAY) = '1980', Diagnosis='RA', and SEX = 'F'. We need to select columns that match these values. We also need to count the total number of patients and the number of women to calculate the percentage.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis",
+                "birthday",
+                "sex"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(SEX) FROM Patient WHERE Diagnosis = 'RA' AND strftime('%Y', Birthday) = '1980' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns and tables. The question asks for patients who were born in 1980 and were diagnosed with RA, and the percentage of women among them. I used the hint provided to identify the correct columns and conditions. I then constructed the SQL query using the instructions provided, making sure to only include the columns and conditions specified in the question.",
+        "SQL": "SELECT (SUM(CASE WHEN SEX = 'F' THEN 1 ELSE 0 END) * 100.0) / COUNT(*) FROM Patient WHERE Diagnosis = 'RA' AND strftime('%Y', Birthday) = '1980'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What percentage of patients who were born in 1980 and were diagnosed with RA are women?",
+            "Evidence": "born in 1980 refers to YEAR(BIRTHDAY) = '1980'; 'RA' refers to Diagnosis='RA' ; women refers to SEX = 'F'; calculation = DIVIDE(SUM(SEX = 'F'), COUNT(SEX)) * 100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(ID) FROM Patient WHERE Diagnosis = 'RA' AND STRFTIME('%Y', Birthday) = '1980'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(SEX) FROM Patient WHERE Diagnosis = 'RA' AND strftime('%Y', Birthday) = '1980' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What percentage of patients who were born in 1980 and were diagnosed with RA are women?",
+            "Evidence": "born in 1980 refers to YEAR(BIRTHDAY) = '1980'; 'RA' refers to Diagnosis='RA' ; women refers to SEX = 'F'; calculation = DIVIDE(SUM(SEX = 'F'), COUNT(SEX)) * 100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(ID) FROM Patient WHERE Diagnosis = 'RA' AND STRFTIME('%Y', Birthday) = '1980'",
+            "PREDICTED_SQL": "SELECT (SUM(CASE WHEN SEX = 'F' THEN 1 ELSE 0 END) * 100.0) / COUNT(*) FROM Patient WHERE Diagnosis = 'RA' AND strftime('%Y', Birthday) = '1980'"
+        },
+        "status": "success"
+    }
+]

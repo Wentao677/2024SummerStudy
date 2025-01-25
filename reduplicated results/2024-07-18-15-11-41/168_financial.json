@@ -1,0 +1,301 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "percentage",
+            "clients",
+            "opened",
+            "accounts",
+            "district",
+            "average salary",
+            "over 10000",
+            "women",
+            "gender",
+            "F",
+            "Woman",
+            "A11"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "trans": [
+                "account"
+            ],
+            "client": [
+                "gender"
+            ],
+            "district": [
+                "A11"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "district": {
+                "a14": {
+                    "column_name": "no. of entrepreneurs per 1000 inhabitants",
+                    "column_description": "no. of entrepreneurs per 1000 inhabitants",
+                    "value_description": ""
+                },
+                "a11": {
+                    "column_name": "average salary",
+                    "column_description": "average salary",
+                    "value_description": ""
+                },
+                "a8": {
+                    "column_name": "no. of municipalities with inhabitants > 10000",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                },
+                "a2": {
+                    "column_name": "district_name",
+                    "column_description": "district_name",
+                    "value_description": ""
+                },
+                "a6": {
+                    "column_name": "no. of municipalities with inhabitants 500-1999",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                },
+                "a7": {
+                    "column_name": "no. of municipalities with inhabitants 2000-9999",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                },
+                "a5": {
+                    "column_name": "no. of municipalities with inhabitants < 499",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                }
+            },
+            "trans": {
+                "amount": {
+                    "column_name": "amount of money",
+                    "column_description": "amount of money",
+                    "value_description": "Unit\uff1aUSD"
+                },
+                "account": {
+                    "column_name": "account of the partner",
+                    "column_description": "",
+                    "value_description": ""
+                }
+            },
+            "client": {
+                "gender": {
+                    "column_name": "",
+                    "column_description": "",
+                    "value_description": "F\uff1afemale  M\uff1amale"
+                }
+            },
+            "loan": {
+                "status": {
+                    "column_name": "",
+                    "column_description": "repayment status",
+                    "value_description": "'A' stands for contract finished, no problems; 'B' stands for contract finished, loan not paid; 'C' stands for running contract, OK so far; 'D' stands for running contract, client in debt"
+                }
+            },
+            "order": {
+                "k_symbol": {
+                    "column_name": "characterization of the payment",
+                    "column_description": "purpose of the payment",
+                    "value_description": "\"POJISTNE\" stands for insurance payment \"SIPO\" stands for household payment \"LEASING\" stands for leasing \"UVER\" stands for loan payment"
+                },
+                "account_to": {
+                    "column_name": "account of the recipient",
+                    "column_description": "account of the recipient",
+                    "value_description": "each bank has unique two-letter code"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "district_id",
+                "account_id"
+            ],
+            "card": [
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "gender",
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id",
+                "A2",
+                "A3",
+                "A11"
+            ],
+            "loan": [
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "account_id",
+                "order_id"
+            ],
+            "trans": [
+                "account_id",
+                "account",
+                "trans_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a11"
+            ],
+            "client": [
+                "district_id",
+                "client_id",
+                "gender"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "district": [
+                "district_id",
+                "A2",
+                "A3",
+                "A11"
+            ],
+            "client": [
+                "gender",
+                "client_id",
+                "district_id"
+            ],
+            "account": [
+                "district_id",
+                "account_id"
+            ],
+            "trans": [
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the clients who opened their accounts in the district with an average salary of over 10000 and filter them by gender. The hint provides the column name 'A11' for average salary and 'gender' for female. The tables 'district', 'client', and 'account' are necessary to answer the question. The 'district' table provides the average salary, the 'client' table provides the gender, and the 'account' table provides the relationship between clients and districts.",
+        "selected_tables": [
+            "district",
+            "client",
+            "account"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a11"
+            ],
+            "client": [
+                "district_id",
+                "client_id",
+                "gender"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "district": [
+                "district_id",
+                "A11"
+            ],
+            "client": [
+                "client_id",
+                "gender",
+                "district_id"
+            ],
+            "account": [
+                "district_id"
+            ]
+        },
+        "model_selected_columns": {
+            "district": [
+                "district_id",
+                "A11"
+            ],
+            "client": [
+                "client_id",
+                "gender",
+                "district_id"
+            ],
+            "account": [
+                "district_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of clients who opened their accounts in a district with an average salary over 10000 and are women. The hint helps identify the columns necessary for answering this question. We need to filter clients by district and gender, and then calculate the percentage. The average salary can be found in A11, and the gender is 'F'.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a11"
+            ],
+            "client": [
+                "district_id",
+                "client_id",
+                "gender"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(IIF(T2.gender = 'F', 1, 0)) AS REAL) * 100 / COUNT(T2.gender) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns and tables. The question asks for the percentage of clients who opened their accounts in the district with an average salary of over 10000 and are women. The average salary can be found in A11, and the gender is in the client table. I then joined the district and client tables on the district_id, and filtered the results to only include districts with an average salary of over 10000. Finally, I used a conditional statement to count the number of women and divided it by the total count to get the percentage.",
+        "SQL": "SELECT CAST(COUNT(IIF(T2.gender = 'F', 1, NULL)) AS REAL) * 100.0 / CAST(COUNT(T2.client_id) AS REAL) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What percentage of clients who opened their accounts in the district with an average salary of over 10000 are women?",
+            "Evidence": "Female refers to gender = 'F'; Woman and female are closed; Average salary can be found in A11",
+            "GOLD_SQL": "SELECT CAST(SUM(T2.gender = 'F') AS REAL) * 100 / COUNT(T2.client_id) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000",
+            "PREDICTED_SQL": "SELECT CAST(SUM(IIF(T2.gender = 'F', 1, 0)) AS REAL) * 100 / COUNT(T2.gender) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What percentage of clients who opened their accounts in the district with an average salary of over 10000 are women?",
+            "Evidence": "Female refers to gender = 'F'; Woman and female are closed; Average salary can be found in A11",
+            "GOLD_SQL": "SELECT CAST(SUM(T2.gender = 'F') AS REAL) * 100 / COUNT(T2.client_id) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(IIF(T2.gender = 'F', 1, NULL)) AS REAL) * 100.0 / CAST(COUNT(T2.client_id) AS REAL) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000"
+        },
+        "status": "success"
+    }
+]

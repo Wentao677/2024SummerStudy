@@ -1,0 +1,200 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "cards",
+            "incredibly powerful",
+            "foils",
+            "cardKingdomFoilId",
+            "cardKingdomId"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "cards": [
+                "cardKingdomFoilId",
+                "cardKingdomId"
+            ]
+        },
+        "similar_values": {
+            "cards": {
+                "name": [
+                    "Foil"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "cards": {
+                "hasnonfoil": {
+                    "column_name": "has Non Foil",
+                    "column_description": "If the card can be found in non-foil",
+                    "value_description": "0: cannot be found 1: can be found"
+                },
+                "hasfoil": {
+                    "column_name": "has Foil",
+                    "column_description": "If the card can be found in foil",
+                    "value_description": "0: cannot be found 1: can be found"
+                },
+                "cardkingdomfoilid": {
+                    "column_name": "card Kingdom Foil Id",
+                    "column_description": "card Kingdom Foil Id",
+                    "value_description": "cardKingdomFoilId, when paired with cardKingdomId that is not Null, is incredibly powerful."
+                }
+            },
+            "sets": {
+                "isfoilonly": {
+                    "column_name": "is Foil Only",
+                    "column_description": "If the set is only available in foil.",
+                    "value_description": ""
+                },
+                "isnonfoilonly": {
+                    "column_name": "is Non Foil Only",
+                    "column_description": "If the set is only available in non-foil.",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "cardKingdomFoilId",
+                "cardKingdomId",
+                "hasFoil",
+                "name",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "id",
+                "uuid"
+            ],
+            "legalities": [
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "id",
+                "code"
+            ],
+            "set_translations": [
+                "id",
+                "setCode"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "id",
+                "cardkingdomfoilid",
+                "cardkingdomid"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "cards": [
+                "cardKingdomFoilId",
+                "cardKingdomId",
+                "hasFoil",
+                "name",
+                "id",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for cards that have incredibly powerful foils, which is defined by the hint as cardKingdomFoilId is not null AND cardKingdomId is not null. This condition is specific to the cards table, as it contains these columns. The hint also mentions cardKingdomId, which is a foreign key in the cards table, referencing the uuid column in the cards table. This implies that the cards table is the primary source of information for the question. The foreign_data table is not relevant to this question, as it only contains a reference to the uuid column in the cards table, but does not provide any additional information. The legalities, sets, set_translations, and rulings tables do not contain any information about cardKingdomFoilId or cardKingdomId, so they are not necessary for this question.",
+        "selected_tables": [
+            "cards"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "id",
+                "cardkingdomfoilid",
+                "cardkingdomid"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "cards": [
+                "cardKingdomFoilId",
+                "cardKingdomId"
+            ]
+        },
+        "model_selected_columns": {
+            "cards": [
+                "cardKingdomFoilId",
+                "cardKingdomId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for cards with incredibly powerful foils, which is defined by the hint as cardKingdomFoilId is not null AND cardKingdomId is not null. This means we need to filter the cards based on these conditions. The name column is not relevant to the question, and the hasFoil column is not directly related to the concept of incredibly powerful foils. The uuid column is unique and not necessary for filtering. The id column is the primary key, but it's not necessary for filtering either. Therefore, we only need to consider the cardKingdomFoilId and cardKingdomId columns.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'cards'.'id'"
+        ],
+        "correct_columns": {
+            "cards": [
+                "id",
+                "cardkingdomfoilid",
+                "cardkingdomid"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by reading the question and understanding that I need to find cards that have incredibly powerful foils. The hint provided suggests that incredibly powerful foils refer to cardKingdomFoilId is not null AND cardKingdomId is not null. I then applied the instructions provided by the database admin, specifically instruction 1, which recommends using ORDER BY + LIMIT 1 instead of MAX/MIN within subqueries. Since this is not necessary in this case, I proceeded to write the SQL query. I selected the id column as per instruction 3, since the question doesn't specify which columns to select. I also made sure to only include the information asked in the question, as per instruction 4.",
+        "SQL": "SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Which are the cards that have incredibly powerful foils.",
+            "Evidence": "incredibly poweful foils refers to cardKingdomFoilId is not null AND cardKingdomId is not null",
+            "GOLD_SQL": "SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL",
+            "PREDICTED_SQL": "SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Which are the cards that have incredibly powerful foils.",
+            "Evidence": "incredibly poweful foils refers to cardKingdomFoilId is not null AND cardKingdomId is not null",
+            "GOLD_SQL": "SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL",
+            "PREDICTED_SQL": "SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL"
+        },
+        "status": "success"
+    }
+]

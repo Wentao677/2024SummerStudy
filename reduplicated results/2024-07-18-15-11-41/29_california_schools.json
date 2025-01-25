@@ -1,0 +1,238 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "K-12",
+            "first-through-twelfth-grade",
+            "school",
+            "largest enrollment",
+            "open",
+            "first-through-twelfth-grade school"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "School",
+                "School"
+            ]
+        },
+        "similar_values": {
+            "schools": {
+                "GSoffered": [
+                    "K-12"
+                ],
+                "GSserved": [
+                    "K-12"
+                ],
+                "AdmLName1": [
+                    "Schooler"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "satscores": {
+                "enroll12": {
+                    "column_name": "enrollment (1st-12nd grade)",
+                    "column_description": "enrollment (1st-12nd grade)",
+                    "value_description": ""
+                }
+            },
+            "frpm": {
+                "enrollment (k-12)": {
+                    "column_name": "",
+                    "column_description": "Enrollment (K-12)",
+                    "value_description": "K-12: 1st grade - 12nd grade"
+                },
+                "enrollment (ages 5-17)": {
+                    "column_name": "",
+                    "column_description": "Enrollment (Ages 5-17)",
+                    "value_description": ""
+                }
+            },
+            "schools": {
+                "opendate": {
+                    "column_name": "",
+                    "column_description": "The date the school opened.",
+                    "value_description": ""
+                },
+                "gsoffered": {
+                    "column_name": "grade span offered",
+                    "column_description": "The grade span offered is the lowest grade and the highest grade offered or supported by the school, district, or administrative authority. This field might differ from the grade span served as reported in the most recent certified California Longitudinal Pupil Achievement (CALPADS) Fall 1 data collection.",
+                    "value_description": "For example XYZ School might display the following data:  GSoffered = P\u2013Adult  GSserved = K\u201312"
+                },
+                "eilcode": {
+                    "column_name": "Educational Instruction Level Code",
+                    "column_description": "The Educational Instruction Level Code is a short text description of the institution's type relative to the grade range served.",
+                    "value_description": "\u2022       A \u2013 Adult \u2022       ELEM \u2013 Elementary \u2022       ELEMHIGH \u2013 Elementary-High Combination \u2022       HS \u2013 High School \u2022       INTMIDJR \u2013 Intermediate/Middle/Junior High \u2022       PS \u2013 Preschool \u2022       UG \u2013 Ungraded"
+                },
+                "closeddate": {
+                    "column_name": "",
+                    "column_description": "The date the school closed.",
+                    "value_description": ""
+                },
+                "gsserved": {
+                    "column_name": "grade span served.",
+                    "column_description": "It is the lowest grade and the highest grade of student enrollment as reported in the most recent certified CALPADS Fall 1 data collection. Only K\u201312 enrollment is reported through CALPADS. This field may differ from the grade span offered.",
+                    "value_description": "1.\u00a0\u00a0\u00a0\u00a0 Only K\u201312 enrollment is reported through CALPADS  2.\u00a0\u00a0\u00a0\u00a0 Note: Special programs at independent study, alternative education, and special education schools will often exceed the typical grade span for schools of that type"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "Academic Year",
+                "School Name",
+                "Enrollment (K-12)",
+                "CDSCode"
+            ],
+            "satscores": [
+                "enroll12",
+                "cds"
+            ],
+            "schools": [
+                "School",
+                "OpenDate",
+                "EILCode",
+                "EILName",
+                "GSoffered",
+                "GSserved",
+                "CDSCode"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "opendate",
+                "cdscode"
+            ],
+            "frpm": [
+                "cdscode",
+                "Enrollment (K-12)"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "frpm": [
+                "Academic Year",
+                "School Name",
+                "Enrollment (K-12)",
+                "CDSCode"
+            ],
+            "schools": [
+                "School",
+                "OpenDate",
+                "EILCode",
+                "EILName",
+                "GSoffered",
+                "GSserved",
+                "CDSCode"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the first-through-twelfth-grade school with the largest enrollment and when it opened. The hint clarifies that K-12 means First-through-twelfth-grade. This information helps to focus on the 'Enrollment (K-12)' column in the frpm table, which is related to schools through the CDSCode foreign key. Additionally, the question requires information about the school's opening date, which is available in the schools table. Therefore, both frpm and schools tables are necessary to answer the question.",
+        "selected_tables": [
+            "frpm",
+            "schools"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "opendate",
+                "cdscode"
+            ],
+            "frpm": [
+                "cdscode",
+                "Enrollment (K-12)"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Enrollment (K-12)"
+            ],
+            "schools": [
+                "CDSCode",
+                "OpenDate"
+            ]
+        },
+        "model_selected_columns": {
+            "frpm": [
+                "CDSCode",
+                "Enrollment (K-12)"
+            ],
+            "schools": [
+                "CDSCode",
+                "OpenDate"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the first-through-twelfth-grade school with the largest enrollment and when it opened. The hint clarifies that K-12 means First-through-twelfth-grade. We need to identify the school with the largest enrollment and its open date. The columns necessary for this are those that contain the school's grade span and enrollment, as well as its open date.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "opendate",
+                "cdscode"
+            ],
+            "frpm": [
+                "cdscode",
+                "Enrollment (K-12)"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` = ( SELECT MAX(T1.`Enrollment (K-12)`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ) ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to create a query that finds the school with the largest enrollment. I used the INNER JOIN to combine the frpm and schools tables based on the CDSCode. I then used the WHERE clause to filter the results to only include schools with a K-12 enrollment. I used the ORDER BY and LIMIT 1 to find the school with the largest enrollment.",
+        "SQL": "SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` = (SELECT MAX(T1.`Enrollment (K-12)`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode)",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "When did the first-through-twelfth-grade school with the largest enrollment open?",
+            "Evidence": "K-12 means First-through-twelfth-grade",
+            "GOLD_SQL": "SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T1.`Enrollment (K-12)` DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` = ( SELECT MAX(T1.`Enrollment (K-12)`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ) "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "When did the first-through-twelfth-grade school with the largest enrollment open?",
+            "Evidence": "K-12 means First-through-twelfth-grade",
+            "GOLD_SQL": "SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T1.`Enrollment (K-12)` DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` = (SELECT MAX(T1.`Enrollment (K-12)`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode)"
+        },
+        "status": "success"
+    }
+]

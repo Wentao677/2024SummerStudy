@@ -1,0 +1,212 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "laboratory examination",
+            "patient",
+            "48473",
+            "AST glutamic oxaloacetic transaminase",
+            "GOT",
+            "normal range",
+            "GOT >= 60",
+            "DATE",
+            "when"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "GOT",
+                "GOT",
+                "Date"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "U-PRO": [
+                    "30"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "got": {
+                    "column_name": "AST glutamic oxaloacetic transaminase",
+                    "column_description": "AST glutamic oxaloacetic transaminase",
+                    "value_description": "Commonsense evidence:  Normal range: N < 60"
+                },
+                "gpt": {
+                    "column_name": "ALT glutamic pyruvic transaminase",
+                    "column_description": "ALT glutamic pyruvic transaminase",
+                    "value_description": "Commonsense evidence:  Normal range: N < 60"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "GOT",
+                "RA",
+                "RF"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "laboratory": [
+                "date",
+                "id",
+                "got"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "GOT",
+                "RA",
+                "RF"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the laboratory examination of a specific patient ('48473') where the AST glutamic oxaloacetic transaminase (GOT) index is above the normal range. The hint clarifies that GOT >= 60. The 'when' refers to the DATE of the examination. To answer this question, we need to identify the patient, the laboratory examination date, and the GOT value. The Patient table provides the patient ID, but we need to link it to the laboratory examination. The Laboratory table contains the examination date and GOT value, but it's linked to the Patient table through the foreign key. Therefore, we need to join the Patient and Laboratory tables to get the required information.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "laboratory": [
+                "date",
+                "id",
+                "got"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "GOT"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "GOT"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question is asking for the date of laboratory examination for patient '48473' where the AST glutamic oxaloacetic transaminase (GOT) index is above the normal range. The hint clarifies that GOT > = 60 and 'when' refers to DATE. Therefore, we need to identify the patient with ID '48473' and the date of laboratory examination where GOT is greater than or equal to 60.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "laboratory": [
+                "date",
+                "id",
+                "got"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.`First Date` FROM Laboratory AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.GOT >= 60 AND T1.ID = 48473 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant tables and columns mentioned in the question. The question asks for the laboratory examination of patient '48473' where his/her AST glutamic oxaloacetic transaminase (GOT) index is above the normal range. The normal range for GOT is >= 60. I then joined the Laboratory and Patient tables on the ID column to get the relevant data. I filtered the results to only include rows where GOT >= 60 and ID = 48473. Finally, I selected the 'First Date' column from the Patient table to get the date of the first examination.",
+        "SQL": "SELECT T2.`First Date` FROM Laboratory AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.GOT >= 60 AND T1.ID = 48473",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "When is the laboratory examination of patient '48473' where his/her AST glutamic oxaloacetic transaminase (GOT) index is above the normal range.",
+            "Evidence": "AST glutamic oxaloacetic transaminase (GOT) index is above the normal range refers to GOT > = 60; when refers to DATE",
+            "GOLD_SQL": "SELECT Date FROM Laboratory WHERE ID = 48473 AND GOT >= 60",
+            "PREDICTED_SQL": "SELECT T2.`First Date` FROM Laboratory AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.GOT >= 60 AND T1.ID = 48473 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "When is the laboratory examination of patient '48473' where his/her AST glutamic oxaloacetic transaminase (GOT) index is above the normal range.",
+            "Evidence": "AST glutamic oxaloacetic transaminase (GOT) index is above the normal range refers to GOT > = 60; when refers to DATE",
+            "GOLD_SQL": "SELECT Date FROM Laboratory WHERE ID = 48473 AND GOT >= 60",
+            "PREDICTED_SQL": "SELECT T2.`First Date` FROM Laboratory AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.GOT >= 60 AND T1.ID = 48473"
+        },
+        "status": "success"
+    }
+]

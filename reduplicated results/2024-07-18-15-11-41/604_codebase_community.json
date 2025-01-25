@@ -1,0 +1,284 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average",
+            "up votes",
+            "average user age",
+            "users creating",
+            "more than 10 posts",
+            "Count (UserId)",
+            "Sum(UpVotes)",
+            "Divide (Sum(UpVotes), Count (UserId))",
+            "Sum(Age)",
+            "Count(UserId)",
+            "Divide (Sum(Age), Count(UserId))"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "UpVotes",
+                "Age"
+            ],
+            "tags": [
+                "Count",
+                "Count"
+            ]
+        },
+        "similar_values": {
+            "tags": {
+                "TagName": [
+                    "age",
+                    "average"
+                ]
+            },
+            "users": {
+                "DisplayName": [
+                    "user"
+                ]
+            },
+            "posts": {
+                "OwnerDisplayName": [
+                    "User"
+                ]
+            },
+            "postHistory": {
+                "UserDisplayName": [
+                    "User"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "age": {
+                    "column_name": "",
+                    "column_description": "user's age",
+                    "value_description": "\u0095 teenager: 13-18 \u0095 adult: 19-65 \u0095 elder: > 65"
+                },
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                },
+                "reputation": {
+                    "column_name": "",
+                    "column_description": "the user's reputation",
+                    "value_description": "The user with higher reputation has more influence."
+                }
+            },
+            "posts": {
+                "answercount": {
+                    "column_name": "Answer Count",
+                    "column_description": "the total number of answers of the post",
+                    "value_description": ""
+                },
+                "favoritecount": {
+                    "column_name": "Favorite Count",
+                    "column_description": "the total number of favorites of the post",
+                    "value_description": "more favorite count refers to more valuable posts."
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Id"
+            ],
+            "comments": [
+                "Score",
+                "UserId",
+                "Id",
+                "PostId"
+            ],
+            "postHistory": [
+                "UserId",
+                "Id",
+                "PostId"
+            ],
+            "postLinks": [
+                "PostId",
+                "Id",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Score",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Count",
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "UpVotes",
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "PostId",
+                "UserId",
+                "Id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posts": [
+                "owneruserid"
+            ],
+            "users": [
+                "upvotes",
+                "age",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "posts": [
+                "Score",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "users": [
+                "UpVotes",
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "PostId",
+                "UserId",
+                "Id"
+            ],
+            "tags": [
+                "Count",
+                "Id",
+                "ExcerptPostId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average up votes and average age of users who have created more than 10 posts. The hint provides the necessary calculations for these averages. To find the users who have created more than 10 posts, we need to count the number of posts for each user. This information is stored in the posts table. The hint also mentions the Count (UserId) > 10, which is a condition that can be applied to the posts table. The users table is necessary to find the up votes and age of each user. The votes table is necessary to find the sum of up votes for each user. The hint also mentions the average age, which is stored in the users table. Therefore, the necessary tables are posts, users, and votes.",
+        "selected_tables": [
+            "posts",
+            "users",
+            "votes"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posts": [
+                "owneruserid"
+            ],
+            "users": [
+                "upvotes",
+                "age",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "posts": [
+                "Id"
+            ],
+            "users": [
+                "Id",
+                "UpVotes",
+                "Age"
+            ],
+            "votes": [
+                "UserId"
+            ]
+        },
+        "model_selected_columns": {
+            "posts": [
+                "Id"
+            ],
+            "users": [
+                "Id",
+                "UpVotes",
+                "Age"
+            ],
+            "votes": [
+                "UserId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average up votes and average user age for users creating more than 10 posts. The hint provides the necessary calculations for these averages. To identify the users creating more than 10 posts, we need to filter the users table based on the count of posts they created. The hint also mentions the Count(UserId) for this purpose. To calculate the average up votes, we need the sum of up votes and the count of users. To calculate the average age, we need the sum of ages and the count of users. The necessary columns are thus identified.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'posts'.'owneruserid'"
+        ],
+        "correct_columns": {
+            "posts": [
+                "owneruserid"
+            ],
+            "users": [
+                "upvotes",
+                "age",
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(T3.UpVotes) AS REAL) / COUNT(T2.OwnerUserId), CAST(SUM(T3.Age) AS REAL) / COUNT(T2.OwnerUserId) FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id INNER JOIN ( SELECT OwnerUserId FROM posts GROUP BY OwnerUserId HAVING COUNT(OwnerUserId) > 10 ) AS T2 ON T1.OwnerUserId = T2.OwnerUserId ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns needed to answer the question. I noticed that the question asks for the average of up votes and average user age for users creating more than 10 posts. I used the hint provided to identify the necessary columns and tables. I then joined the posts table with the users table on the OwnerUserId column to get the user information. I also used a subquery to filter users who have created more than 10 posts. Finally, I calculated the average up votes and average age using the SUM and COUNT functions.",
+        "SQL": "SELECT CAST(SUM(T3.UpVotes) AS REAL) / COUNT(T2.OwnerUserId), CAST(SUM(T3.Age) AS REAL) / COUNT(T2.OwnerUserId) FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id INNER JOIN (SELECT OwnerUserId FROM posts GROUP BY OwnerUserId HAVING COUNT(OwnerUserId) > 10) AS T2 ON T1.OwnerUserId = T2.OwnerUserId",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the average of the up votes and the average user age for users creating more than 10 posts?",
+            "Evidence": "creating more than 10 post refers to Count (UserId) > 10; average of the up votes = Divide (Sum(UpVotes), Count (UserId)); average age = Divide (Sum(Age), Count(UserId))",
+            "GOLD_SQL": "SELECT AVG(T1.UpVotes), AVG(T1.Age) FROM users AS T1 INNER JOIN ( SELECT OwnerUserId, COUNT(*) AS post_count FROM posts GROUP BY OwnerUserId HAVING post_count > 10) AS T2 ON T1.Id = T2.OwnerUserId",
+            "PREDICTED_SQL": "SELECT CAST(SUM(T3.UpVotes) AS REAL) / COUNT(T2.OwnerUserId), CAST(SUM(T3.Age) AS REAL) / COUNT(T2.OwnerUserId) FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id INNER JOIN ( SELECT OwnerUserId FROM posts GROUP BY OwnerUserId HAVING COUNT(OwnerUserId) > 10 ) AS T2 ON T1.OwnerUserId = T2.OwnerUserId "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the average of the up votes and the average user age for users creating more than 10 posts?",
+            "Evidence": "creating more than 10 post refers to Count (UserId) > 10; average of the up votes = Divide (Sum(UpVotes), Count (UserId)); average age = Divide (Sum(Age), Count(UserId))",
+            "GOLD_SQL": "SELECT AVG(T1.UpVotes), AVG(T1.Age) FROM users AS T1 INNER JOIN ( SELECT OwnerUserId, COUNT(*) AS post_count FROM posts GROUP BY OwnerUserId HAVING post_count > 10) AS T2 ON T1.Id = T2.OwnerUserId",
+            "PREDICTED_SQL": "SELECT CAST(SUM(T3.UpVotes) AS REAL) / COUNT(T2.OwnerUserId), CAST(SUM(T3.Age) AS REAL) / COUNT(T2.OwnerUserId) FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id INNER JOIN (SELECT OwnerUserId FROM posts GROUP BY OwnerUserId HAVING COUNT(OwnerUserId) > 10) AS T2 ON T1.OwnerUserId = T2.OwnerUserId"
+        },
+        "status": "success"
+    }
+]

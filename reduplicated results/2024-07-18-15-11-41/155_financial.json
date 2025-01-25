@@ -1,0 +1,209 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Gold",
+            "cards",
+            "prior to 1998",
+            "Percent of Gold",
+            "issued date",
+            "1998",
+            "count",
+            "type",
+            "all cards"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "card": [
+                "issued",
+                "type"
+            ]
+        },
+        "similar_values": {
+            "card": {
+                "type": [
+                    "gold"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "card": {
+                "type": {
+                    "column_name": "",
+                    "column_description": "type of credit card",
+                    "value_description": "\"junior\": junior class of credit card;  \"classic\": standard class of credit card;  \"gold\": high-level credit card"
+                },
+                "issued": {
+                    "column_name": "",
+                    "column_description": "the date when the credit card issued",
+                    "value_description": "in the form YYMMDD"
+                },
+                "card_id": {
+                    "column_name": "credit card id",
+                    "column_description": "id number of credit card",
+                    "value_description": ""
+                }
+            },
+            "trans": {
+                "amount": {
+                    "column_name": "amount of money",
+                    "column_description": "amount of money",
+                    "value_description": "Unit\uff1aUSD"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "date",
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "type",
+                "issued",
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "birth_date",
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "type",
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id"
+            ],
+            "loan": [
+                "date",
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "date",
+                "type",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "card": [
+                "card_id",
+                "type",
+                "issued"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "card": [
+                "type",
+                "issued",
+                "card_id",
+                "disp_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of 'Gold' cards issued prior to 1998. The hint suggests counting the number of 'Gold' cards issued before 1998 and dividing it by the total number of cards. This requires identifying the 'Gold' cards and their issuance dates, as well as the total number of cards. The tables needed to answer this question are those that contain information about cards, their types, and issuance dates.",
+        "selected_tables": [
+            "card"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "card": [
+                "card_id",
+                "type",
+                "issued"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "card": [
+                "type",
+                "issued"
+            ]
+        },
+        "model_selected_columns": {
+            "card": [
+                "type",
+                "issued"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of 'Gold' cards issued prior to 1998. The hint provides a formula to calculate this percentage, which involves counting the number of 'Gold' cards issued before 1998 and dividing it by the total number of cards. The table and columns necessary for this calculation are identified.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'card'.'card_id'"
+        ],
+        "correct_columns": {
+            "card": [
+                "card_id",
+                "type",
+                "issued"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN issued < '1998-01-01' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(card_id) FROM card WHERE type = 'gold' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question and the hint provided. The question is asking for the percentage of 'Gold' cards that were issued prior to 1998. The hint suggests that the percentage can be calculated by dividing the count of 'Gold' cards issued prior to 1998 by the total count of 'Gold' cards and then multiplying by 100. I then used the provided database schema to identify the relevant tables and columns. I used the 'card' table to filter for 'Gold' cards and the 'issued' column to filter for cards issued prior to 1998. I used the COUNT function to count the total number of 'Gold' cards and the SUM function with a CASE statement to count the number of 'Gold' cards issued prior to 1998. Finally, I divided the count of 'Gold' cards issued prior to 1998 by the total count of 'Gold' cards and multiplied by 100 to get the percentage.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN issued < '1998-01-01' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(card_id) FROM card WHERE type = 'gold'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How many percent of 'Gold' cards were issued prior to 1998?",
+            "Evidence": "Percent of Gold = [ count(type = 'gold' and issued date < 1998) / count(all cards)] * 100%",
+            "GOLD_SQL": "SELECT CAST(SUM(type = 'gold' AND STRFTIME('%Y', issued) < '1998') AS REAL) * 100 / COUNT(card_id) FROM card",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN issued < '1998-01-01' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(card_id) FROM card WHERE type = 'gold' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How many percent of 'Gold' cards were issued prior to 1998?",
+            "Evidence": "Percent of Gold = [ count(type = 'gold' and issued date < 1998) / count(all cards)] * 100%",
+            "GOLD_SQL": "SELECT CAST(SUM(type = 'gold' AND STRFTIME('%Y', issued) < '1998') AS REAL) * 100 / COUNT(card_id) FROM card",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN issued < '1998-01-01' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(card_id) FROM card WHERE type = 'gold'"
+        },
+        "status": "success"
+    }
+]

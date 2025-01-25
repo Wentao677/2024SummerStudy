@@ -1,0 +1,249 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "high-level credit cards",
+            "OWNER",
+            "type of disposition",
+            "gold type"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "card": [
+                "type",
+                "type"
+            ]
+        },
+        "similar_values": {
+            "disp": {
+                "type": [
+                    "OWNER"
+                ]
+            },
+            "card": {
+                "type": [
+                    "gold"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "card": {
+                "type": {
+                    "column_name": "",
+                    "column_description": "type of credit card",
+                    "value_description": "\"junior\": junior class of credit card;  \"classic\": standard class of credit card;  \"gold\": high-level credit card"
+                },
+                "card_id": {
+                    "column_name": "credit card id",
+                    "column_description": "id number of credit card",
+                    "value_description": ""
+                },
+                "issued": {
+                    "column_name": "",
+                    "column_description": "the date when the credit card issued",
+                    "value_description": "in the form YYMMDD"
+                },
+                "disp_id": {
+                    "column_name": "disposition id",
+                    "column_description": "disposition id",
+                    "value_description": ""
+                }
+            },
+            "disp": {
+                "type": {
+                    "column_name": "",
+                    "column_description": "type of disposition",
+                    "value_description": "\"OWNER\" : \"USER\" : \"DISPONENT\"  the account can only have the right to issue permanent orders or apply for loans"
+                },
+                "disp_id": {
+                    "column_name": "disposition id",
+                    "column_description": "unique number of identifying this row of record",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "disp_id",
+                "type",
+                "card_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "type",
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id"
+            ],
+            "loan": [
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "card": [
+                "card_id",
+                "disp_id",
+                "type"
+            ],
+            "disp": [
+                "disp_id",
+                "type"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "card": [
+                "disp_id",
+                "type",
+                "card_id"
+            ],
+            "disp": [
+                "type",
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about high-level credit cards, which refers to cards with the 'gold' type. The hint also mentions 'OWNER' type of disposition. To find the number of high-level credit cards with 'OWNER' type of disposition, we need to link the 'card' table with the 'disp' table to get the disposition type, and then filter the results to only include 'gold' type cards. We also need to link the 'disp' table with the 'account' table to get the account information. Finally, we need to link the 'account' table with the 'client' table to get the client information.",
+        "selected_tables": [
+            "card",
+            "disp",
+            "account",
+            "client"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "card": [
+                "card_id",
+                "disp_id",
+                "type"
+            ],
+            "disp": [
+                "disp_id",
+                "type"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "card": [
+                "card_id",
+                "type"
+            ],
+            "disp": [
+                "disp_id",
+                "type"
+            ]
+        },
+        "model_selected_columns": {
+            "card": [
+                "card_id",
+                "type"
+            ],
+            "disp": [
+                "disp_id",
+                "type"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for high-level credit cards with 'OWNER' type of disposition. The hint tells us that high-level credit cards are those with the 'gold' type. We need to find the 'gold' type in the 'card' table and match it with the 'OWNER' type in the 'disp' table.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'card'.'disp_id'"
+        ],
+        "correct_columns": {
+            "card": [
+                "card_id",
+                "disp_id",
+                "type"
+            ],
+            "disp": [
+                "disp_id",
+                "type"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'gold' AND T2.type = 'OWNER' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns that need to be considered for high-level credit cards and 'OWNER' type of disposition. I noticed that 'gold' type is mentioned in the hint, so I used that to filter the cards. Then, I joined the 'card' table with the 'disp' table to get the disposition type. Finally, I counted the number of rows that meet the condition using the COUNT function.",
+        "SQL": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'gold' AND T2.type = 'OWNER'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many high-level credit cards have \"OWNER\" type of disposition?",
+            "Evidence": "High-level credit cards refers to the cards with the gold type.",
+            "GOLD_SQL": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'gold' AND T2.type = 'OWNER'",
+            "PREDICTED_SQL": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'gold' AND T2.type = 'OWNER' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many high-level credit cards have \"OWNER\" type of disposition?",
+            "Evidence": "High-level credit cards refers to the cards with the gold type.",
+            "GOLD_SQL": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'gold' AND T2.type = 'OWNER'",
+            "PREDICTED_SQL": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'gold' AND T2.type = 'OWNER'"
+        },
+        "status": "success"
+    }
+]

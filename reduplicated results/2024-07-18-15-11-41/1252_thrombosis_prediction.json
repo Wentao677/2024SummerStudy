@@ -1,0 +1,224 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "normal Ig G level",
+            "IGG",
+            "900",
+            "2000",
+            "Symptoms",
+            "IS NOT NULL",
+            "patients",
+            "have symptoms"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "IGG"
+            ],
+            "Examination": [
+                "Symptoms",
+                "Symptoms"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "2000.8"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "igg": {
+                    "column_name": "Ig G",
+                    "column_description": "Ig G",
+                    "value_description": "Commonsense evidence:  Normal range: 900 < N < 2000"
+                },
+                "igm": {
+                    "column_name": "Ig M",
+                    "column_description": "Ig M",
+                    "value_description": "Commonsense evidence:  Normal range: 40 < N < 400"
+                },
+                "iga": {
+                    "column_name": "Ig A",
+                    "column_description": "Ig A",
+                    "value_description": "Commonsense evidence:  Normal range: 80 < N < 500"
+                }
+            },
+            "examination": {
+                "symptoms": {
+                    "column_name": "",
+                    "column_description": "other symptoms observed",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Symptoms",
+                "ID"
+            ],
+            "Patient": [
+                "ID"
+            ],
+            "Laboratory": [
+                "IGG",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "igg"
+            ],
+            "examination": [
+                "id",
+                "symptoms"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "IGG",
+                "ID",
+                "Date"
+            ],
+            "Examination": [
+                "Symptoms",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about patients with a normal Ig G level, which is defined as IGG > 900 and IGG < 2000. This information is present in the Laboratory table. The hint also mentions that 'have symptoms' refers to Symptoms IS NOT NULL, which is present in the Examination table. Therefore, we need to join the Laboratory and Examination tables to find the patients with a normal Ig G level who have symptoms.",
+        "selected_tables": [
+            "Laboratory",
+            "Examination"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "igg"
+            ],
+            "examination": [
+                "id",
+                "symptoms"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "IGG"
+            ],
+            "Examination": [
+                "Symptoms"
+            ]
+        },
+        "model_selected_columns": {
+            "Laboratory": [
+                "IGG"
+            ],
+            "Examination": [
+                "Symptoms"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with normal Ig G levels and symptoms. The hint provides the definition of normal Ig G levels as IGG > 900 and IGG < 2000, and symptoms as Symptoms IS NOT NULL. To answer the question, we need to filter patients based on their Ig G levels and check if they have symptoms. The necessary columns are IGG from the Laboratory table and Symptoms from the Examination table.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'laboratory'.'id'",
+            "'examination'.'id'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "igg"
+            ],
+            "examination": [
+                "id",
+                "symptoms"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.IGG > 900 AND T1.IGG < 2000 AND T2.Symptoms IS NOT NULL ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question and the hint. The question asks for the number of patients with a normal Ig G level who have symptoms. The hint clarifies that a normal Ig G level refers to IGG > 900 and IGG < 2000, and having symptoms refers to Symptoms IS NOT NULL. I then constructed the SQL query by joining the Laboratory and Examination tables on the ID column, filtering for patients with a normal Ig G level, and counting the number of patients who have symptoms.",
+        "SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.IGG > 900 AND T1.IGG < 2000 AND T2.Symptoms IS NOT NULL",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Among the patients with a normal Ig G level, how many of them have symptoms?",
+            "Evidence": "normal Ig G level refers to IGG > 900 and IGG < 2000; have symptoms refers to Symptoms IS NOT NULL;",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID INNER JOIN Examination AS T3 ON T3.ID = T2.ID WHERE T2.IGG BETWEEN 900 AND 2000 AND T3.Symptoms IS NOT NULL",
+            "PREDICTED_SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.IGG > 900 AND T1.IGG < 2000 AND T2.Symptoms IS NOT NULL "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Among the patients with a normal Ig G level, how many of them have symptoms?",
+            "Evidence": "normal Ig G level refers to IGG > 900 and IGG < 2000; have symptoms refers to Symptoms IS NOT NULL;",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID INNER JOIN Examination AS T3 ON T3.ID = T2.ID WHERE T2.IGG BETWEEN 900 AND 2000 AND T3.Symptoms IS NOT NULL",
+            "PREDICTED_SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.IGG > 900 AND T1.IGG < 2000 AND T2.Symptoms IS NOT NULL"
+        },
+        "status": "success"
+    }
+]

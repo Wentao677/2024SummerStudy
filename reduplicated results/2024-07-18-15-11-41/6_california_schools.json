@@ -1,0 +1,256 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "SAT test takers",
+            "magnet schools",
+            "magnet program",
+            "Magnet",
+            "1",
+            "over 500"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "Magnet",
+                "Magnet",
+                "Magnet"
+            ]
+        },
+        "similar_values": {
+            "schools": {
+                "School": [
+                    "180 Program"
+                ],
+                "GSoffered": [
+                    "6"
+                ],
+                "Ext": [
+                    "2500"
+                ],
+                "CharterNum": [
+                    "1500"
+                ]
+            },
+            "satscores": {
+                "sname": [
+                    "Opportunity Program"
+                ]
+            },
+            "frpm": {
+                "School Name": [
+                    "De Anza Magnet"
+                ],
+                "Charter School Number": [
+                    "1500"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "schools": {
+                "magnet": {
+                    "column_name": "",
+                    "column_description": "This field identifies whether a school is a magnet school and/or provides a magnet program.",
+                    "value_description": "The field is coded as follows:  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 1 = Magnet - The school is a magnet school and/or offers a magnet program.  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 0 = Not Magnet - The school is not a magnet school and/or does not offer a magnet program.    Note: Preschools and adult education centers do not contain a magnet school indicator."
+                },
+                "soc": {
+                    "column_name": "School Ownership Code",
+                    "column_description": "The School Ownership Code is a numeric code used to identify the type of school.",
+                    "value_description": "\u2022      08 - Preschool       \u2022       09 \u2013 Special Education Schools (Public) \u2022      11 \u2013 Youth Authority Facilities (CEA) \u2022       13 \u2013 Opportunity Schools \u2022       14 \u2013 Juvenile Court Schools \u2022       15 \u2013 Other County or District Programs \u2022       31 \u2013 State Special Schools \u2022       60 \u2013 Elementary School (Public) \u2022       61 \u2013 Elementary School in 1 School District (Public) \u2022       62 \u2013 Intermediate/Middle Schools (Public) \u2022       63 \u2013 Alternative Schools of Choice \u2022       64 \u2013 Junior High Schools (Public) \u2022       65 \u2013 K-12 Schools (Public) \u2022       66 \u2013 High Schools (Public) \u2022       67 \u2013 High Schools in 1 School District (Public) \u2022       68 \u2013 Continuation High Schools \u2022       69 \u2013 District Community Day Schools \u2022       70 \u2013 Adult Education Centers \u2022       98 \u2013 Regional Occupational Center/Program (ROC/P)"
+                },
+                "soctype": {
+                    "column_name": "School Ownership Code Type",
+                    "column_description": "The School Ownership Code Type is the text description of the type of school.",
+                    "value_description": "The School Ownership Code Type is the text description of the type of school."
+                },
+                "charter": {
+                    "column_name": "",
+                    "column_description": "This field identifies a charter school.",
+                    "value_description": "The field is coded as follows:  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 1 = The school is a charter  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 0 = The school is not a charter"
+                },
+                "admfname2": {
+                    "column_name": "",
+                    "column_description": "",
+                    "value_description": "SAME as 1"
+                }
+            },
+            "satscores": {
+                "numtsttakr": {
+                    "column_name": "Number of Test Takers",
+                    "column_description": "Number of Test Takers in this school",
+                    "value_description": "number of test takers in each school"
+                },
+                "numge1500": {
+                    "column_name": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500",
+                    "column_description": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500",
+                    "value_description": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500    Excellence Rate = NumGE1500 / NumTstTakr"
+                }
+            },
+            "frpm": {
+                "school code": {
+                    "column_name": "",
+                    "column_description": "School Code",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "Educational Option Type",
+                "CDSCode"
+            ],
+            "satscores": [
+                "sname",
+                "cds"
+            ],
+            "schools": [
+                "StatusType",
+                "EdOpsCode",
+                "Magnet",
+                "CDSCode"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'school'",
+            "'satscores'.'numtsttakr'"
+        ],
+        "correct_columns": {
+            "schools": [
+                "school",
+                "cdscode",
+                "magnet"
+            ],
+            "satscores": [
+                "cds",
+                "numtsttakr"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "schools": [
+                "StatusType",
+                "EdOpsCode",
+                "Magnet",
+                "CDSCode"
+            ],
+            "satscores": [
+                "sname",
+                "cds"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for schools with SAT test takers over 500 that are magnet schools or offer a magnet program. The hint clarifies that Magnet = 1 indicates a magnet school or program. To answer this question, we need to identify schools with SAT test takers over 500 and filter them by Magnet = 1. This requires information from the schools table, which contains the Magnet field, and the satscores table, which contains the SAT test taker information.",
+        "selected_tables": [
+            "schools",
+            "satscores"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'school'",
+            "'satscores'.'numtsttakr'"
+        ],
+        "correct_columns": {
+            "schools": [
+                "school",
+                "cdscode",
+                "magnet"
+            ],
+            "satscores": [
+                "cds",
+                "numtsttakr"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "schools": [
+                "Magnet"
+            ],
+            "satscores": [
+                "cds",
+                "sname"
+            ]
+        },
+        "model_selected_columns": {
+            "schools": [
+                "Magnet"
+            ],
+            "satscores": [
+                "cds",
+                "sname"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for schools with SAT test takers over 500 that are magnet schools or offer a magnet program. The hint indicates that Magnet = 1 identifies such schools. We need to join the schools table with the satscores table to filter schools with SAT test takers over 500. We also need to filter schools with Magnet = 1.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'school'",
+            "'schools'.'cdscode'",
+            "'satscores'.'numtsttakr'"
+        ],
+        "correct_columns": {
+            "schools": [
+                "school",
+                "cdscode",
+                "magnet"
+            ],
+            "satscores": [
+                "cds",
+                "numtsttakr"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.sname = 'Opportunity Program' AND T1.Magnet = 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I first considered the hint that Magnet = 1 means the school is a magnet school or offers a magnet program. Then, I looked at the database schema and found the 'Magnet' column in the 'schools' table. I joined the 'schools' table with the 'satscores' table on the 'CDSCode' column, and filtered the results to only include schools with SAT test takers of over 500. Finally, I selected the 'CDSCode' column from the 'schools' table to get the list of schools that are magnet schools or offer a magnet program.",
+        "SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr > 500 AND T1.Magnet = 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Among the schools with the SAT test takers of over 500, please list the schools that are magnet schools or offer a magnet program.",
+            "Evidence": "Magnet schools or offer a magnet program means that Magnet = 1",
+            "GOLD_SQL": "SELECT T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Magnet = 1 AND T1.NumTstTakr > 500",
+            "PREDICTED_SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.sname = 'Opportunity Program' AND T1.Magnet = 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Among the schools with the SAT test takers of over 500, please list the schools that are magnet schools or offer a magnet program.",
+            "Evidence": "Magnet schools or offer a magnet program means that Magnet = 1",
+            "GOLD_SQL": "SELECT T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Magnet = 1 AND T1.NumTstTakr > 500",
+            "PREDICTED_SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr > 500 AND T1.Magnet = 1"
+        },
+        "status": "success"
+    }
+]

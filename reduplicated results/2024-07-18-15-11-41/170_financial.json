@@ -1,0 +1,239 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "credit card withdrawals",
+            "VYBER KARTOU",
+            "Operation",
+            "after 1995",
+            "credit card"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "trans": [
+                "operation"
+            ]
+        },
+        "similar_values": {
+            "trans": {
+                "operation": [
+                    "VYBER KARTOU",
+                    "VYBER"
+                ],
+                "type": [
+                    "VYBER"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "trans": {
+                "operation": {
+                    "column_name": "mode of transaction",
+                    "column_description": "mode of transaction",
+                    "value_description": "\"VYBER KARTOU\": credit card withdrawal \"VKLAD\": credit in cash \"PREVOD Z UCTU\" :collection from another bank \"VYBER\": withdrawal in cash \"PREVOD NA UCET\": remittance to another bank"
+                },
+                "type": {
+                    "column_name": "+/- transaction",
+                    "column_description": "+/- transaction",
+                    "value_description": "\"PRIJEM\" stands for credit \"VYDAJ\" stands for withdrawal"
+                },
+                "k_symbol": {
+                    "column_name": "characterization of the transaction",
+                    "column_description": "",
+                    "value_description": "\"POJISTNE\": stands for insurrance payment \"SLUZBY\": stands for payment for statement \"UROK\": stands for interest credited \"SANKC. UROK\": sanction interest if negative balance \"SIPO\": stands for household \"DUCHOD\": stands for old-age pension \"UVER\": stands for loan payment"
+                }
+            },
+            "card": {
+                "issued": {
+                    "column_name": "",
+                    "column_description": "the date when the credit card issued",
+                    "value_description": "in the form YYMMDD"
+                },
+                "card_id": {
+                    "column_name": "credit card id",
+                    "column_description": "id number of credit card",
+                    "value_description": ""
+                },
+                "type": {
+                    "column_name": "",
+                    "column_description": "type of credit card",
+                    "value_description": "\"junior\": junior class of credit card;  \"classic\": standard class of credit card;  \"gold\": high-level credit card"
+                }
+            },
+            "district": {
+                "a15": {
+                    "column_name": "no. of committed crimes 1995",
+                    "column_description": "no. of committed crimes 1995",
+                    "value_description": ""
+                }
+            },
+            "order": {
+                "k_symbol": {
+                    "column_name": "characterization of the payment",
+                    "column_description": "purpose of the payment",
+                    "value_description": "\"POJISTNE\" stands for insurance payment \"SIPO\" stands for household payment \"LEASING\" stands for leasing \"UVER\" stands for loan payment"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "date",
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "card_id",
+                "issued",
+                "disp_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id"
+            ],
+            "loan": [
+                "date",
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "date",
+                "type",
+                "operation",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "trans": [
+                "account_id",
+                "operation",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "trans": [
+                "date",
+                "type",
+                "operation",
+                "trans_id",
+                "account_id"
+            ],
+            "account": [
+                "date",
+                "account_id",
+                "district_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of credit card withdrawals recorded after 1995. The hint provides the specific operation type 'VYBER KARTOU' which means credit card withdrawals. To answer this question, we need to identify the transactions that are credit card withdrawals and occurred after 1995. The operation type 'VYBER KARTOU' is present in the 'trans' table, which contains information about transactions. The 'trans' table also has a column 'date' which stores the date of the transaction. We can filter the transactions by the operation type and date to get the desired result. The 'account' table is also necessary as it provides the link between the transactions and the accounts. The 'account' table has a foreign key to the 'district' table, which is not necessary for this question, but it's still required to get the correct result.",
+        "selected_tables": [
+            "trans",
+            "account"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "trans": [
+                "account_id",
+                "operation",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "trans": [
+                "date",
+                "type",
+                "operation"
+            ]
+        },
+        "model_selected_columns": {
+            "trans": [
+                "date",
+                "type",
+                "operation"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the transactions that are credit card withdrawals (Operation = 'VYBER KARTOU') and occurred after 1995. We can filter the transactions by date and operation type.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'trans'.'account_id'"
+        ],
+        "correct_columns": {
+            "trans": [
+                "account_id",
+                "operation",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(trans_id) FROM trans WHERE STRFTIME('%Y', date) > '1995' AND operation = 'VYBER KARTOU' AND type = 'VYDAJ' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the key phrase 'credit card withdrawals' which corresponds to the operation 'VYBER KARTOU'. I then looked at the trans table and found the columns related to this operation. I also noticed that the date format is 'YYYY-MM-DD' and that the year is the first part of the date. I used the STRFTIME function to extract the year from the date and compared it to '1995' to filter out transactions before 1995. Finally, I counted the number of transactions that match the condition.",
+        "SQL": "SELECT COUNT(trans_id) FROM trans WHERE STRFTIME('%Y', date) > '1995' AND operation = 'VYBER KARTOU'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many credit card withdrawals were recorded after 1995?",
+            "Evidence": "Operation = 'VYBER KARTOU' means credit card withdrawals",
+            "GOLD_SQL": "SELECT COUNT(account_id) FROM trans WHERE STRFTIME('%Y', date) > '1995' AND operation = 'VYBER KARTOU'",
+            "PREDICTED_SQL": "SELECT COUNT(trans_id) FROM trans WHERE STRFTIME('%Y', date) > '1995' AND operation = 'VYBER KARTOU' AND type = 'VYDAJ' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many credit card withdrawals were recorded after 1995?",
+            "Evidence": "Operation = 'VYBER KARTOU' means credit card withdrawals",
+            "GOLD_SQL": "SELECT COUNT(account_id) FROM trans WHERE STRFTIME('%Y', date) > '1995' AND operation = 'VYBER KARTOU'",
+            "PREDICTED_SQL": "SELECT COUNT(trans_id) FROM trans WHERE STRFTIME('%Y', date) > '1995' AND operation = 'VYBER KARTOU'"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,259 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "superheroes",
+            "missing weight data",
+            "weight_kg",
+            "T1.weight_kg",
+            "NULL",
+            "difference",
+            "number of superheroes",
+            "blue eyes",
+            "eye_colour_id",
+            "colour.id",
+            "7",
+            "1",
+            "no eye color"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "superhero": [
+                "weight_kg",
+                "eye_colour_id"
+            ],
+            "colour": [
+                "colour"
+            ]
+        },
+        "similar_values": {
+            "superhero": {
+                "superhero_name": [
+                    "Data"
+                ]
+            },
+            "colour": {
+                "colour": [
+                    "Blue"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "superhero": {
+                "weight_kg": {
+                    "column_name": "weight kg",
+                    "column_description": "the weight of the superhero",
+                    "value_description": "The unit of weight is kilogram. If the weight_kg is NULL or 0, it means the weight of the superhero is missing."
+                },
+                "eye_colour_id": {
+                    "column_name": "eye colour id",
+                    "column_description": "the id of the superhero's eye color",
+                    "value_description": ""
+                },
+                "skin_colour_id": {
+                    "column_name": "skin colour id",
+                    "column_description": "the id of the superhero's skin color",
+                    "value_description": ""
+                },
+                "hair_colour_id": {
+                    "column_name": "hair colour id",
+                    "column_description": "the id of the superhero's hair color",
+                    "value_description": ""
+                },
+                "height_cm": {
+                    "column_name": "height cm",
+                    "column_description": "the height of the superhero",
+                    "value_description": "The unit of height is centimeter. If the height_cm is NULL or 0, it means the height of the superhero is missing."
+                }
+            },
+            "colour": {
+                "colour": {
+                    "column_name": "",
+                    "column_description": "the color of the superhero's skin/eye/hair/etc",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "alignment": [
+                "id"
+            ],
+            "attribute": [
+                "id"
+            ],
+            "colour": [
+                "id",
+                "colour"
+            ],
+            "gender": [
+                "id"
+            ],
+            "publisher": [
+                "id"
+            ],
+            "race": [
+                "race",
+                "id"
+            ],
+            "superhero": [
+                "eye_colour_id",
+                "weight_kg",
+                "id",
+                "gender_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "race_id",
+                "publisher_id",
+                "alignment_id"
+            ],
+            "hero_attribute": [
+                "hero_id",
+                "attribute_id"
+            ],
+            "superpower": [
+                "id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "eye_colour_id",
+                "weight_kg"
+            ],
+            "colour": [
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "superhero": [
+                "eye_colour_id",
+                "weight_kg",
+                "id",
+                "gender_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "race_id",
+                "publisher_id",
+                "alignment_id"
+            ],
+            "colour": [
+                "id",
+                "colour"
+            ],
+            "alignment": [
+                "id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the difference between the number of superheroes with blue eyes and no eye color, among those with missing weight data. The hint provides specific values for blue eyes (colour.id = 7) and no eye color (colour.id = 1). The tables needed to answer this question are those that contain the necessary information about superheroes, their eye colors, and their weights. The superhero table has a foreign key to the colour table, which allows us to link superheroes to their eye colors. The superhero table also has a column for weight_kg, which is used to identify missing weight data. Therefore, the necessary tables are superhero, colour, and alignment.",
+        "selected_tables": [
+            "superhero",
+            "colour",
+            "alignment"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "eye_colour_id",
+                "weight_kg"
+            ],
+            "colour": [
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "superhero": [
+                "id",
+                "eye_colour_id",
+                "weight_kg"
+            ],
+            "colour": [
+                "id"
+            ]
+        },
+        "model_selected_columns": {
+            "superhero": [
+                "id",
+                "eye_colour_id",
+                "weight_kg"
+            ],
+            "colour": [
+                "id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the difference between the number of superheroes with blue eyes and no eye color, among those with missing weight data. The hint provides specific values for blue eyes (colour.id = 7) and no eye color (colour.id = 1). We need to filter superheroes with missing weight data (weight_kg = 0 OR weight_kg = NULL) and then count the number of superheroes with blue eyes and no eye color.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "eye_colour_id",
+                "weight_kg"
+            ],
+            "colour": [
+                "id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT SUM(IIF(T2.id = 7, 1, 0)) - SUM(IIF(T2.id = 1, 1, 0)) AS diff FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.weight_kg = 0 OR T1.weight_kg IS NULL ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "First, I identified the columns and tables related to the question. I noticed that the question is asking for the difference between the number of superheroes with blue eyes and no eye color. I used the hint provided to understand that blue eyes refer to eye_colour_id WHERE colour.id = 7 and no eye color refers to eye_colour_id WHERE colour.id = 1. I also noticed that the question is asking for the difference in superheroes with missing weight data, which refers to weight_kg = 0 OR T1.weight_kg = NULL. I then joined the superhero table with the colour table to get the eye colours and used the IIF function to count the number of superheroes with blue eyes and no eye color. Finally, I filtered the results to only include superheroes with missing weight data.",
+        "SQL": "SELECT SUM(IIF(T2.id = 7, 1, 0)) - SUM(IIF(T2.id = 1, 1, 0)) AS diff FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.weight_kg = 0 OR T1.weight_kg IS NULL",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "In superheroes with missing weight data, calculate the difference between the number of superheroes with blue eyes and no eye color.",
+            "Evidence": "missing weight data refers to weight_kg = 0 OR T1.weight_kg = NULL; difference = SUBTRACT(SUM(colour.id = 7), SUM(colour.id = 1)); blue eyes refers to eye_colour_id WHERE colour.id = 7; no eye color refers to eye_colour_id WHERE colour.id = 1;",
+            "GOLD_SQL": "SELECT SUM(CASE WHEN T2.id = 7 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.id = 1 THEN 1 ELSE 0 END) FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.weight_kg = 0 OR T1.weight_kg is NULL",
+            "PREDICTED_SQL": "SELECT SUM(IIF(T2.id = 7, 1, 0)) - SUM(IIF(T2.id = 1, 1, 0)) AS diff FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.weight_kg = 0 OR T1.weight_kg IS NULL "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "In superheroes with missing weight data, calculate the difference between the number of superheroes with blue eyes and no eye color.",
+            "Evidence": "missing weight data refers to weight_kg = 0 OR T1.weight_kg = NULL; difference = SUBTRACT(SUM(colour.id = 7), SUM(colour.id = 1)); blue eyes refers to eye_colour_id WHERE colour.id = 7; no eye color refers to eye_colour_id WHERE colour.id = 1;",
+            "GOLD_SQL": "SELECT SUM(CASE WHEN T2.id = 7 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.id = 1 THEN 1 ELSE 0 END) FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.weight_kg = 0 OR T1.weight_kg is NULL",
+            "PREDICTED_SQL": "SELECT SUM(IIF(T2.id = 7, 1, 0)) - SUM(IIF(T2.id = 1, 1, 0)) AS diff FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.weight_kg = 0 OR T1.weight_kg IS NULL"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,232 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "triglyceride",
+            "TG",
+            "normal range",
+            "200",
+            "age",
+            "50 years",
+            "year(current_timestamp)",
+            "year(Birthday)",
+            "DISTINCT",
+            "patients",
+            "more than 50 years",
+            "SUBTRACT"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "TG"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "U-PRO": [
+                    "30"
+                ],
+                "RF": [
+                    "54"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "tg": {
+                    "column_name": "triglyceride",
+                    "column_description": "triglyceride",
+                    "value_description": "Commonsense evidence:  Normal range: N < 200"
+                },
+                "t-cho": {
+                    "column_name": "total cholesterol",
+                    "column_description": "total cholesterol",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "pt": {
+                    "column_name": "prothrombin time",
+                    "column_description": "prothrombin time",
+                    "value_description": "Commonsense evidence:  Normal range: N < 14"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            },
+            "patient": {
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID"
+            ],
+            "Patient": [
+                "Birthday",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "TG",
+                "HCT",
+                "PLT",
+                "RF",
+                "SM",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "tg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Birthday",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "TG",
+                "HCT",
+                "PLT",
+                "RF",
+                "SM",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with triglyceride (TG) levels beyond the normal range (TG >= 200) and age more than 50 years. The hint provides the criteria for triglyceride levels and age. To answer this question, we need to identify patients with TG levels beyond the normal range and calculate their age. The Examination table is not necessary as it only references Patient ID. The Patient table is necessary to get the birthday of the patients. The Laboratory table is necessary to get the triglyceride levels of the patients. Therefore, we need to use the Patient and Laboratory tables.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "tg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "TG"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "TG"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with triglyceride (TG) level beyond the normal range and age more than 50 years. The hint provides the conditions for these two criteria. We need to identify patients with TG >= 200 and subtract the year of birth from the current year to get the age. The Birthday column in the Patient table and the TG column in the Laboratory table are essential for this. We also need to consider distinct patients to avoid counting the same patient multiple times.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "tg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG >= 200 AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 50 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition for patients with triglyceride (TG) level beyond the normal range, which is TG >= 200. Then, I identified the condition for patients more than 50 years of age, which is subtracting the year of birth from the current year and checking if the result is greater than 50. I joined the Patient and Laboratory tables on the ID column and applied the conditions. Finally, I used COUNT(DISTINCT) to count the number of unique patients that meet both conditions.",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG >= 200 AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 50",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For all patients with triglyceride (TG) level beyond the normal range, how many are age more than 50 years?",
+            "Evidence": "triglyceride (TG) level beyond the normal range refers to TG > = 200; more than 50 years of age = SUBTRACT(year(current_timestamp), year(Birthday)) > 50; Should consider DISTINCT in the final result;",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG >= 200 AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) > 50",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG >= 200 AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 50 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For all patients with triglyceride (TG) level beyond the normal range, how many are age more than 50 years?",
+            "Evidence": "triglyceride (TG) level beyond the normal range refers to TG > = 200; more than 50 years of age = SUBTRACT(year(current_timestamp), year(Birthday)) > 50; Should consider DISTINCT in the final result;",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG >= 200 AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) > 50",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG >= 200 AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 50"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,280 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Mornington",
+            "Amos",
+            "view count",
+            "post",
+            "posts",
+            "ViewCount",
+            "DisplayName",
+            "SUBTRACT",
+            "SUM"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "posts": [
+                "ViewCount",
+                "ViewCount"
+            ],
+            "users": [
+                "DisplayName"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "Amos",
+                    "mornington"
+                ]
+            },
+            "tags": {
+                "TagName": [
+                    "amos"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "posts": {
+                "viewcount": {
+                    "column_name": "View Count",
+                    "column_description": "the view count of the post",
+                    "value_description": "Higher view count means the post has higher popularity"
+                },
+                "answercount": {
+                    "column_name": "Answer Count",
+                    "column_description": "the total number of answers of the post",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "views": {
+                    "column_name": "",
+                    "column_description": "the number of views",
+                    "value_description": ""
+                },
+                "displayname": {
+                    "column_name": "Display Name",
+                    "column_description": "the user's display name",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "bountyamount": {
+                    "column_name": "Bounty Amount",
+                    "column_description": "the amount of bounty",
+                    "value_description": ""
+                }
+            },
+            "tags": {
+                "count": {
+                    "column_name": "",
+                    "column_description": "the count of posts that contain this tag",
+                    "value_description": "more counts --> this tag is more popular"
+                }
+            },
+            "posthistory": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "PostId",
+                "UserDisplayName",
+                "Id",
+                "UserId"
+            ],
+            "postHistory": [
+                "UserId",
+                "UserDisplayName",
+                "Id",
+                "PostId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "ViewCount",
+                "OwnerDisplayName",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "DisplayName",
+                "Views",
+                "Id"
+            ],
+            "votes": [
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "displayname"
+            ],
+            "posthistory": [
+                "userid",
+                "postid"
+            ],
+            "posts": [
+                "id",
+                "viewcount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "posts": [
+                "ViewCount",
+                "OwnerDisplayName",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "users": [
+                "DisplayName",
+                "Views",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the difference in view count from posts posted by Mornington and Amos. The hint suggests using the SUM function with a WHERE clause to filter the view counts by the display names. This implies that we need to access the posts table to get the view counts. Additionally, the hint mentions the display names, which are stored in the users table. Therefore, we need to join the posts table with the users table to filter the view counts by the display names. Finally, we need to use the SUM function to calculate the total view counts for both Mornington and Amos.",
+        "selected_tables": [
+            "posts",
+            "users"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "posthistory"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "displayname"
+            ],
+            "posthistory": [
+                "userid",
+                "postid"
+            ],
+            "posts": [
+                "id",
+                "viewcount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "posts": [
+                "ViewCount"
+            ],
+            "users": [
+                "DisplayName"
+            ]
+        },
+        "model_selected_columns": {
+            "posts": [
+                "ViewCount"
+            ],
+            "users": [
+                "DisplayName"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the difference in view count from posts posted by Mornington and view count from posts posted by Amos. The hint suggests using the SUM function on ViewCount column where DisplayName is either 'Mornington' or 'Amos'. Therefore, we need to select the ViewCount column from the posts table and the DisplayName column from the users table.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "posthistory"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'users'.'id'",
+            "'posts'.'id'"
+        ],
+        "correct_columns": {
+            "users": [
+                "id",
+                "displayname"
+            ],
+            "posthistory": [
+                "userid",
+                "postid"
+            ],
+            "posts": [
+                "id",
+                "viewcount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT SUM(CASE WHEN T2.DisplayName = 'Mornington' THEN T1.ViewCount ELSE 0 END) - SUM(CASE WHEN T2.DisplayName = 'Amos' THEN T1.ViewCount ELSE 0 END) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to create a query that calculates the difference in view count from posts posted by Mornington and Amos. I used the INNER JOIN to combine the posts and users tables based on the OwnerUserId and Id columns. I used CASE WHEN statements to filter the ViewCount based on the DisplayName. I subtracted the sum of ViewCount for Mornington from the sum of ViewCount for Amos to get the difference.",
+        "SQL": "SELECT SUM(CASE WHEN T2.DisplayName = 'mornington' THEN T1.ViewCount ELSE 0 END) - SUM(CASE WHEN T2.DisplayName = 'Amos' THEN T1.ViewCount ELSE 0 END) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Calculate the difference in view count from post posted by Mornington and view count from posts posted by Amos.",
+            "Evidence": "calculation = SUBTRACT(SUM(ViewCount where DisplayName = 'Mornington'), SUM(ViewCount where DisplayName = 'Amos'));",
+            "GOLD_SQL": "SELECT SUM(IIF(T1.DisplayName = 'Mornington', T3.ViewCount, 0)) - SUM(IIF(T1.DisplayName = 'Amos', T3.ViewCount, 0)) AS diff FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN posts AS T3 ON T3.Id = T2.PostId",
+            "PREDICTED_SQL": "SELECT SUM(CASE WHEN T2.DisplayName = 'Mornington' THEN T1.ViewCount ELSE 0 END) - SUM(CASE WHEN T2.DisplayName = 'Amos' THEN T1.ViewCount ELSE 0 END) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Calculate the difference in view count from post posted by Mornington and view count from posts posted by Amos.",
+            "Evidence": "calculation = SUBTRACT(SUM(ViewCount where DisplayName = 'Mornington'), SUM(ViewCount where DisplayName = 'Amos'));",
+            "GOLD_SQL": "SELECT SUM(IIF(T1.DisplayName = 'Mornington', T3.ViewCount, 0)) - SUM(IIF(T1.DisplayName = 'Amos', T3.ViewCount, 0)) AS diff FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN posts AS T3 ON T3.Id = T2.PostId",
+            "PREDICTED_SQL": "SELECT SUM(CASE WHEN T2.DisplayName = 'mornington' THEN T1.ViewCount ELSE 0 END) - SUM(CASE WHEN T2.DisplayName = 'Amos' THEN T1.ViewCount ELSE 0 END) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id"
+        },
+        "status": "success"
+    }
+]

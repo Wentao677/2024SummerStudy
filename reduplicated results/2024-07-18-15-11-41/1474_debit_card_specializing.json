@@ -1,0 +1,263 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "customers",
+            "CZK",
+            "gas",
+            "2011",
+            "Between 201101 And 201112",
+            "January",
+            "December"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {},
+        "similar_values": {
+            "customers": {
+                "Currency": [
+                    "CZK"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "transactions_1k": {
+                "gasstationid": {
+                    "column_name": "Gas Station ID",
+                    "column_description": "Gas Station ID",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "Amount",
+                    "value_description": ""
+                },
+                "productid": {
+                    "column_name": "Product ID",
+                    "column_description": "Product ID",
+                    "value_description": ""
+                },
+                "time": {
+                    "column_name": "",
+                    "column_description": "Time",
+                    "value_description": ""
+                },
+                "transactionid": {
+                    "column_name": "Transaction ID",
+                    "column_description": "Transaction ID",
+                    "value_description": ""
+                }
+            },
+            "gasstations": {
+                "gasstationid": {
+                    "column_name": "Gas Station ID",
+                    "column_description": "Gas Station ID",
+                    "value_description": ""
+                }
+            },
+            "yearmonth": {
+                "consumption": {
+                    "column_name": "",
+                    "column_description": "consumption",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                },
+                "customerid": {
+                    "column_name": "Customer ID",
+                    "column_description": "Customer ID",
+                    "value_description": ""
+                }
+            },
+            "customers": {
+                "customerid": {
+                    "column_name": "",
+                    "column_description": "identification of the customer",
+                    "value_description": ""
+                },
+                "currency": {
+                    "column_name": "",
+                    "column_description": "Currency",
+                    "value_description": ""
+                }
+            },
+            "products": {
+                "productid": {
+                    "column_name": "Product ID",
+                    "column_description": "Product ID",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "customers": [
+                "CustomerID",
+                "Currency"
+            ],
+            "gasstations": [
+                "GasStationID"
+            ],
+            "products": [
+                "ProductID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "TransactionID",
+                "CustomerID"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "currency"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "customers": [
+                "CustomerID",
+                "Currency"
+            ],
+            "transactions_1k": [
+                "Date",
+                "TransactionID",
+                "CustomerID"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for customers who paid in CZK and consumed the most gas in 2011. The hint provides a specific date range for 2011, which helps to narrow down the search. To answer this question, we need to identify the customers who paid in CZK and have transactions within the specified date range. We also need to calculate the total consumption for each customer. The tables needed to answer this question are customers, transactions_1k, and yearmonth.",
+        "selected_tables": [
+            "customers",
+            "transactions_1k",
+            "yearmonth"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "currency"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "customers": [
+                "Currency"
+            ],
+            "yearmonth": [
+                "Date",
+                "CustomerID",
+                "Consumption"
+            ]
+        },
+        "model_selected_columns": {
+            "customers": [
+                "Currency"
+            ],
+            "yearmonth": [
+                "Date",
+                "CustomerID",
+                "Consumption"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for customers paying in CZK, so we need to filter by Currency. We also need to filter by the year 2011, which can be achieved by filtering the Date column. Finally, we need to sum up the consumption for each customer, so we need the Consumption column.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'customers'.'customerid'"
+        ],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "currency"
+            ],
+            "yearmonth": [
+                "customerid",
+                "date",
+                "consumption"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date BETWEEN 201101 AND 201112 AND T1.Currency = 'CZK' ORDER BY T2.Consumption DESC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to create a query that selects the customer ID of the customer who consumed the most gas in 2011, paying in CZK. I used the yearmonth table to get the consumption data and the customers table to filter by currency. I joined the two tables on customer ID and filtered the date range to 2011. I then ordered the results by consumption in descending order and limited the result to the top 1.",
+        "SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date BETWEEN 201101 AND 201112 AND T1.Currency = 'CZK' ORDER BY T2.Consumption DESC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Which customers, paying in CZK, consumed the most gas in 2011?",
+            "Evidence": "Year 2011 can be presented as Between 201101 And 201112, which means between January and December in 2011",
+            "GOLD_SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Currency = 'CZK' AND T2.Date BETWEEN 201101 AND 201112 GROUP BY T1.CustomerID ORDER BY SUM(T2.Consumption) DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date BETWEEN 201101 AND 201112 AND T1.Currency = 'CZK' ORDER BY T2.Consumption DESC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Which customers, paying in CZK, consumed the most gas in 2011?",
+            "Evidence": "Year 2011 can be presented as Between 201101 And 201112, which means between January and December in 2011",
+            "GOLD_SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Currency = 'CZK' AND T2.Date BETWEEN 201101 AND 201112 GROUP BY T1.CustomerID ORDER BY SUM(T2.Consumption) DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date BETWEEN 201101 AND 201112 AND T1.Currency = 'CZK' ORDER BY T2.Consumption DESC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,235 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "printing",
+            "card",
+            "Daren Bader",
+            "artist",
+            "availability",
+            "kind of printing",
+            "created"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "cards": [
+                "printings",
+                "artist",
+                "availability",
+                "printings"
+            ]
+        },
+        "similar_values": {
+            "cards": {
+                "artist": [
+                    "Daren Bader"
+                ],
+                "subtypes": [
+                    "Daretti"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "cards": {
+                "rarity": {
+                    "column_name": "",
+                    "column_description": "The card printing rarity.",
+                    "value_description": ""
+                },
+                "availability": {
+                    "column_name": "",
+                    "column_description": "A list of the card's available printing types.",
+                    "value_description": "\"arena\", \"dreamcast\", \"mtgo\", \"paper\", \"shandalar\""
+                },
+                "setcode": {
+                    "column_name": "Set Code",
+                    "column_description": "The set printing code that the card is from.",
+                    "value_description": ""
+                },
+                "originaltext": {
+                    "column_name": "",
+                    "column_description": "original Text",
+                    "value_description": "The text on the card as originally printed."
+                },
+                "ispromo": {
+                    "column_name": "is Promotion",
+                    "column_description": "If the card is a promotional printing.",
+                    "value_description": "0: is not 1: is"
+                },
+                "isalternative": {
+                    "column_name": "is Alternative",
+                    "column_description": "If the card is an alternate variation to an original printing",
+                    "value_description": "0: is not 1: is"
+                },
+                "artist": {
+                    "column_name": "",
+                    "column_description": "The name of the artist that illustrated the card art.",
+                    "value_description": ""
+                },
+                "isfullart": {
+                    "column_name": "is Full Art",
+                    "column_description": "If the card has full artwork.",
+                    "value_description": "0: doesn't have, 1: has full artwork"
+                },
+                "originaltype": {
+                    "column_name": "",
+                    "column_description": "original Type",
+                    "value_description": "The type of the card as originally printed. Includes any supertypes and subtypes."
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "artist",
+                "availability",
+                "faceName",
+                "hasNonFoil",
+                "isPromo",
+                "keywords",
+                "name",
+                "originalType",
+                "printings",
+                "rarity",
+                "setCode",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "id",
+                "uuid"
+            ],
+            "legalities": [
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "isNonFoilOnly",
+                "id",
+                "code"
+            ],
+            "set_translations": [
+                "id",
+                "setCode"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "availability",
+                "artist"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "cards": [
+                "artist",
+                "availability",
+                "faceName",
+                "hasNonFoil",
+                "isPromo",
+                "keywords",
+                "name",
+                "originalType",
+                "printings",
+                "rarity",
+                "setCode",
+                "id",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the kind of printing on a card created by Daren Bader. The hint clarifies that 'Daren Bader' refers to the artist, which is a column in the 'cards' table. The 'availability' column in the 'cards' table provides information about the kind of printing. Therefore, we need to select the 'cards' table to answer the question. The 'foreign_data' table is not relevant as it only provides a foreign key reference to the 'cards' table. The 'legalities', 'sets', 'set_translations', and 'rulings' tables are also not necessary as they do not provide information about the kind of printing or the artist.",
+        "selected_tables": [
+            "cards"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "availability",
+                "artist"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "cards": [
+                "artist",
+                "availability"
+            ]
+        },
+        "model_selected_columns": {
+            "cards": [
+                "artist",
+                "availability"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the kind of printing on a card created by Daren Bader. The hint suggests that 'kind of printing' refers to the availability column, and 'Daren Bader created' refers to the artist column. Therefore, we need to select the columns that contain these values.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "availability",
+                "artist"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT availability FROM cards WHERE artist = 'Daren Bader' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by reading the question and understanding that I need to find the kind of printing on the card that Daren Bader created. The hint provided suggests that the kind of printing refers to the availability and the artist is 'Daren Bader'. I then looked at the database schema and found the 'artist' and 'availability' columns in the 'cards' table. I used the WHERE clause to filter the results to only include cards created by 'Daren Bader'. Finally, I selected the 'availability' column to get the desired result.",
+        "SQL": "SELECT availability FROM cards WHERE artist = 'Daren Bader'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What kind of printing is on the card that Daren Bader created?",
+            "Evidence": "kind of printing refers to availability; Daren Bader created refers to artist = 'Daren Bader'",
+            "GOLD_SQL": "SELECT DISTINCT availability FROM cards WHERE artist = 'Daren Bader'",
+            "PREDICTED_SQL": "SELECT availability FROM cards WHERE artist = 'Daren Bader' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What kind of printing is on the card that Daren Bader created?",
+            "Evidence": "kind of printing refers to availability; Daren Bader created refers to artist = 'Daren Bader'",
+            "GOLD_SQL": "SELECT DISTINCT availability FROM cards WHERE artist = 'Daren Bader'",
+            "PREDICTED_SQL": "SELECT availability FROM cards WHERE artist = 'Daren Bader'"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,209 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "in-patient",
+            "age 50 and above",
+            "anti-cardiolipin antibody",
+            "IgG",
+            "Admission",
+            "Birthday",
+            "current_timestamp",
+            "AVG(aCL IgG)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "IGG"
+            ],
+            "Patient": [
+                "Admission",
+                "Birthday"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "acl igg": {
+                    "column_name": "anti-Cardiolipin antibody (IgG)",
+                    "column_description": "anti-Cardiolipin antibody (IgG) concentration",
+                    "value_description": ""
+                },
+                "acl iga": {
+                    "column_name": "anti-Cardiolipin antibody (IgA) concentration",
+                    "column_description": "anti-Cardiolipin antibody (IgA) concentration",
+                    "value_description": ""
+                },
+                "acl igm": {
+                    "column_name": "anti-Cardiolipin antibody (IgM)",
+                    "column_description": "anti-Cardiolipin antibody (IgM) concentration",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "aCL IgG",
+                "LAC",
+                "ID"
+            ],
+            "Patient": [
+                "Birthday",
+                "Admission",
+                "ID"
+            ],
+            "Laboratory": [
+                "IGG",
+                "SM",
+                "SSB",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "aCL IgG",
+                "id"
+            ],
+            "patient": [
+                "id",
+                "admission",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "aCL IgG",
+                "LAC",
+                "ID"
+            ],
+            "Patient": [
+                "Birthday",
+                "Admission",
+                "ID"
+            ],
+            "Laboratory": [
+                "IGG",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average anti-cardiolipin antibody (IgG) concentration for in-patients aged 50 and above. The hint provides the necessary conditions for in-patients (Admission = '+') and age (SUBTRACT(year(current_timestamp), year(Birthday)) >= '50'). To answer this question, we need to join the Examination table with the Patient table to get the patient's age and admission status. We also need the Examination table to get the anti-cardiolipin antibody (IgG) concentration. The Patient table is necessary to filter patients based on their age and admission status.",
+        "selected_tables": [
+            "Examination",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "aCL IgG",
+                "id"
+            ],
+            "patient": [
+                "id",
+                "admission",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "aCL IgG"
+            ],
+            "Patient": [
+                "Birthday",
+                "Admission"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "aCL IgG"
+            ],
+            "Patient": [
+                "Birthday",
+                "Admission"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average anti-cardiolipin antibody (IgG) concentration for in-patients aged 50 and above. The hint provides the necessary conditions for in-patients (Admission = '+') and age (SUBTRACT(year(current_timestamp), year(Birthday)) >= '50'). We need to filter patients based on these conditions and then calculate the average anti-cardiolipin antibody (IgG) concentration.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'examination'.'id'",
+            "'patient'.'id'"
+        ],
+        "correct_columns": {
+            "examination": [
+                "aCL IgG",
+                "id"
+            ],
+            "patient": [
+                "id",
+                "admission",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(T2.`aCL IgG`) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '+' AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) >= 50 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant tables and columns. The Patient table has the information about the patient's age, and the Examination table has the information about the anti-cardiolipin antibody (IgG) concentration. I then used the hint to determine the conditions for in-patient age 50 and above. The Admission column in the Patient table indicates whether the patient is an in-patient, and the Birthday column can be used to calculate the patient's age. I used the AVG function to calculate the average anti-cardiolipin antibody (IgG) concentration for the patients who meet the conditions.",
+        "SQL": "SELECT AVG(T2.`aCL IgG`) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '+' AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) >= 50",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For in-patient age 50 and above, what is their average anti-cardiolipin antibody (IgG) concentration?",
+            "Evidence": "in-patient refers to Admission = '+'; age 50 and above refers to SUBTRACT(year(current_timestamp), year(Birthday)) >= '50'; average anti-cardiolipin antibody (IgG) concentration refers to AVG(aCL IgG)",
+            "GOLD_SQL": "SELECT AVG(T2.`aCL IgG`) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) >= 50 AND T1.Admission = '+'",
+            "PREDICTED_SQL": "SELECT AVG(T2.`aCL IgG`) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '+' AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) >= 50 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For in-patient age 50 and above, what is their average anti-cardiolipin antibody (IgG) concentration?",
+            "Evidence": "in-patient refers to Admission = '+'; age 50 and above refers to SUBTRACT(year(current_timestamp), year(Birthday)) >= '50'; average anti-cardiolipin antibody (IgG) concentration refers to AVG(aCL IgG)",
+            "GOLD_SQL": "SELECT AVG(T2.`aCL IgG`) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) >= 50 AND T1.Admission = '+'",
+            "PREDICTED_SQL": "SELECT AVG(T2.`aCL IgG`) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '+' AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) >= 50"
+        },
+        "status": "success"
+    }
+]

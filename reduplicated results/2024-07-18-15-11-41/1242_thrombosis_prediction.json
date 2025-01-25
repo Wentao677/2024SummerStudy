@@ -1,0 +1,240 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "laboratory examinations",
+            "1984",
+            "patients",
+            "below 50 years old",
+            "normal platelet level",
+            "YEAR(Date)",
+            "SUBTRACT(year(current_timestamp), year(Birthday))",
+            "PLT",
+            "100",
+            "400"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "PLT"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "100.4",
+                    "400.2"
+                ],
+                "DNA": [
+                    "100"
+                ],
+                "U-PRO": [
+                    "100"
+                ]
+            },
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "plt": {
+                    "column_name": "platelet",
+                    "column_description": "platelet",
+                    "value_description": "Commonsense evidence:  Normal range: 100 < N < 400"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "ana pattern": {
+                    "column_name": "pattern observed in the sheet of ANA examination",
+                    "column_description": "pattern observed in the sheet of ANA examination",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "Date",
+                "PLT",
+                "RF",
+                "SM",
+                "SSB",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "plt",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "Date",
+                "PLT",
+                "RF",
+                "SM",
+                "SSB",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question requires filtering laboratory examinations taken in 1984, patients below 50 years old, and normal platelet levels. The hint provides the necessary conditions for these filters. To answer the question, we need to join the Laboratory table with the Patient table to filter patients based on their birthday and platelet levels. The Examination table is not necessary as it only references the Patient table, which is already included in the join.",
+        "selected_tables": [
+            "Laboratory",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "plt",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "Date",
+                "PLT"
+            ],
+            "Patient": [
+                "Birthday"
+            ]
+        },
+        "model_selected_columns": {
+            "Laboratory": [
+                "Date",
+                "PLT"
+            ],
+            "Patient": [
+                "Birthday"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients below 50 years old with normal platelet level. The hint provides the necessary conditions for platelet level and age. We need to filter patients based on their birthday and platelet level. The laboratory examinations in 1984 refer to the date of the laboratory tests. We need to filter the laboratory tests by year and then join the results with the patient table to get the patient information.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'patient'.'id'",
+            "'laboratory'.'id'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "plt",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T2.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T2.Date) = '1984' AND T2.PLT BETWEEN 100 AND 400 AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) < 50 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant tables and columns. I noticed that the question is asking for patients below 50 years old with normal platelet level, so I focused on the Patient and Laboratory tables. I used the hint provided to help me with the conditions. I then joined the two tables on the ID column and applied the conditions. I used the BETWEEN operator to check for the normal platelet level and the YEAR function to check for the year of the laboratory examination. Finally, I used the SUBTRACT function to check for the age of the patient.",
+        "SQL": "SELECT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE YEAR(T2.Date) = '1984' AND T2.PLT BETWEEN 100 AND 400 AND YEAR(CURRENT_TIMESTAMP) - YEAR(T1.Birthday) < 50",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For laboratory examinations take in 1984, list all patients below 50 years old with normal platelet level.",
+            "Evidence": "laboratory examinations take in 1984 refers to YEAR(Date) = '1984'; below 50 years old = SUBTRACT(year(current_timestamp), year(Birthday)) < 50; normal platelet level refers to PLT between 100 and 400; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.PLT BETWEEN 100 AND 400 AND STRFTIME('%Y', T2.Date) - STRFTIME('%Y', T1.Birthday) < 50 AND STRFTIME('%Y', T2.Date) = '1984'",
+            "PREDICTED_SQL": "SELECT DISTINCT T2.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T2.Date) = '1984' AND T2.PLT BETWEEN 100 AND 400 AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) < 50 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such function: YEAR",
+            "Question": "For laboratory examinations take in 1984, list all patients below 50 years old with normal platelet level.",
+            "Evidence": "laboratory examinations take in 1984 refers to YEAR(Date) = '1984'; below 50 years old = SUBTRACT(year(current_timestamp), year(Birthday)) < 50; normal platelet level refers to PLT between 100 and 400; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.PLT BETWEEN 100 AND 400 AND STRFTIME('%Y', T2.Date) - STRFTIME('%Y', T1.Birthday) < 50 AND STRFTIME('%Y', T2.Date) = '1984'",
+            "PREDICTED_SQL": "SELECT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE YEAR(T2.Date) = '1984' AND T2.PLT BETWEEN 100 AND 400 AND YEAR(CURRENT_TIMESTAMP) - YEAR(T1.Birthday) < 50"
+        },
+        "status": "success"
+    }
+]

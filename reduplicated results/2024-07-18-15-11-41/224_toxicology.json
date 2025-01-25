@@ -1,0 +1,196 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "bond IDs",
+            "TR000_2",
+            "atom ID",
+            "atom_id2"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "bond": [
+                "bond_id"
+            ],
+            "atom": [
+                "atom_id",
+                "atom_id"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "connected": {
+                "bond_id": {
+                    "column_name": "bond id",
+                    "column_description": "bond id representing bond between two atoms",
+                    "value_description": ""
+                },
+                "atom_id2": {
+                    "column_name": "atom id 2",
+                    "column_description": "id of the second atom",
+                    "value_description": ""
+                },
+                "atom_id": {
+                    "column_name": "atom id",
+                    "column_description": "id of the first atom",
+                    "value_description": ""
+                }
+            },
+            "atom": {
+                "atom_id": {
+                    "column_name": "atom id",
+                    "column_description": "the unique id of atoms",
+                    "value_description": ""
+                }
+            },
+            "bond": {
+                "molecule_id": {
+                    "column_name": "",
+                    "column_description": "identifying the molecule in which the bond appears",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "atom": [
+                "atom_id",
+                "molecule_id",
+                "element"
+            ],
+            "bond": [
+                "bond_id",
+                "molecule_id"
+            ],
+            "connected": [
+                "atom_id",
+                "atom_id2",
+                "bond_id"
+            ],
+            "molecule": [
+                "molecule_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "connected": [
+                "bond_id",
+                "atom_id2"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "connected": [
+                "atom_id",
+                "atom_id2",
+                "bond_id"
+            ],
+            "atom": [
+                "atom_id",
+                "molecule_id",
+                "element"
+            ],
+            "bond": [
+                "bond_id",
+                "molecule_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for bond IDs that have the same atom ID 2 as TR000_2. The hint clarifies that atom ID 2 refers to atom_id2 in the connected table. This suggests that we need to find bond IDs that are connected to atoms with ID TR000_2. The connected table provides this information, as it contains bond IDs and atom IDs. The atom table is also necessary to determine the atom ID 2, as it is referenced in the connected table. Finally, the bond table is required to retrieve the bond IDs.",
+        "selected_tables": [
+            "connected",
+            "atom",
+            "bond"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "connected": [
+                "bond_id",
+                "atom_id2"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "connected": [
+                "bond_id",
+                "atom_id2"
+            ],
+            "atom": [
+                "atom_id2"
+            ]
+        },
+        "model_selected_columns": {
+            "connected": [
+                "bond_id",
+                "atom_id2"
+            ],
+            "atom": [
+                "atom_id2"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for bond IDs that have the same atom ID 2 as TR000_2. The hint clarifies that atom ID 2 refers to atom_id2. Therefore, we need to find bond IDs that have a matching atom_id2 with TR000_2. We can achieve this by joining the connected table with the atom table and filtering the results based on the atom_id2.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "connected": [
+                "bond_id",
+                "atom_id2"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT bond_id FROM connected WHERE atom_id2 = 'TR000_2' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "The question asks for the bond IDs that have the same atom ID 2 as TR000_2. From the database schema, we know that the atom ID 2 is stored in the connected table. We also know that the bond ID is stored in the connected table. Therefore, we need to query the connected table to find the bond IDs that have the same atom ID 2 as TR000_2.",
+        "SQL": "SELECT bond_id FROM connected WHERE atom_id2 = 'TR000_2'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What are the bond IDs that have the same atom ID 2 of TR000_2?",
+            "Evidence": "TR000_2 is the atom id; atom ID 2 refers to atom_id2",
+            "GOLD_SQL": "SELECT T.bond_id FROM connected AS T WHERE T.atom_id2 = 'TR000_2'",
+            "PREDICTED_SQL": "SELECT bond_id FROM connected WHERE atom_id2 = 'TR000_2' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What are the bond IDs that have the same atom ID 2 of TR000_2?",
+            "Evidence": "TR000_2 is the atom id; atom ID 2 refers to atom_id2",
+            "GOLD_SQL": "SELECT T.bond_id FROM connected AS T WHERE T.atom_id2 = 'TR000_2'",
+            "PREDICTED_SQL": "SELECT bond_id FROM connected WHERE atom_id2 = 'TR000_2'"
+        },
+        "status": "success"
+    }
+]

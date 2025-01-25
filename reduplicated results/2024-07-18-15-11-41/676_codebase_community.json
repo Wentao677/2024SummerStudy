@@ -1,0 +1,234 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "display names",
+            "users",
+            "adults",
+            "Age",
+            "19",
+            "65"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "DisplayName",
+                "Age"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "user",
+                    "name"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "posthistory": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the user who post the post",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                },
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the user who post the comment",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "displayname": {
+                    "column_name": "Display Name",
+                    "column_description": "the user's display name",
+                    "value_description": ""
+                },
+                "age": {
+                    "column_name": "",
+                    "column_description": "user's age",
+                    "value_description": "\u0095 teenager: 13-18 \u0095 adult: 19-65 \u0095 elder: > 65"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the user id",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the voter",
+                    "value_description": ""
+                }
+            },
+            "badges": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the unique id of the user",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "UserDisplayName",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "UserDisplayName",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "OwnerDisplayName",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "DisplayName",
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "users": [
+                "DisplayName",
+                "Age",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the users who are adults, which is defined as users with an Age between 19 and 65. The hint provides this information. We can find this information in the users table, which contains the Age column. Additionally, we need to retrieve the display names of these users, which are stored in the users table as well. Therefore, we need to select the users table to answer the question.",
+        "selected_tables": [
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "users": [
+                "DisplayName",
+                "Age"
+            ]
+        },
+        "model_selected_columns": {
+            "users": [
+                "DisplayName",
+                "Age"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the display names of users who are adults. The hint clarifies that adults refer to users where Age is between 19 and 65. Therefore, we need to select the columns that contain the display names and the age information.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DisplayName FROM users WHERE Age BETWEEN 19 AND 65 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I carefully read the question and the database schema to understand the requirements. I noticed that the question asks for the display names of users who are adults, which refers to users with an Age between 19 and 65. I then constructed a SQL query that filters the users table based on the Age column and selects the DisplayName column.",
+        "SQL": "SELECT DisplayName FROM users WHERE Age BETWEEN 19 AND 65",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please list all display names of users who are adults.",
+            "Evidence": "adults refer to users where Age BETWEEN 19 and 65;",
+            "GOLD_SQL": "SELECT DisplayName FROM users WHERE Age BETWEEN 19 AND 65",
+            "PREDICTED_SQL": "SELECT DisplayName FROM users WHERE Age BETWEEN 19 AND 65 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please list all display names of users who are adults.",
+            "Evidence": "adults refer to users where Age BETWEEN 19 and 65;",
+            "GOLD_SQL": "SELECT DisplayName FROM users WHERE Age BETWEEN 19 AND 65",
+            "PREDICTED_SQL": "SELECT DisplayName FROM users WHERE Age BETWEEN 19 AND 65"
+        },
+        "status": "success"
+    }
+]

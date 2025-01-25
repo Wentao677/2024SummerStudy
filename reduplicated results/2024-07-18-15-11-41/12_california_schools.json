@@ -1,0 +1,276 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "SAT excellence rate",
+            "over 0.3",
+            "highest eligible free rate",
+            "students aged 5-17",
+            "Excellence rate",
+            "NumGE1500",
+            "NumTstTakr",
+            "Free Meal Count (Ages 5-17)",
+            "Enrollment (Ages 5-17)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "satscores": [
+                "NumGE1500",
+                "NumTstTakr"
+            ],
+            "frpm": [
+                "Free Meal Count (Ages 5-17)",
+                "Enrollment (Ages 5-17)"
+            ]
+        },
+        "similar_values": {
+            "satscores": {
+                "sname": [
+                    "Academy for Academic Excellence"
+                ]
+            },
+            "frpm": {
+                "School Name": [
+                    "Academy for Academic Excellence"
+                ]
+            },
+            "schools": {
+                "School": [
+                    "PRIME Academy of Excellence"
+                ],
+                "GSserved": [
+                    "5-11"
+                ],
+                "GSoffered": [
+                    "5-12"
+                ],
+                "AdmLName1": [
+                    "Free"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "satscores": {
+                "numge1500": {
+                    "column_name": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500",
+                    "column_description": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500",
+                    "value_description": "Number of Test Takers Whose Total SAT Scores Are Greater or Equal to 1500    Excellence Rate = NumGE1500 / NumTstTakr"
+                },
+                "enroll12": {
+                    "column_name": "enrollment (1st-12nd grade)",
+                    "column_description": "enrollment (1st-12nd grade)",
+                    "value_description": ""
+                }
+            },
+            "frpm": {
+                "enrollment (ages 5-17)": {
+                    "column_name": "",
+                    "column_description": "Enrollment (Ages 5-17)",
+                    "value_description": ""
+                },
+                "free meal count (ages 5-17)": {
+                    "column_name": "",
+                    "column_description": "Free Meal Count (Ages 5-17)",
+                    "value_description": "eligible free rate = Free Meal Count / Enrollment"
+                },
+                "free meal count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free Meal Count (K-12)",
+                    "value_description": "eligible free rate = Free Meal Count / Enrollment"
+                },
+                "frpm count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free or Reduced Price Meal Count (K-12)",
+                    "value_description": "eligible FRPM rate = FRPM / Enrollment"
+                }
+            },
+            "schools": {
+                "gsserved": {
+                    "column_name": "grade span served.",
+                    "column_description": "It is the lowest grade and the highest grade of student enrollment as reported in the most recent certified CALPADS Fall 1 data collection. Only K\u201312 enrollment is reported through CALPADS. This field may differ from the grade span offered.",
+                    "value_description": "1.\u00a0\u00a0\u00a0\u00a0 Only K\u201312 enrollment is reported through CALPADS  2.\u00a0\u00a0\u00a0\u00a0 Note: Special programs at independent study, alternative education, and special education schools will often exceed the typical grade span for schools of that type"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "School Code",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)",
+                "Percent (%) Eligible Free (K-12)",
+                "FRPM Count (K-12)",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)",
+                "Percent (%) Eligible Free (Ages 5-17)",
+                "FRPM Count (Ages 5-17)",
+                "Percent (%) Eligible FRPM (Ages 5-17)",
+                "CDSCode"
+            ],
+            "satscores": [
+                "NumTstTakr",
+                "NumGE1500",
+                "cds"
+            ],
+            "schools": [
+                "District",
+                "GSserved",
+                "CDSCode"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "frpm": [
+                "cdscode",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)"
+            ],
+            "satscores": [
+                "cds",
+                "numtsttakr",
+                "numge1500"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "satscores": [
+                "NumTstTakr",
+                "NumGE1500",
+                "cds"
+            ],
+            "frpm": [
+                "School Code",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)",
+                "Percent (%) Eligible Free (K-12)",
+                "FRPM Count (K-12)",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)",
+                "Percent (%) Eligible Free (Ages 5-17)",
+                "FRPM Count (Ages 5-17)",
+                "Percent (%) Eligible FRPM (Ages 5-17)",
+                "CDSCode"
+            ],
+            "schools": [
+                "District",
+                "GSserved",
+                "CDSCode"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the highest eligible free rate for students aged 5-17 among schools with an SAT excellence rate of over 0.3. The hint provides the definition of excellence rate and eligible free rate. This helps to identify the tables needed to answer the question. The excellence rate is defined in the satscores table, which means we need this table to filter schools with an excellence rate of over 0.3. The eligible free rate is defined in the frpm table, which means we need this table to find the highest eligible free rate for students aged 5-17. The schools table is necessary to link the CDSCode in the frpm and satscores tables.",
+        "selected_tables": [
+            "satscores",
+            "frpm",
+            "schools"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "frpm": [
+                "cdscode",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)"
+            ],
+            "satscores": [
+                "cds",
+                "numtsttakr",
+                "numge1500"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "satscores": [
+                "cds",
+                "NumGE1500",
+                "NumTstTakr"
+            ],
+            "frpm": [
+                "CDSCode",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)"
+            ]
+        },
+        "model_selected_columns": {
+            "satscores": [
+                "cds",
+                "NumGE1500",
+                "NumTstTakr"
+            ],
+            "frpm": [
+                "CDSCode",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for schools with an SAT excellence rate of over 0.3 and the highest eligible free rate for students aged 5-17. The hint provides the formulas for both rates. We need to filter schools by their SAT excellence rate and then find the school with the highest eligible free rate for students aged 5-17. We can use the 'satscores' table to filter schools by their SAT excellence rate and the 'frpm' table to find the eligible free rate for students aged 5-17.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "frpm": [
+                "cdscode",
+                "Enrollment (Ages 5-17)",
+                "Free Meal Count (Ages 5-17)"
+            ],
+            "satscores": [
+                "cds",
+                "numtsttakr",
+                "numge1500"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE CAST(T1.NumGE1500 AS REAL) / T1.NumTstTakr > 0.3 ORDER BY CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` DESC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the query. I joined the satscores and frpm tables based on the CDSCode. I filtered the results to only include schools with an SAT excellence rate of over 0.3. I then ordered the results by the eligible free rate for students aged 5-17 in descending order and limited the results to the top 1. Finally, I returned the eligible free rate as a real value.",
+        "SQL": "SELECT CAST(T2.`Percent (%) Eligible Free (Ages 5-17)` AS REAL) FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T1.NumGE1500 / T1.NumTstTakr > 0.3 ORDER BY CAST(T2.`Percent (%) Eligible Free (Ages 5-17)` AS REAL) DESC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Among the schools with an SAT excellence rate of over 0.3, what is the highest eligible free rate for students aged 5-17?",
+            "Evidence": "Excellence rate = NumGE1500 / NumTstTakr; Eligible free rates for students aged 5-17 = `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)`",
+            "GOLD_SQL": "SELECT MAX(CAST(T1.`Free Meal Count (Ages 5-17)` AS REAL) / T1.`Enrollment (Ages 5-17)`) FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE CAST(T2.NumGE1500 AS REAL) / T2.NumTstTakr > 0.3",
+            "PREDICTED_SQL": "SELECT CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE CAST(T1.NumGE1500 AS REAL) / T1.NumTstTakr > 0.3 ORDER BY CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` DESC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Among the schools with an SAT excellence rate of over 0.3, what is the highest eligible free rate for students aged 5-17?",
+            "Evidence": "Excellence rate = NumGE1500 / NumTstTakr; Eligible free rates for students aged 5-17 = `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)`",
+            "GOLD_SQL": "SELECT MAX(CAST(T1.`Free Meal Count (Ages 5-17)` AS REAL) / T1.`Enrollment (Ages 5-17)`) FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE CAST(T2.NumGE1500 AS REAL) / T2.NumTstTakr > 0.3",
+            "PREDICTED_SQL": "SELECT CAST(T2.`Percent (%) Eligible Free (Ages 5-17)` AS REAL) FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T1.NumGE1500 / T1.NumTstTakr > 0.3 ORDER BY CAST(T2.`Percent (%) Eligible Free (Ages 5-17)` AS REAL) DESC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

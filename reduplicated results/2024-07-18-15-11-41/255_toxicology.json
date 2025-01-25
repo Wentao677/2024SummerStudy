@@ -1,0 +1,229 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "single bonds",
+            "carcinogenic",
+            "percentage",
+            "five decimal places",
+            "bond_type",
+            "label",
+            "molecules",
+            "bond_id",
+            "SUM",
+            "COUNT",
+            "DIVIDE"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "bond": [
+                "bond_type",
+                "bond_id"
+            ],
+            "molecule": [
+                "label"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "molecule": {
+                "molecule_id": {
+                    "column_name": "molecule id",
+                    "column_description": "unique id of molecule",
+                    "value_description": "\"+\" --> this molecule / compound is carcinogenic '-' this molecule is not / compound carcinogenic"
+                },
+                "label": {
+                    "column_name": "",
+                    "column_description": "whether this molecule is carcinogenic or not",
+                    "value_description": ""
+                }
+            },
+            "bond": {
+                "bond_type": {
+                    "column_name": "",
+                    "column_description": "type of the bond",
+                    "value_description": "\u0093-\u0094: single bond '=': double bond '#': triple bond"
+                },
+                "molecule_id": {
+                    "column_name": "",
+                    "column_description": "identifying the molecule in which the bond appears",
+                    "value_description": ""
+                }
+            },
+            "connected": {
+                "bond_id": {
+                    "column_name": "bond id",
+                    "column_description": "bond id representing bond between two atoms",
+                    "value_description": ""
+                }
+            },
+            "atom": {
+                "element": {
+                    "column_name": "",
+                    "column_description": "the element of the toxicology",
+                    "value_description": "\u0095 cl: chlorine \u0095 c: carbon \u0095 h: hydrogen \u0095 o: oxygen \u0095 s: sulfur \u0095 n: nitrogen \u0095 p: phosphorus \u0095 na: sodium \u0095 br: bromine \u0095 f: fluorine \u0095 i: iodine \u0095 sn: Tin \u0095 pb: lead \u0095 te: tellurium \u0095 ca: Calcium"
+                },
+                "molecule_id": {
+                    "column_name": "molecule id",
+                    "column_description": "identifying the molecule to which the atom belongs",
+                    "value_description": "TRXXX_i represents ith atom of molecule TRXXX"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "atom": [
+                "molecule_id",
+                "atom_id"
+            ],
+            "bond": [
+                "molecule_id",
+                "bond_type",
+                "bond_id"
+            ],
+            "connected": [
+                "bond_id",
+                "atom_id",
+                "atom_id2"
+            ],
+            "molecule": [
+                "molecule_id",
+                "label"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "molecule_id",
+                "bond_type",
+                "bond_id"
+            ],
+            "molecule": [
+                "molecule_id",
+                "label"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "bond": [
+                "molecule_id",
+                "bond_type",
+                "bond_id"
+            ],
+            "molecule": [
+                "molecule_id",
+                "label"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the proportion of single bonds that are carcinogenic. The hint provides a formula to calculate this proportion, which involves counting the number of single bonds and the number of carcinogenic molecules. The hint also mentions that label = '+' means molecules are carcinogenic. This information helps to identify the necessary tables. The table 'bond' is required to get the count of single bonds (bond_type = '-'). The table 'molecule' is required to get the count of carcinogenic molecules (label = '+'). The table 'connected' is not necessary for this question as it only provides information about the bonds between atoms, which is not relevant to the question. The table 'atom' is also not necessary as it only provides information about the atoms, which is not relevant to the question.",
+        "selected_tables": [
+            "bond",
+            "molecule"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "molecule_id",
+                "bond_type",
+                "bond_id"
+            ],
+            "molecule": [
+                "molecule_id",
+                "label"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "bond": [
+                "bond_id",
+                "bond_type"
+            ],
+            "molecule": [
+                "molecule_id",
+                "label"
+            ]
+        },
+        "model_selected_columns": {
+            "bond": [
+                "bond_id",
+                "bond_type"
+            ],
+            "molecule": [
+                "molecule_id",
+                "label"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the proportion of single bonds that are carcinogenic. The hint provides a formula to calculate this proportion, which involves counting the number of single bonds and the number of carcinogenic molecules. The bond_type column in the bond table is necessary to filter single bonds, and the label column in the molecule table is necessary to filter carcinogenic molecules. The molecule_id column in the bond table is necessary to link the bond to the corresponding molecule.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'bond'.'molecule_id'"
+        ],
+        "correct_columns": {
+            "bond": [
+                "molecule_id",
+                "bond_type",
+                "bond_id"
+            ],
+            "molecule": [
+                "molecule_id",
+                "label"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T2.label = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.bond_id) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '-' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the key phrases mentioned. I noticed that the question asks for the proportion of single bonds that are carcinogenic, which is equivalent to the proportion of molecules with label '+' that have single bonds. I then used the hint provided to guide my query. I joined the bond and molecule tables on the molecule_id column, filtered the results to only include single bonds (bond_type = '-'), and then counted the number of molecules with label '+' and the total number of bonds. I used the SUM and COUNT functions to calculate the proportion, and then multiplied by 100 to convert to a percentage.",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T2.label = '+' AND T1.bond_type = '-' THEN 1 ELSE NULL END) AS REAL) * 100.0 / CAST(COUNT(T1.bond_id) AS REAL) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What proportion of single bonds are carcinogenic? Please provide your answer as a percentage with five decimal places.",
+            "Evidence": "single bond refers to bond_type = '-'; label = '+' mean molecules are carcinogenic; proportion = DIVIDE(SUM(label = '+') * 100, COUNT(bond_id)) where bond_type = '-'",
+            "GOLD_SQL": "SELECT ROUND(CAST(COUNT(CASE WHEN T2.label = '+' THEN T1.bond_id ELSE NULL END) AS REAL) * 100 / COUNT(T1.bond_id),5) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '-'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T2.label = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.bond_id) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '-' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What proportion of single bonds are carcinogenic? Please provide your answer as a percentage with five decimal places.",
+            "Evidence": "single bond refers to bond_type = '-'; label = '+' mean molecules are carcinogenic; proportion = DIVIDE(SUM(label = '+') * 100, COUNT(bond_id)) where bond_type = '-'",
+            "GOLD_SQL": "SELECT ROUND(CAST(COUNT(CASE WHEN T2.label = '+' THEN T1.bond_id ELSE NULL END) AS REAL) * 100 / COUNT(T1.bond_id),5) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '-'",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(CASE WHEN T2.label = '+' AND T1.bond_type = '-' THEN 1 ELSE NULL END) AS REAL) * 100.0 / CAST(COUNT(T1.bond_id) AS REAL) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id"
+        },
+        "status": "success"
+    }
+]

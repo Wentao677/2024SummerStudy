@@ -1,0 +1,262 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "customer",
+            "consumption decrease rate",
+            "Year 2012",
+            "Year 2013",
+            "2012/8/25",
+            "2012-08-24",
+            "consumption_2012",
+            "consumption_2013"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "yearmonth": [
+                "Consumption"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "yearmonth": {
+                "consumption": {
+                    "column_name": "",
+                    "column_description": "consumption",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "transactions_1k": {
+                "amount": {
+                    "column_name": "",
+                    "column_description": "Amount",
+                    "value_description": ""
+                },
+                "price": {
+                    "column_name": "",
+                    "column_description": "Price",
+                    "value_description": "total price = Amount x Price"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "customers": {
+                "currency": {
+                    "column_name": "",
+                    "column_description": "Currency",
+                    "value_description": ""
+                }
+            },
+            "gasstations": {
+                "segment": {
+                    "column_name": "chain segment",
+                    "column_description": "chain segment",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "customers": [
+                "CustomerID"
+            ],
+            "gasstations": [
+                "GasStationID"
+            ],
+            "products": [
+                "ProductID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "TransactionID"
+            ],
+            "yearmonth": [
+                "Consumption",
+                "CustomerID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'transactions_1k'.'customerid'",
+            "'transactions_1k'.'gasstationid'",
+            "'transactions_1k'.'price'"
+        ],
+        "correct_columns": {
+            "transactions_1k": [
+                "customerid",
+                "gasstationid",
+                "date",
+                "price"
+            ],
+            "gasstations": [
+                "gasstationid"
+            ],
+            "yearmonth": [
+                "customerid",
+                "consumption",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Consumption",
+                "CustomerID",
+                "Date"
+            ],
+            "transactions_1k": [
+                "Date",
+                "TransactionID",
+                "CustomerID"
+            ],
+            "customers": [
+                "CustomerID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the consumption decrease rate from 2012 to 2013 for a specific customer who paid 634.8 on 2012/8/25. The hint provides a formula for the consumption decrease rate, which involves consumption values for both years. The year and date information is crucial in identifying the relevant consumption values. The customer's payment information is also necessary to identify the specific customer. The yearmonth table contains consumption values for each customer, and the transactions_1k table contains the payment information. Therefore, the tables needed are yearmonth, transactions_1k, and customers.",
+        "selected_tables": [
+            "yearmonth",
+            "transactions_1k",
+            "customers"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "gasstations"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'transactions_1k'.'gasstationid'",
+            "'transactions_1k'.'price'"
+        ],
+        "correct_columns": {
+            "transactions_1k": [
+                "customerid",
+                "gasstationid",
+                "date",
+                "price"
+            ],
+            "gasstations": [
+                "gasstationid"
+            ],
+            "yearmonth": [
+                "customerid",
+                "consumption",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "CustomerID",
+                "Consumption"
+            ],
+            "transactions_1k": [
+                "Date",
+                "CustomerID"
+            ],
+            "customers": [
+                "CustomerID"
+            ]
+        },
+        "model_selected_columns": {
+            "yearmonth": [
+                "Date",
+                "CustomerID",
+                "Consumption"
+            ],
+            "transactions_1k": [
+                "Date",
+                "CustomerID"
+            ],
+            "customers": [
+                "CustomerID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the consumption decrease rate from Year 2012 to 2013 for a specific customer. The hint provides a formula for the consumption decrease rate and mentions a specific date '2012/8/24' which can be represented as '2012-08-24'. This hint helps identify the relevant columns. The question also mentions a specific customer who paid 634.8 in 2012/8/25, which means we need to filter the data based on the customer's ID and date.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "gasstations"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'transactions_1k'.'gasstationid'",
+            "'transactions_1k'.'price'"
+        ],
+        "correct_columns": {
+            "transactions_1k": [
+                "customerid",
+                "gasstationid",
+                "date",
+                "price"
+            ],
+            "gasstations": [
+                "gasstationid"
+            ],
+            "yearmonth": [
+                "customerid",
+                "consumption",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT (SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Date LIKE '2013%' THEN T1.Consumption ELSE 0 END)) / SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) FROM yearmonth AS T1 INNER JOIN transactions_1k AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '2012-08-24' AND T1.Consumption = 634.8 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "First, I identified the customer who paid 634.8 on 2012/8/25. Then, I found the consumption for this customer in 2012 and 2013. Finally, I calculated the consumption decrease rate using the formula (consumption_2012 - consumption_2013) / consumption_2012.",
+        "SQL": "SELECT (SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Date LIKE '2013%' THEN T1.Consumption ELSE 0 END)) / SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) FROM yearmonth AS T1 INNER JOIN transactions_1k AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '2012-08-25' AND T1.CustomerID IN (SELECT CustomerID FROM transactions_1k WHERE Date = '2012-08-25' AND Amount = 634.8)",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For the customer who paid 634.8 in 2012/8/25, what was the consumption decrease rate from Year 2012 to 2013?",
+            "Evidence": "'2012/8/24' can be represented by '2012-08-24'; Consumption decrease rate = (consumption_2012 - consumption_2013) / consumption_2012",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(SUBSTR(Date, 1, 4) = '2012', Consumption, 0)) - SUM(IIF(SUBSTR(Date, 1, 4) = '2013', Consumption, 0)) AS FLOAT) / SUM(IIF(SUBSTR(Date, 1, 4) = '2012', Consumption, 0)) FROM yearmonth WHERE CustomerID = ( SELECT T1.CustomerID FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.Date = '2012-08-25' AND T1.Price = 634.8 )",
+            "PREDICTED_SQL": "SELECT (SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Date LIKE '2013%' THEN T1.Consumption ELSE 0 END)) / SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) FROM yearmonth AS T1 INNER JOIN transactions_1k AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '2012-08-24' AND T1.Consumption = 634.8 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For the customer who paid 634.8 in 2012/8/25, what was the consumption decrease rate from Year 2012 to 2013?",
+            "Evidence": "'2012/8/24' can be represented by '2012-08-24'; Consumption decrease rate = (consumption_2012 - consumption_2013) / consumption_2012",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(SUBSTR(Date, 1, 4) = '2012', Consumption, 0)) - SUM(IIF(SUBSTR(Date, 1, 4) = '2013', Consumption, 0)) AS FLOAT) / SUM(IIF(SUBSTR(Date, 1, 4) = '2012', Consumption, 0)) FROM yearmonth WHERE CustomerID = ( SELECT T1.CustomerID FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.Date = '2012-08-25' AND T1.Price = 634.8 )",
+            "PREDICTED_SQL": "SELECT (SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) - SUM(CASE WHEN T1.Date LIKE '2013%' THEN T1.Consumption ELSE 0 END)) / SUM(CASE WHEN T1.Date LIKE '2012%' THEN T1.Consumption ELSE 0 END) FROM yearmonth AS T1 INNER JOIN transactions_1k AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '2012-08-25' AND T1.CustomerID IN (SELECT CustomerID FROM transactions_1k WHERE Date = '2012-08-25' AND Amount = 634.8)"
+        },
+        "status": "success"
+    }
+]

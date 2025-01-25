@@ -1,0 +1,295 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "users' display names",
+            "posts",
+            "over 20000 views",
+            "2011",
+            "ViewCount",
+            "CreationDate",
+            "Year"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "postHistory": [
+                "UserDisplayName"
+            ],
+            "users": [
+                "Views",
+                "CreationDate"
+            ],
+            "posts": [
+                "ViewCount"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "name"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "comments": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "displayname": {
+                    "column_name": "Display Name",
+                    "column_description": "the user's display name",
+                    "value_description": ""
+                },
+                "views": {
+                    "column_name": "",
+                    "column_description": "the number of views",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the user account",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "viewcount": {
+                    "column_name": "View Count",
+                    "column_description": "the view count of the post",
+                    "value_description": "Higher view count means the post has higher popularity"
+                },
+                "creaiondate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                },
+                "lasactivitydate": {
+                    "column_name": "Last Activity Date",
+                    "column_description": "the last activity date",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Id"
+            ],
+            "comments": [
+                "PostId",
+                "CreationDate",
+                "UserDisplayName",
+                "Id",
+                "UserId"
+            ],
+            "postHistory": [
+                "CreationDate",
+                "UserId",
+                "UserDisplayName",
+                "Id",
+                "PostId"
+            ],
+            "postLinks": [
+                "CreationDate",
+                "PostId",
+                "Id",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "ViewCount",
+                "OwnerUserId",
+                "OwnerDisplayName",
+                "Id",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "DisplayName",
+                "Views",
+                "CreationDate",
+                "Id"
+            ],
+            "votes": [
+                "PostId",
+                "CreationDate",
+                "UserId",
+                "Id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "id"
+            ],
+            "posts": [
+                "owneruserid",
+                "viewcount",
+                "creaiondate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "posts": [
+                "CreaionDate",
+                "ViewCount",
+                "OwnerUserId",
+                "OwnerDisplayName",
+                "Id",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "users": [
+                "DisplayName",
+                "Views",
+                "CreationDate",
+                "Id"
+            ],
+            "postHistory": [
+                "UserDisplayName",
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for users' display names whose posts had over 20000 views in 2011. The hint clarifies that this refers to ViewCount > 20000 where YEAR(CreationDate) = 2011. This requires us to consider the posts table, which contains the ViewCount and CreationDate columns. The users table is also necessary to retrieve the display names of the users. The posts table's foreign key references to the users table ensure that we can link a post to its corresponding user. The hint's mention of YEAR(CreationDate) = 2011 implies that we need to filter posts based on their creation date, which is stored in the posts table.",
+        "selected_tables": [
+            "posts",
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "id"
+            ],
+            "posts": [
+                "owneruserid",
+                "viewcount",
+                "creaiondate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "posts": [
+                "Id",
+                "ViewCount",
+                "CreationDate"
+            ],
+            "users": [
+                "Id",
+                "DisplayName"
+            ],
+            "postHistory": [
+                "PostId",
+                "UserId",
+                "UserDisplayName"
+            ]
+        },
+        "model_selected_columns": {
+            "posts": [
+                "Id",
+                "ViewCount",
+                "CreationDate"
+            ],
+            "users": [
+                "Id",
+                "DisplayName"
+            ],
+            "postHistory": [
+                "PostId",
+                "UserId",
+                "UserDisplayName"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for users' display names whose posts had over 20000 views in 2011. The hint provides a crucial filter condition: ViewCount > 20000 where YEAR(CreationDate) = 2011. This filter condition requires columns from the posts table. Additionally, we need the users' display names, which are found in the users table. The postHistory table is also necessary to link the posts to their respective users.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'posts'.'owneruserid'",
+            "'posts'.'creaiondate'"
+        ],
+        "correct_columns": {
+            "users": [
+                "displayname",
+                "id"
+            ],
+            "posts": [
+                "owneruserid",
+                "viewcount",
+                "creaiondate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T3.DisplayName FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id WHERE T1.ViewCount > 20000 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition specified in the question: users' display names whose posts had over 20000 views in 2011. I then looked at the database schema and identified the relevant tables and columns: posts, users, and ViewCount. I used the hint provided to filter the posts by year of creation. I then joined the posts table with the users table on the OwnerUserId column to get the display names. Finally, I filtered the results to only include posts with a ViewCount greater than 20000.",
+        "SQL": "SELECT DISTINCT T3.DisplayName FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id WHERE T1.ViewCount > 20000 AND YEAR(T1.CreationDate) = 2011",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Please list the users' display names whose posts had over 20000 views in 2011.",
+            "Evidence": "had over 20000 views in 2011 refers to ViewCount > 20000 where YEAR(CreationDate) = 2011;",
+            "GOLD_SQL": "SELECT T1.DisplayName FROM users AS T1 INNER JOIN posts AS T2 ON T1.Id = T2.OwnerUserId WHERE STRFTIME('%Y', T2.CreaionDate) = '2011' AND T2.ViewCount > 20000",
+            "PREDICTED_SQL": "SELECT DISTINCT T3.DisplayName FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id WHERE T1.ViewCount > 20000 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such column: T1.CreationDate",
+            "Question": "Please list the users' display names whose posts had over 20000 views in 2011.",
+            "Evidence": "had over 20000 views in 2011 refers to ViewCount > 20000 where YEAR(CreationDate) = 2011;",
+            "GOLD_SQL": "SELECT T1.DisplayName FROM users AS T1 INNER JOIN posts AS T2 ON T1.Id = T2.OwnerUserId WHERE STRFTIME('%Y', T2.CreaionDate) = '2011' AND T2.ViewCount > 20000",
+            "PREDICTED_SQL": "SELECT DISTINCT T3.DisplayName FROM posts AS T1 INNER JOIN users AS T3 ON T1.OwnerUserId = T3.Id WHERE T1.ViewCount > 20000 AND YEAR(T1.CreationDate) = 2011"
+        },
+        "status": "success"
+    }
+]

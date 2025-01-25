@@ -1,0 +1,230 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "laboratory test",
+            "uric acid level",
+            "8.4",
+            "1991-10-21",
+            "Birthday",
+            "test date",
+            "year",
+            "SUBTRACT",
+            "UA",
+            "Date"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Birthday"
+            ],
+            "Laboratory": [
+                "Date",
+                "UA",
+                "Date"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "CRP": [
+                    "8.4"
+                ],
+                "RF": [
+                    "38.4"
+                ],
+                "DNA": [
+                    "38.4"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "ua": {
+                    "column_name": "uric acid",
+                    "column_description": "uric acid",
+                    "value_description": "Commonsense evidence:  Normal range: N > 8.0 (Male)N > 6.5 (Female)"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "ID"
+            ],
+            "Patient": [
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "UA",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "ua",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "UA",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the age of a patient at a specific date (1991-10-21) based on a laboratory test result (UA = 8.4). The hint provides the necessary information to identify the tables required. The patient's birthday is needed to calculate the age, which is stored in the Patient table. The laboratory test result (UA = 8.4) is stored in the Laboratory table. The date of the laboratory test (1991-10-21) is also stored in the Laboratory table. Therefore, the necessary tables are Examination, Patient, and Laboratory.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "ua",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "UA"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "UA"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the age of a patient at a specific date, which is 1991-10-21, and the uric acid level is 8.4. The hint provides the exact values for these conditions. To answer the question, we need to find the patient's birthday and calculate the age at that specific date. The uric acid level is used to filter the patient, and the date is used to calculate the age.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "ua",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT strftime('%Y', T2.Date) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.Date = '1991-10-21' AND T2.UA = '8.4' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant tables and columns based on the question. I noticed that the question asks for the patient's age at the time of the laboratory test, so I needed to join the Patient and Laboratory tables. I also identified the relevant columns, including Date, Birthday, and UA. I then constructed the query by joining the tables, filtering for the specific date and UA value, and calculating the age using the strftime function.",
+        "SQL": "SELECT strftime('%Y', T2.Date) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.Date = '1991-10-21' AND T2.UA = '8.4'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patient who got the laboratory test of uric acid level as 8.4 on 1991-10-21, how old was he/she at that time?",
+            "Evidence": "how old at that time refers to SUBTRACT(year(test date), year(Birthday)); uric acid level as 8.4 refers to UA = '8.4'; 1991/10/21 refers to Date = '1991-10-21'",
+            "GOLD_SQL": "SELECT STRFTIME('%Y', T2.Date) - STRFTIME('%Y', T1.Birthday) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.UA = 8.4 AND T2.Date = '1991-10-21'",
+            "PREDICTED_SQL": "SELECT strftime('%Y', T2.Date) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.Date = '1991-10-21' AND T2.UA = '8.4' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patient who got the laboratory test of uric acid level as 8.4 on 1991-10-21, how old was he/she at that time?",
+            "Evidence": "how old at that time refers to SUBTRACT(year(test date), year(Birthday)); uric acid level as 8.4 refers to UA = '8.4'; 1991/10/21 refers to Date = '1991-10-21'",
+            "GOLD_SQL": "SELECT STRFTIME('%Y', T2.Date) - STRFTIME('%Y', T1.Birthday) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.UA = 8.4 AND T2.Date = '1991-10-21'",
+            "PREDICTED_SQL": "SELECT strftime('%Y', T2.Date) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.Date = '1991-10-21' AND T2.UA = '8.4'"
+        },
+        "status": "success"
+    }
+]

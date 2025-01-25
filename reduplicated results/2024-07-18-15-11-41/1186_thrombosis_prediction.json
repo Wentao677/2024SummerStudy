@@ -1,0 +1,236 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Behcet's",
+            "patients",
+            "ID",
+            "diagnosed",
+            "exams",
+            "01/01/197",
+            "12/31/1997",
+            "YEAR(Description)",
+            "1997-1-1",
+            "1998-1-1"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "ID",
+                "Description"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Behcet"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "ana pattern": {
+                    "column_name": "pattern observed in the sheet of ANA examination",
+                    "column_description": "pattern observed in the sheet of ANA examination",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "laboratory": {
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "Date",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "id",
+                "Examination Date",
+                "diagnosis"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date",
+                "Diagnosis"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients who were diagnosed with Behcet's and had their exams between 01/01/197 and 12/31/1997. The hint clarifies that 'Behcet' refers to the diagnosis and 'exam between 01/01/1997 and 12/31/1997' refers to the YEAR(Description) > = '1997-1-1' AND YEAR(Description) < '1998-1-1'. This hint helps identify the relevant tables and columns. The diagnosis 'Behcet' is mentioned in the Examination table, and the exam dates are mentioned in the Examination table as well. The patient ID is mentioned in both the Examination and Patient tables. Therefore, the necessary tables are Examination and Patient.",
+        "selected_tables": [
+            "Examination",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "id",
+                "Examination Date",
+                "diagnosis"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "ID",
+                "Examination Date"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients diagnosed with Behcet's and had their exams between 01/01/197 and 12/31/1997. The hint suggests that 'Behcet' refers to the diagnosis and exam between 01/01/1997 and 12/31/1997 refers to the YEAR(Description) > = '1997-1-1' AND YEAR(Description) < '1998-1-1'. This hint helps identify the relevant columns.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'examination'.'diagnosis'"
+        ],
+        "correct_columns": {
+            "examination": [
+                "id",
+                "Examination Date",
+                "diagnosis"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.ID FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'Behcet's' AND T2.`Examination Date` BETWEEN '1997-01-01' AND '1997-12-31' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns relevant to the question. I noticed that the diagnosis is stored in the Patient table and the examination dates are stored in the Examination table. I then used the JOIN clause to combine the two tables based on the ID column. I used the BETWEEN operator to filter the examination dates between 01/01/1997 and 12/31/1997. Finally, I used the WHERE clause to filter the patients who were diagnosed with Behcet's.",
+        "SQL": "SELECT T2.ID FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'Behcet' AND YEAR(T2.`Examination Date`) BETWEEN 1997 AND 1997",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "near \"s\": syntax error",
+            "Question": "Lists all patients by ID who were diagnosed with Behcet's and had their exams between 01/01/197 and 12/31/1997.",
+            "Evidence": "'Behcet' refers to diagnosis; exam between 01/01/1997 and 12/31/1997 refers to YEAR(Description) > = '1997-1-1' AND YEAR(Description) < '1998-1-1'",
+            "GOLD_SQL": "SELECT ID FROM Examination WHERE `Examination Date` BETWEEN '1997-01-01' AND '1997-12-31' AND Diagnosis = 'Behcet'",
+            "PREDICTED_SQL": "SELECT T2.ID FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'Behcet's' AND T2.`Examination Date` BETWEEN '1997-01-01' AND '1997-12-31' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such function: YEAR",
+            "Question": "Lists all patients by ID who were diagnosed with Behcet's and had their exams between 01/01/197 and 12/31/1997.",
+            "Evidence": "'Behcet' refers to diagnosis; exam between 01/01/1997 and 12/31/1997 refers to YEAR(Description) > = '1997-1-1' AND YEAR(Description) < '1998-1-1'",
+            "GOLD_SQL": "SELECT ID FROM Examination WHERE `Examination Date` BETWEEN '1997-01-01' AND '1997-12-31' AND Diagnosis = 'Behcet'",
+            "PREDICTED_SQL": "SELECT T2.ID FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.Diagnosis = 'Behcet' AND YEAR(T2.`Examination Date`) BETWEEN 1997 AND 1997"
+        },
+        "status": "success"
+    }
+]

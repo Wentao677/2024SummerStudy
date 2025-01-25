@@ -1,0 +1,231 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average monthly consumption",
+            "SME",
+            "2013",
+            "year",
+            "month",
+            "consumption",
+            "AVG(Consumption)",
+            "Between 201301 And 201312",
+            "yearmonth table",
+            "Date values"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "yearmonth": [
+                "Consumption",
+                "Consumption",
+                "Consumption",
+                "Date"
+            ]
+        },
+        "similar_values": {
+            "customers": {
+                "Segment": [
+                    "SME"
+                ]
+            },
+            "gasstations": {
+                "Segment": [
+                    "Value for money"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "yearmonth": {
+                "consumption": {
+                    "column_name": "",
+                    "column_description": "consumption",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "transactions_1k": {
+                "price": {
+                    "column_name": "",
+                    "column_description": "Price",
+                    "value_description": "total price = Amount x Price"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "Amount",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "customers": {
+                "customerid": {
+                    "column_name": "",
+                    "column_description": "identification of the customer",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "customers": [
+                "Segment",
+                "CustomerID"
+            ],
+            "gasstations": [
+                "GasStationID"
+            ],
+            "products": [
+                "ProductID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "TransactionID"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "segment"
+            ],
+            "yearmonth": [
+                "customerid",
+                "consumption",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ],
+            "customers": [
+                "Segment",
+                "CustomerID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average monthly consumption of customers in SME for the year 2013. The hint provides a formula for calculating average monthly consumption and a way to represent the year 2013 in the yearmonth table. This suggests that we need to focus on the yearmonth table to get the consumption data. The question also mentions SME, which is a segment in the customers table. Therefore, we need to join the yearmonth table with the customers table to filter the data for SME customers. The transactions_1k table is not necessary for this question as it does not provide information about the consumption. The gasstations and products tables are also not necessary as they do not have any relationship with the yearmonth table or the customers table in the context of this question.",
+        "selected_tables": [
+            "yearmonth",
+            "customers"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "segment"
+            ],
+            "yearmonth": [
+                "customerid",
+                "consumption",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ],
+            "customers": [
+                "Segment"
+            ]
+        },
+        "model_selected_columns": {
+            "yearmonth": [
+                "Date",
+                "Consumption"
+            ],
+            "customers": [
+                "Segment"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average monthly consumption of customers in SME for the year 2013. The hint provides the formula for average monthly consumption and how to represent the year 2013 in the Date values. This information helps identify the necessary columns.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'customers'.'customerid'",
+            "'yearmonth'.'customerid'"
+        ],
+        "correct_columns": {
+            "customers": [
+                "customerid",
+                "segment"
+            ],
+            "yearmonth": [
+                "customerid",
+                "consumption",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(T2.Consumption) / 12 FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Segment = 'SME' AND T2.Date LIKE '2013%' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question which asks for the average monthly consumption of customers in SME for the year 2013. I then looked at the yearmonth table which has the consumption data and the date in the format 'YYYYMM'. I used the LIKE operator to filter the dates for the year 2013. I joined the yearmonth table with the customers table to filter the customers in SME. Finally, I calculated the average monthly consumption by dividing the average consumption by 12.",
+        "SQL": "SELECT AVG(Consumption) / 12 FROM yearmonth AS T2 WHERE Date BETWEEN '201301' AND '201312' AND CustomerID IN (SELECT CustomerID FROM customers WHERE Segment = 'SME')",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What was the average monthly consumption of customers in SME for the year 2013?",
+            "Evidence": "Average Monthly consumption = AVG(Consumption) / 12; Year 2013 can be presented as Between 201301 And 201312; The first 4 strings of the Date values in the yearmonth table can represent year.",
+            "GOLD_SQL": "SELECT AVG(T2.Consumption) / 12 FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.Date, 1, 4) = '2013' AND T1.Segment = 'SME'",
+            "PREDICTED_SQL": "SELECT AVG(T2.Consumption) / 12 FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Segment = 'SME' AND T2.Date LIKE '2013%' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What was the average monthly consumption of customers in SME for the year 2013?",
+            "Evidence": "Average Monthly consumption = AVG(Consumption) / 12; Year 2013 can be presented as Between 201301 And 201312; The first 4 strings of the Date values in the yearmonth table can represent year.",
+            "GOLD_SQL": "SELECT AVG(T2.Consumption) / 12 FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.Date, 1, 4) = '2013' AND T1.Segment = 'SME'",
+            "PREDICTED_SQL": "SELECT AVG(Consumption) / 12 FROM yearmonth AS T2 WHERE Date BETWEEN '201301' AND '201312' AND CustomerID IN (SELECT CustomerID FROM customers WHERE Segment = 'SME')"
+        },
+        "status": "success"
+    }
+]

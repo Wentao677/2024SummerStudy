@@ -1,0 +1,205 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average unemployment ratio",
+            "1995",
+            "1996",
+            "unemployment rate",
+            "A12",
+            "A13",
+            "higher percentage"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "district": [
+                "A12",
+                "A13"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "district": {
+                "a13": {
+                    "column_name": "unemployment rate 1996",
+                    "column_description": "unemployment rate 1996",
+                    "value_description": ""
+                },
+                "a12": {
+                    "column_name": "unemployment rate 1995",
+                    "column_description": "unemployment rate 1995",
+                    "value_description": ""
+                },
+                "a15": {
+                    "column_name": "no. of committed crimes 1995",
+                    "column_description": "no. of committed crimes 1995",
+                    "value_description": ""
+                },
+                "a11": {
+                    "column_name": "average salary",
+                    "column_description": "average salary",
+                    "value_description": ""
+                },
+                "a16": {
+                    "column_name": "no. of committed crimes 1996",
+                    "column_description": "no. of committed crimes 1996",
+                    "value_description": ""
+                },
+                "a10": {
+                    "column_name": "ratio of urban inhabitants",
+                    "column_description": "ratio of urban inhabitants",
+                    "value_description": ""
+                }
+            },
+            "loan": {
+                "status": {
+                    "column_name": "",
+                    "column_description": "repayment status",
+                    "value_description": "'A' stands for contract finished, no problems; 'B' stands for contract finished, loan not paid; 'C' stands for running contract, OK so far; 'D' stands for running contract, client in debt"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "A12",
+                "A13",
+                "district_id"
+            ],
+            "loan": [
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "order_id",
+                "account_id"
+            ],
+            "trans": [
+                "date",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "a13",
+                "a12"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "district": [
+                "A12",
+                "A13",
+                "district_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average unemployment ratio of 1995 and 1996, which one has a higher percentage. The hint provides the column names A12 and A13, which refer to the unemployment rates of 1995 and 1996, respectively. This information suggests that the district table is the primary source of the required data. The district table contains columns A12 and A13, which are the unemployment rates for 1995 and 1996, respectively. Therefore, the district table is the first and most essential table to include in the SQL query.",
+        "selected_tables": [
+            "district"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "a13",
+                "a12"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "district": [
+                "A12",
+                "A13"
+            ]
+        },
+        "model_selected_columns": {
+            "district": [
+                "A12",
+                "A13"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average unemployment ratio of 1995 and 1996, and which one has a higher percentage. The hint clarifies that A12 refers to unemployment rate 1995 and A13 refers to unemployment rate 1996. Therefore, we need columns that contain these values to calculate the average and compare the percentages.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "a13",
+                "a12"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(A12), AVG(A13) FROM district ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "The question asks for the average unemployment ratio of 1995 and 1996, and which one has a higher percentage. The hint tells us that A12 refers to unemployment rate 1995 and A13 refers to unemployment rate 1996. We need to find the average of these two columns and then compare them. We will use the AVG function to find the average of each column and then use the MAX function to find the highest average.",
+        "SQL": "SELECT AVG(A12), AVG(A13), (SELECT MAX(AVG(A12), AVG(A13)) FROM district) AS highest_average FROM district",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "The average unemployment ratio of 1995 and 1996, which one has higher percentage?",
+            "Evidence": "A12 refers to unemploymant rate 1995; A13 refers to unemploymant rate 1996",
+            "GOLD_SQL": "SELECT DISTINCT IIF(AVG(A13) > AVG(A12), '1996', '1995') FROM district",
+            "PREDICTED_SQL": "SELECT AVG(A12), AVG(A13) FROM district "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "The average unemployment ratio of 1995 and 1996, which one has higher percentage?",
+            "Evidence": "A12 refers to unemploymant rate 1995; A13 refers to unemploymant rate 1996",
+            "GOLD_SQL": "SELECT DISTINCT IIF(AVG(A13) > AVG(A12), '1996', '1995') FROM district",
+            "PREDICTED_SQL": "SELECT AVG(A12), AVG(A13), (SELECT MAX(AVG(A12), AVG(A13)) FROM district) AS highest_average FROM district"
+        },
+        "status": "success"
+    }
+]

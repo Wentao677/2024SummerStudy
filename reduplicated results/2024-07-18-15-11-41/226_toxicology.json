@@ -1,0 +1,200 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "TR008",
+            "double bonds",
+            "molecule",
+            "percentage",
+            "bond_type",
+            "bond_id",
+            "molecule_id",
+            "SUM",
+            "COUNT",
+            "DIVIDE"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "bond": [
+                "bond_type",
+                "bond_id",
+                "molecule_id"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "bond": {
+                "molecule_id": {
+                    "column_name": "",
+                    "column_description": "identifying the molecule in which the bond appears",
+                    "value_description": ""
+                },
+                "bond_type": {
+                    "column_name": "",
+                    "column_description": "type of the bond",
+                    "value_description": "\u0093-\u0094: single bond '=': double bond '#': triple bond"
+                }
+            },
+            "molecule": {
+                "molecule_id": {
+                    "column_name": "molecule id",
+                    "column_description": "unique id of molecule",
+                    "value_description": "\"+\" --> this molecule / compound is carcinogenic '-' this molecule is not / compound carcinogenic"
+                }
+            },
+            "atom": {
+                "molecule_id": {
+                    "column_name": "molecule id",
+                    "column_description": "identifying the molecule to which the atom belongs",
+                    "value_description": "TRXXX_i represents ith atom of molecule TRXXX"
+                }
+            },
+            "connected": {
+                "bond_id": {
+                    "column_name": "bond id",
+                    "column_description": "bond id representing bond between two atoms",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "atom": [
+                "molecule_id",
+                "atom_id"
+            ],
+            "bond": [
+                "bond_id",
+                "molecule_id",
+                "bond_type"
+            ],
+            "connected": [
+                "bond_id",
+                "atom_id",
+                "atom_id2"
+            ],
+            "molecule": [
+                "molecule_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "molecule_id",
+                "bond_id",
+                "bond_type"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "bond": [
+                "bond_id",
+                "molecule_id",
+                "bond_type"
+            ],
+            "molecule": [
+                "molecule_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of double bonds in the molecule TR008. The hint provides a clear direction, mentioning bond_type = '=' as the indicator for double bonds and molecule_id = 'TR008' as the specific molecule of interest. To answer this question, we need to count the number of double bonds in the molecule TR008 and then divide it by the total number of bonds in the molecule. The hint also provides the formula for calculating the percentage. Based on this analysis, we need to use the bond table to get the bond_type and the molecule table to filter the results by molecule_id.",
+        "selected_tables": [
+            "bond",
+            "molecule"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "molecule_id",
+                "bond_id",
+                "bond_type"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "bond": [
+                "bond_id",
+                "bond_type",
+                "molecule_id"
+            ],
+            "molecule": [
+                "molecule_id"
+            ]
+        },
+        "model_selected_columns": {
+            "bond": [
+                "bond_id",
+                "bond_type",
+                "molecule_id"
+            ],
+            "molecule": [
+                "molecule_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of double bonds in the molecule TR008. The hint provides a clear direction, mentioning bond_type = '=' as the indicator for double bonds and molecule_id = 'TR008' as the filter for the molecule. Therefore, we need to select columns that contain these values. We also need to count the total number of bonds to calculate the percentage.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "molecule_id",
+                "bond_id",
+                "bond_type"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.bond_type = '=' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.bond_id) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.molecule_id = 'TR008' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the SQL query. I used the hint provided to identify the correct columns and conditions. I also used the database schema to ensure that the query is correct. I made sure to only include the columns and conditions specified in the question and to use the correct alias names for the tables.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.bond_type = '=' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.bond_id) AS percent FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.molecule_id = 'TR008'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the percentage of double bonds in the molecule TR008? Please provide your answer as a percentage with five decimal places.",
+            "Evidence": "double bond refers to bond_type = '='; TR008 is the molecule id; percentage = DIVIDE(SUM(bond_type = '='), COUNT(bond_id)) as percent where molecule_id = 'TR008'",
+            "GOLD_SQL": "SELECT ROUND(CAST(COUNT(CASE WHEN T.bond_type = '=' THEN T.bond_id ELSE NULL END) AS REAL) * 100 / COUNT(T.bond_id),5) FROM bond AS T WHERE T.molecule_id = 'TR008'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.bond_type = '=' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.bond_id) FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.molecule_id = 'TR008' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the percentage of double bonds in the molecule TR008? Please provide your answer as a percentage with five decimal places.",
+            "Evidence": "double bond refers to bond_type = '='; TR008 is the molecule id; percentage = DIVIDE(SUM(bond_type = '='), COUNT(bond_id)) as percent where molecule_id = 'TR008'",
+            "GOLD_SQL": "SELECT ROUND(CAST(COUNT(CASE WHEN T.bond_type = '=' THEN T.bond_id ELSE NULL END) AS REAL) * 100 / COUNT(T.bond_id),5) FROM bond AS T WHERE T.molecule_id = 'TR008'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.bond_type = '=' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.bond_id) AS percent FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.molecule_id = 'TR008'"
+        },
+        "status": "success"
+    }
+]

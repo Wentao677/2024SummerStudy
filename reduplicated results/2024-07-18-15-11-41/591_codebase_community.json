@@ -1,0 +1,269 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "users",
+            "supporter badge",
+            "year",
+            "2011",
+            "Name of badge",
+            "year(Date)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "badges": [
+                "Name"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "Name"
+                ]
+            },
+            "badges": {
+                "Name": [
+                    "Supporter"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "age": {
+                    "column_name": "",
+                    "column_description": "user's age",
+                    "value_description": "\u0095 teenager: 13-18 \u0095 adult: 19-65 \u0095 elder: > 65"
+                },
+                "reputation": {
+                    "column_name": "",
+                    "column_description": "the user's reputation",
+                    "value_description": "The user with higher reputation has more influence."
+                },
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the user account",
+                    "value_description": ""
+                },
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "favoritecount": {
+                    "column_name": "Favorite Count",
+                    "column_description": "the total number of favorites of the post",
+                    "value_description": "more favorite count refers to more valuable posts."
+                },
+                "creaiondate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            },
+            "badges": {
+                "date": {
+                    "column_name": "",
+                    "column_description": "the date that the user obtained the badge",
+                    "value_description": ""
+                },
+                "name": {
+                    "column_name": "",
+                    "column_description": "the badge name the user obtained",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the badge id",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the vote",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Name",
+                "Date",
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "CreationDate",
+                "UserId",
+                "Id",
+                "PostId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "CreationDate",
+                "Id"
+            ],
+            "votes": [
+                "UserId",
+                "Id",
+                "PostId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "badges": [
+                "id",
+                "name",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "badges": [
+                "Name",
+                "Date",
+                "Id",
+                "UserId"
+            ],
+            "users": [
+                "CreationDate",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of users awarded with the 'Supporter' badge during the year 2011. The hint provides the necessary information to identify the relevant tables. The 'badges' table contains information about the badges, including the 'Name' of the badge, which is 'Supporter'. The 'Date' column in the 'badges' table represents the date the user obtained the badge. The year can be extracted from this date. The 'users' table contains information about the users, including their ID. The 'badges' table has a foreign key referencing the 'users' table, indicating the relationship between badges and users. Therefore, the necessary tables are 'badges' and 'users'.",
+        "selected_tables": [
+            "badges",
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "badges": [
+                "id",
+                "name",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "badges": [
+                "Name",
+                "Date"
+            ],
+            "users": [
+                "Id"
+            ]
+        },
+        "model_selected_columns": {
+            "badges": [
+                "Name",
+                "Date"
+            ],
+            "users": [
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of users awarded with the 'Supporter' badge during the year 2011. The hint provides the exact name of the badge and the year. We need to filter the 'Name' column in the 'badges' table to get the 'Supporter' badge and then filter the 'Date' column to get the dates within the year 2011. Finally, we need to count the number of unique 'UserId' in the 'badges' table for the filtered results.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'badges'.'id'"
+        ],
+        "correct_columns": {
+            "badges": [
+                "id",
+                "name",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(UserId) FROM badges WHERE STRFTIME('%Y', Date) = '2011' AND Name = 'Supporter' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant table and columns based on the question. The question asks for the number of users awarded with the 'Supporter' badge during the year 2011. The relevant table is 'badges' and the relevant columns are 'UserId', 'Name', and 'Date'. I then used the STRFTIME function to extract the year from the 'Date' column and compared it to 2011. Finally, I used the COUNT function to count the number of users who received the 'Supporter' badge in 2011.",
+        "SQL": "SELECT COUNT(UserId) FROM badges WHERE STRFTIME('%Y', Date) = '2011' AND Name = 'Supporter'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many users are awarded with supporter badge during year 2011?",
+            "Evidence": "\"Supporter\" is the Name of badge; in year 2011 refers to year(Date) = 2011",
+            "GOLD_SQL": "SELECT COUNT(Id) FROM badges WHERE STRFTIME('%Y', Date) = '2011' AND Name = 'Supporter'",
+            "PREDICTED_SQL": "SELECT COUNT(UserId) FROM badges WHERE STRFTIME('%Y', Date) = '2011' AND Name = 'Supporter' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many users are awarded with supporter badge during year 2011?",
+            "Evidence": "\"Supporter\" is the Name of badge; in year 2011 refers to year(Date) = 2011",
+            "GOLD_SQL": "SELECT COUNT(Id) FROM badges WHERE STRFTIME('%Y', Date) = '2011' AND Name = 'Supporter'",
+            "PREDICTED_SQL": "SELECT COUNT(UserId) FROM badges WHERE STRFTIME('%Y', Date) = '2011' AND Name = 'Supporter'"
+        },
+        "status": "success"
+    }
+]

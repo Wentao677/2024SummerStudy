@@ -1,0 +1,249 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "normal anti-SSA",
+            "SSA",
+            "patients",
+            "hospital",
+            "before 2000",
+            "First Date",
+            "2000",
+            "number of distinct ones"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "SSA"
+            ],
+            "Patient": [
+                "First Date"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "2000.8"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "ssa": {
+                    "column_name": "anti-SSA",
+                    "column_description": "anti-SSA",
+                    "value_description": "Commonsense evidence:  Normal range: N= -, +-"
+                },
+                "ssb": {
+                    "column_name": "anti-SSB",
+                    "column_description": "anti-SSB",
+                    "value_description": "Commonsense evidence:  Normal range: N= -, +-"
+                }
+            },
+            "patient": {
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "examination": {
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "Birthday",
+                "Description",
+                "First Date",
+                "Admission",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "RA",
+                "RF",
+                "RNP",
+                "SM",
+                "SC170",
+                "SSA",
+                "SSB",
+                "CENTROMEA",
+                "DNA",
+                "DNA-II",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "ssa",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Birthday",
+                "Description",
+                "First Date",
+                "Admission",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "RA",
+                "RF",
+                "RNP",
+                "SM",
+                "SC170",
+                "SSA",
+                "SSB",
+                "CENTROMEA",
+                "DNA",
+                "DNA-II",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of patients with a normal anti-SSA who came to the hospital before 2000. The hint clarifies that normal anti-SSA refers to SSA IN('-','+-') and came to the hospital before 2000 refers to YEAR(`First Date`) < 2000. This requires us to identify patients with a normal anti-SSA and a `First Date` before 2000. The tables Examination and Patient are necessary to identify patients, as they contain information about patients and their examinations. The Laboratory table is necessary to identify patients with a normal anti-SSA, as it contains information about laboratory tests and their results.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "ssa",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "First Date"
+            ],
+            "Laboratory": [
+                "SSA"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "First Date"
+            ],
+            "Laboratory": [
+                "SSA"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with normal anti-SSA who came to the hospital before 2000. The hint clarifies that normal anti-SSA refers to SSA IN('-','+-') and came to the hospital before 2000 refers to YEAR(`First Date`) < 2000. We need to filter patients based on these conditions, so we need columns that contain these values. The table Patient has the column `First Date` which contains the date when a patient came to the hospital, and the table Laboratory has the column SSA which contains the anti-SSA value. We also need to filter patients based on the normal anti-SSA condition, so we need the column SSA from the table Laboratory.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'patient'.'id'",
+            "'laboratory'.'id'",
+            "'laboratory'.'date'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "ssa",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.SSA IN ('-', '+-') AND STRFTIME('%Y', T1.`First Date`) < '2000' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns and tables. The question asks about patients with normal anti-SSA, so I looked at the Laboratory table and found the SSA column. The question also asks about patients who came to the hospital before 2000, so I looked at the Patient table and found the First Date column. I then joined the two tables on the ID column and applied the conditions. I used the IN operator to check for normal anti-SSA and the YEAR function to check the year of the First Date. Finally, I used the COUNT(DISTINCT) function to count the number of distinct patients.",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.SSA IN ('-', '+-') AND YEAR(T1.`First Date`) < 2000",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How many patients with a normal anti-SSA came to the hospital before 2000?",
+            "Evidence": "normal anti-SSA refers to SSA IN('-','+-'); came to the hospital before 2000 refers to YEAR(`First Date`) < 2000; Should compute the number of distinct ones",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.SSA IN ('negative', '0') AND STRFTIME('%Y', T2.Date) < '2000'",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.SSA IN ('-', '+-') AND STRFTIME('%Y', T1.`First Date`) < '2000' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such function: YEAR",
+            "Question": "How many patients with a normal anti-SSA came to the hospital before 2000?",
+            "Evidence": "normal anti-SSA refers to SSA IN('-','+-'); came to the hospital before 2000 refers to YEAR(`First Date`) < 2000; Should compute the number of distinct ones",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.SSA IN ('negative', '0') AND STRFTIME('%Y', T2.Date) < '2000'",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.SSA IN ('-', '+-') AND YEAR(T1.`First Date`) < 2000"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,295 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "away team",
+            "team_long_name",
+            "away_team_api_id",
+            "scored the most goals",
+            "MAX(away_team_goal)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Team": [
+                "team_long_name"
+            ],
+            "Match": [
+                "away_team_api_id",
+                "goal",
+                "away_team_goal"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "match": {
+                "away_team_goal": {
+                    "column_name": "away team goal",
+                    "column_description": "the goal of the away team",
+                    "value_description": ""
+                },
+                "home_team_goal": {
+                    "column_name": "home team goal",
+                    "column_description": "the goal of the home team",
+                    "value_description": ""
+                },
+                "away_team_api_id": {
+                    "column_name": "away team api id",
+                    "column_description": "the id of the away team api",
+                    "value_description": ""
+                },
+                "shoton": {
+                    "column_name": "shot on",
+                    "column_description": "the shot on goal of the match",
+                    "value_description": "commonsense reasoning:  A shot on goal is a shot that enters the goal or would have entered the goal if it had not been blocked by the goalkeeper or another defensive player."
+                }
+            },
+            "league": {
+                "name": {
+                    "column_name": "",
+                    "column_description": "league name",
+                    "value_description": ""
+                }
+            },
+            "team": {
+                "team_long_name": {
+                    "column_name": "team long name",
+                    "column_description": "the team's long name",
+                    "value_description": ""
+                },
+                "team_short_name": {
+                    "column_name": "team short name",
+                    "column_description": "the team's short name",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the unique id for teams",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Player_Attributes": [
+                "id",
+                "player_fifa_api_id",
+                "player_api_id"
+            ],
+            "Player": [
+                "player_name",
+                "id",
+                "player_api_id",
+                "player_fifa_api_id"
+            ],
+            "League": [
+                "name",
+                "id",
+                "country_id"
+            ],
+            "Country": [
+                "id"
+            ],
+            "Team": [
+                "team_api_id",
+                "team_fifa_api_id",
+                "team_long_name",
+                "team_short_name",
+                "id"
+            ],
+            "Team_Attributes": [
+                "id",
+                "team_fifa_api_id",
+                "team_api_id"
+            ],
+            "Match": [
+                "away_team_api_id",
+                "away_team_goal",
+                "away_player_2",
+                "away_player_3",
+                "away_player_4",
+                "away_player_6",
+                "away_player_7",
+                "away_player_8",
+                "away_player_9",
+                "away_player_10",
+                "goal",
+                "id",
+                "country_id",
+                "league_id",
+                "home_team_api_id",
+                "home_player_1",
+                "home_player_2",
+                "home_player_3",
+                "home_player_4",
+                "home_player_5",
+                "home_player_6",
+                "home_player_7",
+                "home_player_8",
+                "home_player_9",
+                "home_player_10",
+                "home_player_11",
+                "away_player_1",
+                "away_player_5",
+                "away_player_11"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "team": [
+                "team_long_name",
+                "team_api_id"
+            ],
+            "match": [
+                "away_team_api_id",
+                "away_team_goal"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Match": [
+                "away_team_api_id",
+                "away_team_goal",
+                "away_player_2",
+                "away_player_3",
+                "away_player_4",
+                "away_player_6",
+                "away_player_7",
+                "away_player_8",
+                "away_player_9",
+                "away_player_10",
+                "goal",
+                "id",
+                "country_id",
+                "league_id",
+                "home_team_api_id",
+                "home_player_1",
+                "home_player_2",
+                "home_player_3",
+                "home_player_4",
+                "home_player_5",
+                "home_player_6",
+                "home_player_7",
+                "home_player_8",
+                "home_player_9",
+                "home_player_10",
+                "home_player_11",
+                "away_player_1",
+                "away_player_5",
+                "away_player_11"
+            ],
+            "Team": [
+                "team_api_id",
+                "team_fifa_api_id",
+                "team_long_name",
+                "team_short_name",
+                "id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the full name of the away team that scored the most goals. The hint clarifies that 'full name' refers to 'team_long_name', 'away team' refers to 'away_team_api_id', and 'scored the most goals' refers to the maximum 'away_team_goal'. To answer this question, we need to join the 'Match' table with the 'Team' table to get the away team's name and the 'away_team_goal'. We also need to use the 'MAX' function to find the team that scored the most goals. Therefore, we need to select the 'Team' table and the 'Match' table.",
+        "selected_tables": [
+            "Match",
+            "Team"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "team": [
+                "team_long_name",
+                "team_api_id"
+            ],
+            "match": [
+                "away_team_api_id",
+                "away_team_goal"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Match": [
+                "away_team_api_id",
+                "away_team_goal"
+            ],
+            "Team": [
+                "team_long_name"
+            ]
+        },
+        "model_selected_columns": {
+            "Match": [
+                "away_team_api_id",
+                "away_team_goal"
+            ],
+            "Team": [
+                "team_long_name"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the full name of the away team that scored the most goals. The hint provides the necessary information to identify the columns required for the query. We need to join the Match table with the Team table to get the full name of the away team. The away team goal is the maximum goal scored by the away team, which is obtained by using the MAX function. The away team API ID is used to join the Match table with the Team table to get the full name of the away team.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'team'.'team_api_id'"
+        ],
+        "correct_columns": {
+            "team": [
+                "team_long_name",
+                "team_api_id"
+            ],
+            "match": [
+                "away_team_api_id",
+                "away_team_goal"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.team_long_name FROM Match AS T1 INNER JOIN Team AS T2 ON T1.away_team_api_id = T2.team_api_id ORDER BY T1.away_team_goal DESC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the column that contains the full name of the away team, which is team_long_name in the Team table. I then joined the Match table with the Team table on the away_team_api_id column. I used the MAX function to find the team that scored the most goals, and then ordered the results in descending order to get the team with the highest goal score. Finally, I limited the results to 1 row to get the team with the most goals.",
+        "SQL": "SELECT T2.team_long_name FROM Match AS T1 INNER JOIN Team AS T2 ON T1.away_team_api_id = T2.team_api_id ORDER BY T1.away_team_goal DESC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please provide the full name of the away team that scored the most goals.",
+            "Evidence": "full name refers to team_long_name; away team refers to away_team_api_id; scored the most goals refers to MAX(away_team_goal)",
+            "GOLD_SQL": "SELECT t2.team_long_name FROM Match AS t1 INNER JOIN Team AS t2 ON t1.away_team_api_id = t2.team_api_id ORDER BY t1.away_team_goal DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T2.team_long_name FROM Match AS T1 INNER JOIN Team AS T2 ON T1.away_team_api_id = T2.team_api_id ORDER BY T1.away_team_goal DESC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Please provide the full name of the away team that scored the most goals.",
+            "Evidence": "full name refers to team_long_name; away team refers to away_team_api_id; scored the most goals refers to MAX(away_team_goal)",
+            "GOLD_SQL": "SELECT t2.team_long_name FROM Match AS t1 INNER JOIN Team AS t2 ON t1.away_team_api_id = t2.team_api_id ORDER BY t1.away_team_goal DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T2.team_long_name FROM Match AS T1 INNER JOIN Team AS T2 ON T1.away_team_api_id = T2.team_api_id ORDER BY T1.away_team_goal DESC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

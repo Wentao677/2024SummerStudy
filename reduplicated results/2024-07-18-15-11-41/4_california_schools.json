@@ -1,0 +1,274 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "phone numbers",
+            "direct charter-funded schools",
+            "opened after 2000/1/1",
+            "Charter School",
+            "frpm",
+            "Charter School (Y/N)",
+            "2000/1/1"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "Phone",
+                "School",
+                "Charter"
+            ],
+            "frpm": [
+                "Charter School (Y/N)"
+            ]
+        },
+        "similar_values": {
+            "schools": {
+                "School": [
+                    "Epic Charter School"
+                ],
+                "FundingType": [
+                    "Directly funded"
+                ],
+                "City": [
+                    "Charter Oak"
+                ],
+                "MailCity": [
+                    "Charter Oak"
+                ],
+                "AdmLName1": [
+                    "Schooler"
+                ],
+                "StreetAbr": [
+                    "School St."
+                ],
+                "MailStreet": [
+                    "School Road"
+                ]
+            },
+            "satscores": {
+                "sname": [
+                    "Charter School of San Diego"
+                ]
+            },
+            "frpm": {
+                "School Name": [
+                    "Epic Charter"
+                ],
+                "Charter Funding Type": [
+                    "Directly funded"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "schools": {
+                "charternum": {
+                    "column_name": "",
+                    "column_description": "The charter school number,",
+                    "value_description": "4-digit number assigned to a charter school."
+                },
+                "charter": {
+                    "column_name": "",
+                    "column_description": "This field identifies a charter school.",
+                    "value_description": "The field is coded as follows:  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 1 = The school is a charter  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 0 = The school is not a charter"
+                },
+                "fundingtype": {
+                    "column_name": "",
+                    "column_description": "Indicates the charter school funding type",
+                    "value_description": "Values are as follows:  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 Not in CS (California School) funding model  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 Locally funded  \u00b7\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 Directly funded"
+                }
+            },
+            "frpm": {
+                "charter school number": {
+                    "column_name": "",
+                    "column_description": "Charter School Number",
+                    "value_description": ""
+                },
+                "charter school (y/n)": {
+                    "column_name": "",
+                    "column_description": "Charter School (Y/N)",
+                    "value_description": "0: N; 1: Y"
+                },
+                "frpm count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free or Reduced Price Meal Count (K-12)",
+                    "value_description": "eligible FRPM rate = FRPM / Enrollment"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Charter School (Y/N)",
+                "Charter School Number",
+                "Charter Funding Type"
+            ],
+            "satscores": [
+                "sname",
+                "cds"
+            ],
+            "schools": [
+                "CDSCode",
+                "City",
+                "Phone",
+                "OpenDate",
+                "Charter",
+                "CharterNum",
+                "FundingType",
+                "School"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "phone",
+                "cdscode",
+                "opendate"
+            ],
+            "frpm": [
+                "cdscode",
+                "Charter Funding Type",
+                "Charter School (Y/N)"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Charter School (Y/N)",
+                "Charter School Number",
+                "Charter Funding Type"
+            ],
+            "schools": [
+                "CDSCode",
+                "City",
+                "Phone",
+                "OpenDate",
+                "Charter",
+                "CharterNum",
+                "FundingType",
+                "School"
+            ],
+            "satscores": [
+                "sname",
+                "cds"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the phone numbers of direct charter-funded schools that are opened after 2000/1/1. The hint mentions Charter schools refers to `Charter School (Y/N)` = 1 in the frpm, which helps identify the charter schools. The question also requires the funding type to be 'Directly funded' and the school's open date to be after 2000/1/1. Therefore, we need to join the frpm table with the schools table to get the charter school information and the funding type. We also need the satscores table to filter the schools that are opened after 2000/1/1.",
+        "selected_tables": [
+            "frpm",
+            "schools",
+            "satscores"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "phone",
+                "cdscode",
+                "opendate"
+            ],
+            "frpm": [
+                "cdscode",
+                "Charter Funding Type",
+                "Charter School (Y/N)"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode"
+            ],
+            "schools": [
+                "CDSCode",
+                "Phone",
+                "FundingType",
+                "OpenDate"
+            ]
+        },
+        "model_selected_columns": {
+            "frpm": [
+                "CDSCode"
+            ],
+            "schools": [
+                "CDSCode",
+                "Phone",
+                "FundingType",
+                "OpenDate"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for phone numbers of direct charter-funded schools opened after 2000/1/1. The hint mentions Charter schools refers to `Charter School (Y/N)` = 1 in the frpm. This helps identify the relevant schools. The question also mentions direct charter-funded schools, which is related to the `FundingType` column in the schools table. Finally, the question asks for schools opened after 2000/1/1, which is related to the `OpenDate` column in the schools table.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'frpm'.'Charter Funding Type'",
+            "'frpm'.'Charter School (Y/N)'"
+        ],
+        "correct_columns": {
+            "schools": [
+                "phone",
+                "cdscode",
+                "opendate"
+            ],
+            "frpm": [
+                "cdscode",
+                "Charter Funding Type",
+                "Charter School (Y/N)"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.Phone FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.FundingType = 'Directly funded' AND STRFTIME('%Y', T1.OpenDate) > '2000' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns and tables. The question asks for the phone numbers of direct charter-funded schools that are opened after 2000/1/1. The hint mentions Charter School (Y/N) = 1 in the frpm table, which means I need to filter schools that are charter schools. The FundingType column in the schools table indicates whether a school is direct charter-funded or not. The OpenDate column in the schools table indicates when a school was opened. I used the STRFTIME function to convert the OpenDate to a string that can be compared with '2000'.",
+        "SQL": "SELECT Phone FROM schools WHERE FundingType = 'Directly funded' AND Charter = 1 AND STRFTIME('%Y', OpenDate) > '2000'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "no such column: T2.Phone",
+            "Question": "Please list the phone numbers of the direct charter-funded schools that are opened after 2000/1/1.",
+            "Evidence": "Charter schools refers to `Charter School (Y/N)` = 1 in the frpm",
+            "GOLD_SQL": "SELECT T2.Phone FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`Charter School (Y/N)` = 1 AND T2.OpenDate > '2000-01-01'",
+            "PREDICTED_SQL": "SELECT T2.Phone FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.FundingType = 'Directly funded' AND STRFTIME('%Y', T1.OpenDate) > '2000' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Please list the phone numbers of the direct charter-funded schools that are opened after 2000/1/1.",
+            "Evidence": "Charter schools refers to `Charter School (Y/N)` = 1 in the frpm",
+            "GOLD_SQL": "SELECT T2.Phone FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`Charter School (Y/N)` = 1 AND T2.OpenDate > '2000-01-01'",
+            "PREDICTED_SQL": "SELECT Phone FROM schools WHERE FundingType = 'Directly funded' AND Charter = 1 AND STRFTIME('%Y', OpenDate) > '2000'"
+        },
+        "status": "success"
+    }
+]

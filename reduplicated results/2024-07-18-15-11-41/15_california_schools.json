@@ -1,0 +1,259 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "active district",
+            "highest average score",
+            "Reading",
+            "district",
+            "average score",
+            "Reading"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "District",
+                "District"
+            ]
+        },
+        "similar_values": {
+            "frpm": {
+                "School Name": [
+                    "District Office"
+                ],
+                "District Type": [
+                    "Unified School District"
+                ]
+            },
+            "schools": {
+                "School": [
+                    "Hall District Elementary"
+                ],
+                "StatusType": [
+                    "Active"
+                ],
+                "AdmLName1": [
+                    "Reading"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "satscores": {
+                "avgscrread": {
+                    "column_name": "average scores in Reading",
+                    "column_description": "average scores in Reading",
+                    "value_description": "average scores in Reading"
+                },
+                "dname": {
+                    "column_name": "district name",
+                    "column_description": "district segment",
+                    "value_description": ""
+                },
+                "avgscrwrite": {
+                    "column_name": "average scores in writing",
+                    "column_description": "average scores in writing",
+                    "value_description": "average scores in writing"
+                },
+                "avgscrmath": {
+                    "column_name": "average scores in Math",
+                    "column_description": "average scores in Math",
+                    "value_description": "average scores in Math"
+                }
+            },
+            "schools": {
+                "district": {
+                    "column_name": "",
+                    "column_description": "District",
+                    "value_description": ""
+                },
+                "school": {
+                    "column_name": "",
+                    "column_description": "School",
+                    "value_description": ""
+                },
+                "phone": {
+                    "column_name": "",
+                    "column_description": "Phone",
+                    "value_description": ""
+                }
+            },
+            "frpm": {
+                "district type": {
+                    "column_name": "",
+                    "column_description": "District Type",
+                    "value_description": ""
+                },
+                "district name": {
+                    "column_name": "",
+                    "column_description": "District Name",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "District Code",
+                "District Name",
+                "CDSCode"
+            ],
+            "satscores": [
+                "dname",
+                "AvgScrRead",
+                "cds"
+            ],
+            "schools": [
+                "CDSCode",
+                "NCESDist",
+                "StatusType",
+                "County",
+                "District",
+                "EdOpsCode"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "district",
+                "cdscode",
+                "statustype"
+            ],
+            "satscores": [
+                "cds",
+                "avgscrread"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "schools": [
+                "CDSCode",
+                "NCESDist",
+                "StatusType",
+                "County",
+                "District",
+                "EdOpsCode"
+            ],
+            "satscores": [
+                "dname",
+                "AvgScrRead",
+                "cds"
+            ],
+            "frpm": [
+                "District Code",
+                "District Name",
+                "CDSCode"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the active district with the highest average score in Reading. The hint emphasizes the importance of 'StatusType' which is mentioned in the 'schools' table. This suggests that we need to filter districts based on their status. The 'satscores' table contains the average scores in Reading, which is the metric we're interested in. Finally, the 'frpm' table provides the connection between districts and schools, allowing us to link the district information with the scores. Therefore, we need to use the 'schools', 'satscores', and 'frpm' tables to answer the question.",
+        "selected_tables": [
+            "schools",
+            "satscores",
+            "frpm"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "district",
+                "cdscode",
+                "statustype"
+            ],
+            "satscores": [
+                "cds",
+                "avgscrread"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "schools": [
+                "CDSCode",
+                "StatusType"
+            ],
+            "satscores": [
+                "cds",
+                "AvgScrRead"
+            ]
+        },
+        "model_selected_columns": {
+            "schools": [
+                "CDSCode",
+                "StatusType"
+            ],
+            "satscores": [
+                "cds",
+                "AvgScrRead"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the active district with the highest average score in Reading. To answer this, we need to identify the active districts and their corresponding average scores in Reading. The hint points us towards the 'StatusType' column in the 'schools' table, which has 'Active' as an example. We also need the 'AvgScrRead' column from the 'satscores' table, which contains the average scores in Reading. Finally, we need to link the active districts to their corresponding scores, which is done by matching the 'CDSCode' column in the 'satscores' table to the 'CDSCode' column in the 'schools' table.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'district'"
+        ],
+        "correct_columns": {
+            "schools": [
+                "district",
+                "cdscode",
+                "statustype"
+            ],
+            "satscores": [
+                "cds",
+                "avgscrread"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' ORDER BY T2.AvgScrRead DESC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns and tables needed to answer the question. I knew I needed to join the schools table with the satscores table to get the average score in Reading. I then filtered the results to only include active districts. Finally, I sorted the results by the average score in Reading in descending order and limited the results to the top 1.",
+        "SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' ORDER BY T2.AvgScrRead DESC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Which active district has the highest average score in Reading?",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT T1.District FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' ORDER BY T2.AvgScrRead DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' ORDER BY T2.AvgScrRead DESC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Which active district has the highest average score in Reading?",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT T1.District FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' ORDER BY T2.AvgScrRead DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' ORDER BY T2.AvgScrRead DESC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

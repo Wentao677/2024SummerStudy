@@ -1,0 +1,221 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "outpatient",
+            "within normal range",
+            "creatinine phosphokinase",
+            "CPK",
+            "250",
+            "Admission",
+            "distinct ids"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "CPK"
+            ],
+            "Patient": [
+                "Admission",
+                "ID"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Patient": {
+                "Diagnosis": [
+                    "CPK !"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "1250"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "cpk": {
+                    "column_name": "creatinine phosphokinase",
+                    "column_description": "creatinine phosphokinase",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "cre": {
+                    "column_name": "creatinine",
+                    "column_description": "creatinine",
+                    "value_description": "Commonsense evidence:  Normal range: N < 1.5"
+                }
+            },
+            "patient": {
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Diagnosis",
+                "RVVT"
+            ],
+            "Patient": [
+                "ID",
+                "Admission",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "CRE",
+                "CPK",
+                "RF",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "cpk"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Admission",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "CRE",
+                "CPK",
+                "RF",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for outpatient patients within the normal range of creatinine phosphokinase. The hint clarifies that outpatient refers to Admission = '-' and normal range of creatinine phosphokinase refers to CPK < 250. To answer this question, we need to identify patients who are outpatients and have a CPK value less than 250. The Admission column in the Patient table indicates whether a patient is an outpatient or not. The CPK column in the Laboratory table provides the creatinine phosphokinase values. Therefore, we need to join the Patient table with the Laboratory table to filter out patients who are not outpatients and have CPK values less than 250.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "cpk"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Admission"
+            ],
+            "Laboratory": [
+                "ID",
+                "CPK"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Admission"
+            ],
+            "Laboratory": [
+                "ID",
+                "CPK"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify patients who were admitted as outpatients (Admission = '-') and have a creatinine phosphokinase value within the normal range (CPK < 250). We will use the Patient table to filter outpatients and the Laboratory table to filter creatinine phosphokinase values.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "cpk"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.CPK < 250 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns in the Patient and Laboratory tables. The question asks for outpatient patients with a normal range of creatinine phosphokinase, which is defined as CPK < 250. I joined the two tables on the ID column and filtered the results to only include patients with Admission = '-' and CPK < 250. Finally, I selected the distinct IDs using the DISTINCT keyword.",
+        "SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.CPK < 250",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all outpatient within normal range of creatinine phosphokinase. Give me the distinct ids.",
+            "Evidence": "outpatient refers to Admission = '-'; normal range of creatinine phosphokinase refers to CPK < 250;",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CPK < 250 AND T1.Admission = '-'",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.CPK < 250 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all outpatient within normal range of creatinine phosphokinase. Give me the distinct ids.",
+            "Evidence": "outpatient refers to Admission = '-'; normal range of creatinine phosphokinase refers to CPK < 250;",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CPK < 250 AND T1.Admission = '-'",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.Admission = '-' AND T2.CPK < 250"
+        },
+        "status": "success"
+    }
+]

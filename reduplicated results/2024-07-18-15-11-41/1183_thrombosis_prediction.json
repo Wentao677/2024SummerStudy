@@ -1,0 +1,255 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "SLE",
+            "original diagnose",
+            "diagnosis",
+            "1997/1/27",
+            "Examination Date",
+            "1997-01-27",
+            "First Date",
+            "patient",
+            "hospital"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Diagnosis",
+                "First Date"
+            ],
+            "Examination": [
+                "Examination Date"
+            ]
+        },
+        "similar_values": {
+            "Patient": {
+                "Diagnosis": [
+                    "SLE"
+                ]
+            },
+            "Examination": {
+                "Diagnosis": [
+                    "SLE"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                }
+            },
+            "examination": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "laboratory": {
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "id",
+                "Examination Date",
+                "diagnosis"
+            ],
+            "patient": [
+                "diagnosis",
+                "id",
+                "First Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date",
+                "Diagnosis"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the original diagnose of a patient who was diagnosed SLE on a specific date. The hint clarifies that 'SLE' refers to the diagnosis, '1997/1/27' refers to the Examination Date, and 'first came to the hospital' refers to the patient's First Date. This information helps to identify the relevant tables. The Examination table is necessary to find the patient who was diagnosed SLE on the specified date. The Patient table is necessary to find the original diagnose of the patient. The Laboratory table is not necessary in this case, as the question does not mention laboratory tests. Therefore, the necessary tables are Examination and Patient.",
+        "selected_tables": [
+            "Examination",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "id",
+                "Examination Date",
+                "diagnosis"
+            ],
+            "patient": [
+                "diagnosis",
+                "id",
+                "First Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Diagnosis",
+                "Examination Date"
+            ],
+            "Patient": [
+                "ID",
+                "First Date",
+                "Diagnosis"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "ID",
+                "Diagnosis",
+                "Examination Date"
+            ],
+            "Patient": [
+                "ID",
+                "First Date",
+                "Diagnosis"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question is asking for the original diagnosis of a patient who was diagnosed SLE on a specific date. The hint provides the date '1997/1/27' which corresponds to the 'Examination Date' column. The question also mentions the patient's first date at the hospital, which corresponds to the 'First Date' column. Therefore, we need to select columns that provide this information.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "id",
+                "Examination Date",
+                "diagnosis"
+            ],
+            "patient": [
+                "diagnosis",
+                "id",
+                "First Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` = '1997-01-27' AND T2.Diagnosis = 'SLE' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the patient who was diagnosed with SLE on a specific date. I then looked for the patient's original diagnosis when they first came to the hospital. I joined the Patient and Examination tables on the ID column, filtered the Examination table for the specific date and diagnosis, and then selected the Diagnosis column from the Patient table.",
+        "SQL": "SELECT T1.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` = '1997-01-27' AND T2.Diagnosis = 'SLE' AND T1.`First Date` = (SELECT MIN(`First Date`) FROM Patient WHERE ID = T1.ID)",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patient who was diagnosed SLE on 1997/1/27, what was his/her original diagnose when he/she came to the hospital for the first time?",
+            "Evidence": "'SLE' AND original diagnose refers to diagnosis; 1997/1/27 refer to `Examination Date` = '1997-01-27'; first came to the hospital refers to patient.`First Date`",
+            "GOLD_SQL": "SELECT T1.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.ID = ( SELECT ID FROM Examination WHERE `Examination Date` = '1997-01-27' AND Diagnosis = 'SLE' ) AND T2.`Examination Date` = T1.`First Date`",
+            "PREDICTED_SQL": "SELECT T2.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` = '1997-01-27' AND T2.Diagnosis = 'SLE' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patient who was diagnosed SLE on 1997/1/27, what was his/her original diagnose when he/she came to the hospital for the first time?",
+            "Evidence": "'SLE' AND original diagnose refers to diagnosis; 1997/1/27 refer to `Examination Date` = '1997-01-27'; first came to the hospital refers to patient.`First Date`",
+            "GOLD_SQL": "SELECT T1.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.ID = ( SELECT ID FROM Examination WHERE `Examination Date` = '1997-01-27' AND Diagnosis = 'SLE' ) AND T2.`Examination Date` = T1.`First Date`",
+            "PREDICTED_SQL": "SELECT T1.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T2.`Examination Date` = '1997-01-27' AND T2.Diagnosis = 'SLE' AND T1.`First Date` = (SELECT MIN(`First Date`) FROM Patient WHERE ID = T1.ID)"
+        },
+        "status": "success"
+    }
+]

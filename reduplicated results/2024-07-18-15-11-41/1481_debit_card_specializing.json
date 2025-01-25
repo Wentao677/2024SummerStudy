@@ -1,0 +1,266 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "annual average consumption",
+            "customers",
+            "least amount of consumption",
+            "CZK",
+            "2013",
+            "SME",
+            "LAM",
+            "KAM",
+            "difference",
+            "annual average",
+            "total consumption per year",
+            "number of customer with lowest consumption",
+            "year",
+            "Between 201301 And 201312",
+            "yearmonth table",
+            "Date values"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "yearmonth": [
+                "Consumption",
+                "Consumption",
+                "Consumption",
+                "Consumption",
+                "Date"
+            ]
+        },
+        "similar_values": {
+            "customers": {
+                "Currency": [
+                    "CZK"
+                ],
+                "Segment": [
+                    "LAM",
+                    "SME",
+                    "KAM"
+                ]
+            },
+            "gasstations": {
+                "Segment": [
+                    "Value for money"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "yearmonth": {
+                "consumption": {
+                    "column_name": "",
+                    "column_description": "consumption",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "transactions_1k": {
+                "price": {
+                    "column_name": "",
+                    "column_description": "Price",
+                    "value_description": "total price = Amount x Price"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "Amount",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date",
+                    "value_description": ""
+                }
+            },
+            "customers": {
+                "currency": {
+                    "column_name": "",
+                    "column_description": "Currency",
+                    "value_description": ""
+                },
+                "segment": {
+                    "column_name": "client segment",
+                    "column_description": "client segment",
+                    "value_description": ""
+                },
+                "customerid": {
+                    "column_name": "",
+                    "column_description": "identification of the customer",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "customers": [
+                "CustomerID",
+                "Segment",
+                "Currency"
+            ],
+            "gasstations": [
+                "Country",
+                "Segment",
+                "GasStationID"
+            ],
+            "products": [
+                "ProductID"
+            ],
+            "transactions_1k": [
+                "Date",
+                "CustomerID",
+                "Amount",
+                "Price",
+                "TransactionID"
+            ],
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "yearmonth": [
+                "consumption",
+                "customerid",
+                "date"
+            ],
+            "customers": [
+                "customerid",
+                "currency",
+                "segment"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ],
+            "customers": [
+                "CustomerID",
+                "Segment",
+                "Currency"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the customers with the lowest consumption in each segment, calculate their annual average consumption, and then find the differences between SME and LAM, LAM and KAM, and KAM and SME. The yearmonth table provides the necessary information about consumption per customer per year. The customers table is required to identify the segment of each customer. The transactions_1k table is not necessary for this question, as it only provides information about individual transactions, not consumption per customer per year. The yearmonth table's foreign key to the customers table ensures that we can link consumption data to the corresponding customer segment.",
+        "selected_tables": [
+            "yearmonth",
+            "customers"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "yearmonth": [
+                "consumption",
+                "customerid",
+                "date"
+            ],
+            "customers": [
+                "customerid",
+                "currency",
+                "segment"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ],
+            "customers": [
+                "Segment",
+                "Currency"
+            ]
+        },
+        "model_selected_columns": {
+            "yearmonth": [
+                "Date",
+                "Consumption",
+                "CustomerID"
+            ],
+            "customers": [
+                "Segment",
+                "Currency"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question requires calculating the annual average consumption of customers with the least amount of consumption in each segment, and then finding the differences between SME and LAM, LAM and KAM, and KAM and SME. To achieve this, we need to filter customers by segment, find the minimum consumption for each segment, calculate the annual average consumption for each segment, and then find the differences between the segments.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'customers'.'customerid'"
+        ],
+        "correct_columns": {
+            "yearmonth": [
+                "consumption",
+                "customerid",
+                "date"
+            ],
+            "customers": [
+                "customerid",
+                "currency",
+                "segment"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END) AS DIFF1 , SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END) AS DIFF2 , SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END) AS DIFF3 FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date LIKE '2013%' AND T2.Currency = 'CZK' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "First, I identified the tables and columns needed for the query. Then, I used the instructions to determine the best way to find the annual average consumption of the customers with the least amount of consumption paid in CZK for 2013 between SME and LAM, LAM and KAM, and KAM and SME. I used the yearmonth table to get the total consumption per year and the number of customers with the lowest consumption in each segment. I used the customers table to filter the customers by currency. I used the CASE statement to calculate the annual average consumption for each segment and then subtracted the annual average consumption of one segment from another to get the difference.",
+        "SQL": "SELECT (SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END)) - (SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END)) AS DIFF1, (SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END)) - (SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END)) AS DIFF2, (SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END)) - (SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END)) AS DIFF3 FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date BETWEEN '201301' AND '201312' AND T2.Currency = 'CZK' AND T2.Segment IN ('SME', 'LAM', 'KAM') GROUP BY T2.Segment ORDER BY T2.Segment",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the difference in the annual average consumption of the customers with the least amount of consumption paid in CZK for 2013 between SME and LAM, LAM and KAM, and KAM and SME?",
+            "Evidence": "annual average consumption of customer with the lowest consumption in each segment = total consumption per year / the number of customer with lowest consumption in each segment; Difference in annual average = SME's annual average - LAM's annual average; Difference in annual average = LAM's annual average - KAM's annual average; Year 2013 can be presented as Between 201301 And 201312; The first 4 strings of the Date values in the yearmonth table can represent year.",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(T1.Segment = 'SME', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'LAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) , CAST(SUM(IIF(T1.Segment = 'LAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'KAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) , CAST(SUM(IIF(T1.Segment = 'KAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'SME', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Currency = 'CZK' AND T2.Consumption = ( SELECT MIN(Consumption) FROM yearmonth ) AND T2.Date BETWEEN 201301 AND 201312",
+            "PREDICTED_SQL": "SELECT SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END) AS DIFF1 , SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END) AS DIFF2 , SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / SUM(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END) AS DIFF3 FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date LIKE '2013%' AND T2.Currency = 'CZK' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the difference in the annual average consumption of the customers with the least amount of consumption paid in CZK for 2013 between SME and LAM, LAM and KAM, and KAM and SME?",
+            "Evidence": "annual average consumption of customer with the lowest consumption in each segment = total consumption per year / the number of customer with lowest consumption in each segment; Difference in annual average = SME's annual average - LAM's annual average; Difference in annual average = LAM's annual average - KAM's annual average; Year 2013 can be presented as Between 201301 And 201312; The first 4 strings of the Date values in the yearmonth table can represent year.",
+            "GOLD_SQL": "SELECT CAST(SUM(IIF(T1.Segment = 'SME', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'LAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) , CAST(SUM(IIF(T1.Segment = 'LAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'KAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) , CAST(SUM(IIF(T1.Segment = 'KAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'SME', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Currency = 'CZK' AND T2.Consumption = ( SELECT MIN(Consumption) FROM yearmonth ) AND T2.Date BETWEEN 201301 AND 201312",
+            "PREDICTED_SQL": "SELECT (SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END)) - (SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END)) AS DIFF1, (SUM(CASE WHEN T2.Segment = 'LAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'LAM' THEN 1 ELSE 0 END)) - (SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END)) AS DIFF2, (SUM(CASE WHEN T2.Segment = 'KAM' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'KAM' THEN 1 ELSE 0 END)) - (SUM(CASE WHEN T2.Segment = 'SME' THEN T1.Consumption ELSE 0 END) / COUNT(CASE WHEN T2.Segment = 'SME' THEN 1 ELSE 0 END)) AS DIFF3 FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date BETWEEN '201301' AND '201312' AND T2.Currency = 'CZK' AND T2.Segment IN ('SME', 'LAM', 'KAM') GROUP BY T2.Segment ORDER BY T2.Segment"
+        },
+        "status": "success"
+    }
+]

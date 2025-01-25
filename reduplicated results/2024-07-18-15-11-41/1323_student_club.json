@@ -1,0 +1,256 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "names of events",
+            "event_name",
+            "attendance of over 20 students",
+            "COUNT(event_id)",
+            "20",
+            "fundraisers"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "event": [
+                "event_name"
+            ]
+        },
+        "similar_values": {
+            "income": {
+                "source": [
+                    "Fundraising"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "attendance": {
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event which was attended",
+                    "value_description": "References the Event table"
+                },
+                "link_to_member": {
+                    "column_name": "link to member",
+                    "column_description": "The unique identifier of the member who attended the event",
+                    "value_description": "References the Member table"
+                }
+            },
+            "event": {
+                "location": {
+                    "column_name": "",
+                    "column_description": "Address where the event was held or is to be held or the name of such a location",
+                    "value_description": ""
+                },
+                "event_name": {
+                    "column_name": "event name",
+                    "column_description": "event name",
+                    "value_description": ""
+                },
+                "event_id": {
+                    "column_name": "event id",
+                    "column_description": "A unique identifier for the event",
+                    "value_description": ""
+                },
+                "type": {
+                    "column_name": "",
+                    "column_description": "The kind of event, such as game, social, election",
+                    "value_description": ""
+                }
+            },
+            "budget": {
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event to which the budget line applies.",
+                    "value_description": "References the Event table"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "expense_id",
+                "link_to_member",
+                "link_to_budget"
+            ],
+            "income": [
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'event'.'type'"
+        ],
+        "correct_columns": {
+            "event": [
+                "event_name",
+                "event_id",
+                "type"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "link_to_event",
+                "budget_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the events that had an attendance of over 20 students but were not fundraisers. The hint provides a crucial clue about the attendance count, which is stored in the attendance table. We also need to identify the events that are not fundraisers, which is related to the budget table. The event_name column in the event table provides the names of the events. The link_to_event column in the attendance table connects the attendance records to the corresponding events. The link_to_event column in the budget table connects the budget records to the corresponding events. Therefore, we need to join the attendance, event, and budget tables to answer the question.",
+        "selected_tables": [
+            "event",
+            "attendance",
+            "budget"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'event'.'type'"
+        ],
+        "correct_columns": {
+            "event": [
+                "event_name",
+                "event_id",
+                "type"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name"
+            ],
+            "attendance": [
+                "link_to_event"
+            ],
+            "budget": [
+                "link_to_event"
+            ]
+        },
+        "model_selected_columns": {
+            "event": [
+                "event_name"
+            ],
+            "attendance": [
+                "link_to_event"
+            ],
+            "budget": [
+                "link_to_event"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for event names with attendance over 20 students but not fundraisers. The hint provides the necessary information to identify the relevant columns. We need to join the event table with the attendance table to get the event names and attendance count. We also need to join the budget table to filter out events that are fundraisers. The event_name column from the event table provides the names of the events, the COUNT(event_id) from the attendance table gives us the attendance count, and the link_to_event column from the budget table helps us filter out fundraisers.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'event'.'event_id'",
+            "'event'.'type'"
+        ],
+        "correct_columns": {
+            "event": [
+                "event_name",
+                "event_id",
+                "type"
+            ],
+            "attendance": [
+                "link_to_event"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event GROUP BY T1.event_id HAVING COUNT(T2.link_to_member) > 20 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition for the attendance of over 20 students, which is COUNT(event_id) > 20. Then, I joined the event table with the attendance table to get the event names. I filtered out the events that were fundraisers by excluding events with 'Fundraising' in the type column. Finally, I selected the event names that met the conditions.",
+        "SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name NOT IN (SELECT T3.event_name FROM event AS T3 WHERE T3.type = 'Fundraising') GROUP BY T1.event_id HAVING COUNT(T2.link_to_member) > 20",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all the names of events that had an attendance of over 20 students but were not fundraisers.",
+            "Evidence": "name of events refers to event_name; attendance of over 20 students COUNT(event_id) > 20.",
+            "GOLD_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event GROUP BY T1.event_id HAVING COUNT(T2.link_to_event) > 20 EXCEPT SELECT T1.event_name FROM event AS T1  WHERE T1.type = 'Fundraiser'",
+            "PREDICTED_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event GROUP BY T1.event_id HAVING COUNT(T2.link_to_member) > 20 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all the names of events that had an attendance of over 20 students but were not fundraisers.",
+            "Evidence": "name of events refers to event_name; attendance of over 20 students COUNT(event_id) > 20.",
+            "GOLD_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event GROUP BY T1.event_id HAVING COUNT(T2.link_to_event) > 20 EXCEPT SELECT T1.event_name FROM event AS T1  WHERE T1.type = 'Fundraiser'",
+            "PREDICTED_SQL": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name NOT IN (SELECT T3.event_name FROM event AS T3 WHERE T3.type = 'Fundraising') GROUP BY T1.event_id HAVING COUNT(T2.link_to_member) > 20"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,262 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Story Spotlight",
+            "French",
+            "percentage",
+            "cards",
+            "language",
+            "isStorySpotlight",
+            "id",
+            "Count(id)",
+            "Divide",
+            "100"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "cards": [
+                "isStorySpotlight",
+                "isStorySpotlight",
+                "id"
+            ],
+            "foreign_data": [
+                "language"
+            ]
+        },
+        "similar_values": {
+            "cards": {
+                "name": [
+                    "Glaring Spotlight"
+                ],
+                "number": [
+                    "100"
+                ]
+            },
+            "foreign_data": {
+                "language": [
+                    "French"
+                ]
+            },
+            "set_translations": {
+                "language": [
+                    "French"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "foreign_data": {
+                "language": {
+                    "column_name": "",
+                    "column_description": "The foreign language of card.",
+                    "value_description": ""
+                },
+                "text": {
+                    "column_name": "",
+                    "column_description": "The foreign text ruling of the card.",
+                    "value_description": ""
+                },
+                "flavortext": {
+                    "column_name": "flavor Text",
+                    "column_description": "The foreign flavor text of the card.",
+                    "value_description": ""
+                }
+            },
+            "cards": {
+                "isstoryspotlight": {
+                    "column_name": "is Story Spotlight",
+                    "column_description": "If the card is a Story Spotlight card.",
+                    "value_description": "0: is not 1: is"
+                },
+                "number": {
+                    "column_name": "",
+                    "column_description": "The number of the card",
+                    "value_description": ""
+                },
+                "keywords": {
+                    "column_name": "",
+                    "column_description": "A list of keywords found on the card.",
+                    "value_description": ""
+                }
+            },
+            "set_translations": {
+                "language": {
+                    "column_name": "",
+                    "column_description": "language of this card set",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "isStorySpotlight",
+                "name",
+                "text",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "language",
+                "name",
+                "id",
+                "uuid"
+            ],
+            "legalities": [
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "id",
+                "code"
+            ],
+            "set_translations": [
+                "id",
+                "language",
+                "setCode"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "uuid",
+                "isstoryspotlight",
+                "id"
+            ],
+            "foreign_data": [
+                "uuid",
+                "language"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "cards": [
+                "isStorySpotlight",
+                "name",
+                "text",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "language",
+                "name",
+                "id",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of cards whose language is French among the Story Spotlight cards. The hint provides a clear direction on how to approach this problem. We need to identify the cards that are Story Spotlight cards (isStorySpotlight = 1) and then filter those cards by their language (French). The hint also provides the formula to calculate the percentage. Based on this analysis, we need to use the tables that contain the necessary information: cards, foreign_data, and possibly sets.",
+        "selected_tables": [
+            "cards",
+            "foreign_data"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "uuid",
+                "isstoryspotlight",
+                "id"
+            ],
+            "foreign_data": [
+                "uuid",
+                "language"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "cards": [
+                "isStorySpotlight",
+                "uuid"
+            ],
+            "foreign_data": [
+                "language",
+                "uuid"
+            ]
+        },
+        "model_selected_columns": {
+            "cards": [
+                "isStorySpotlight",
+                "uuid"
+            ],
+            "foreign_data": [
+                "language",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of cards whose language is French among the Story Spotlight cards. The hint provides the necessary information to identify the relevant columns. We need to filter cards by isStorySpotlight = 1 (Story Spotlight cards) and language = 'French'. We also need to count the total number of Story Spotlight cards. The columns necessary for this query are those that contain the values 'French' and 1.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'cards'.'id'"
+        ],
+        "correct_columns": {
+            "cards": [
+                "uuid",
+                "isstoryspotlight",
+                "id"
+            ],
+            "foreign_data": [
+                "uuid",
+                "language"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T2.language = 'French' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.uuid) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.isStorySpotlight = 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns and tables. The question asks for the percentage of cards whose language is French among the Story Spotlight cards. The Story Spotlight cards are identified by isStorySpotlight = 1, and the French language is identified by language = 'French'. I then used a subquery to count the total number of Story Spotlight cards, and another subquery to count the number of Story Spotlight cards that are also in French. I used the SUM function with a CASE statement to count the number of cards that are in French, and then divided this by the total number of Story Spotlight cards to get the percentage.",
+        "SQL": "SELECT (SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1 AND language = 'French') * 100.0 / (SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1)",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of cards whose language is French among the Story Spotlight cards?",
+            "Evidence": "Story Spotlight card refers to isStorySpotlight = 1; French is the language; Percentage = Divide(Count(id) where language = 'French' and isStorySpotlight = 1, Count(id) where isStorySpotlight = 1)*100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN T2.language = 'French' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.isStorySpotlight = 1",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T2.language = 'French' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.uuid) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.isStorySpotlight = 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such column: language",
+            "Question": "What is the percentage of cards whose language is French among the Story Spotlight cards?",
+            "Evidence": "Story Spotlight card refers to isStorySpotlight = 1; French is the language; Percentage = Divide(Count(id) where language = 'French' and isStorySpotlight = 1, Count(id) where isStorySpotlight = 1)*100",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN T2.language = 'French' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.isStorySpotlight = 1",
+            "PREDICTED_SQL": "SELECT (SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1 AND language = 'French') * 100.0 / (SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1)"
+        },
+        "status": "success"
+    }
+]

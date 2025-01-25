@@ -1,0 +1,240 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average",
+            "weight",
+            "heroes",
+            "aliens",
+            "Alien",
+            "weight_kg",
+            "AVG"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "superhero": [
+                "weight_kg"
+            ]
+        },
+        "similar_values": {
+            "publisher": {
+                "publisher_name": [
+                    "NBC - Heroes"
+                ]
+            },
+            "race": {
+                "race": [
+                    "Alien"
+                ]
+            },
+            "superhero": {
+                "superhero_name": [
+                    "Alien"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "superhero": {
+                "weight_kg": {
+                    "column_name": "weight kg",
+                    "column_description": "the weight of the superhero",
+                    "value_description": "The unit of weight is kilogram. If the weight_kg is NULL or 0, it means the weight of the superhero is missing."
+                },
+                "height_cm": {
+                    "column_name": "height cm",
+                    "column_description": "the height of the superhero",
+                    "value_description": "The unit of height is centimeter. If the height_cm is NULL or 0, it means the height of the superhero is missing."
+                }
+            },
+            "race": {
+                "race": {
+                    "column_name": "",
+                    "column_description": "the race of the superhero",
+                    "value_description": "In the context of superheroes, a superhero's race would refer to the particular group of people that the superhero belongs to base on these physical characteristics"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the unique identifier of the race",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "alignment": [
+                "id"
+            ],
+            "attribute": [
+                "id"
+            ],
+            "colour": [
+                "id"
+            ],
+            "gender": [
+                "id"
+            ],
+            "publisher": [
+                "id"
+            ],
+            "race": [
+                "race",
+                "id"
+            ],
+            "superhero": [
+                "superhero_name",
+                "race_id",
+                "weight_kg",
+                "id",
+                "gender_id",
+                "eye_colour_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "publisher_id",
+                "alignment_id"
+            ],
+            "hero_attribute": [
+                "hero_id",
+                "attribute_id"
+            ],
+            "superpower": [
+                "id"
+            ],
+            "hero_power": [
+                "hero_id",
+                "power_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "race_id",
+                "id",
+                "weight_kg"
+            ],
+            "race": [
+                "id",
+                "race"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "superhero": [
+                "superhero_name",
+                "race_id",
+                "weight_kg",
+                "id",
+                "gender_id",
+                "eye_colour_id",
+                "hair_colour_id",
+                "skin_colour_id",
+                "publisher_id",
+                "alignment_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average weight of heroes who are aliens. The hint provides a clear definition of 'aliens' as 'race = 'Alien''. This suggests that we need to identify the heroes with this specific race. The 'superhero' table contains the race information, and the 'alignment' table is not relevant to this question. The 'weight_kg' column is present in the 'superhero' table, which is necessary for calculating the average weight. The 'hero_attribute' and 'superpower' tables are not relevant to this question. Therefore, we need the 'superhero' table to identify the heroes and calculate their average weight.",
+        "selected_tables": [
+            "superhero"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "race"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "superhero": [
+                "race_id",
+                "id",
+                "weight_kg"
+            ],
+            "race": [
+                "id",
+                "race"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "superhero": [
+                "weight_kg",
+                "race_id"
+            ]
+        },
+        "model_selected_columns": {
+            "superhero": [
+                "weight_kg",
+                "race_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average weight of heroes who are aliens. The hint provides the necessary information to identify the 'Alien' race. The 'weight_kg' column is necessary to calculate the average weight. The 'superhero' table is the only table that contains the necessary information.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "race"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'superhero'.'id'"
+        ],
+        "correct_columns": {
+            "superhero": [
+                "race_id",
+                "id",
+                "weight_kg"
+            ],
+            "race": [
+                "id",
+                "race"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(weight_kg) FROM superhero WHERE race_id = 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the query. I used the hint provided to identify the correct race_id for aliens, which is 1. I then used the AVG function to calculate the average weight of the heroes who are aliens.",
+        "SQL": "SELECT AVG(weight_kg) FROM superhero WHERE race_id = 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Find the average weight of the heroes who are aliens.",
+            "Evidence": "average = AVG(weight_kg); aliens refers to race = 'Alien';",
+            "GOLD_SQL": "SELECT CAST(SUM(T1.weight_kg) AS REAL) / COUNT(T1.id) FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T2.race = 'Alien'",
+            "PREDICTED_SQL": "SELECT AVG(weight_kg) FROM superhero WHERE race_id = 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Find the average weight of the heroes who are aliens.",
+            "Evidence": "average = AVG(weight_kg); aliens refers to race = 'Alien';",
+            "GOLD_SQL": "SELECT CAST(SUM(T1.weight_kg) AS REAL) / COUNT(T1.id) FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T2.race = 'Alien'",
+            "PREDICTED_SQL": "SELECT AVG(weight_kg) FROM superhero WHERE race_id = 1"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,217 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patients",
+            "hospital",
+            "year 1992",
+            "prothrombin time",
+            "PT",
+            "First Date",
+            "normal",
+            "year",
+            "1992",
+            "First Date",
+            "PT < 14"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "PT",
+                "PT"
+            ],
+            "Patient": [
+                "First Date",
+                "First Date"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "U-PRO": [
+                    "30"
+                ],
+                "RF": [
+                    "34"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "pt": {
+                    "column_name": "prothrombin time",
+                    "column_description": "prothrombin time",
+                    "value_description": "Commonsense evidence:  Normal range: N < 14"
+                },
+                "aptt": {
+                    "column_name": "activated partial prothrombin time",
+                    "column_description": "activated partial prothrombin time",
+                    "value_description": "Commonsense evidence:  Normal range: N < 45"
+                }
+            },
+            "patient": {
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "ID"
+            ],
+            "Patient": [
+                "First Date",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "TP",
+                "PT",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "First Date",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "TP",
+                "PT",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients who first came to the hospital after year 1992 with prothrombin time (PT) level that are normal. The hint clarifies that 'first came to the hospital after year 1992' refers to year(First Date) > 1992 and 'prothrombin time (PT) level that are normal' refers to PT < 14. To answer this question, we need to identify patients who meet these conditions. The Patient table provides the information about when a patient first came to the hospital, and the Laboratory table contains the prothrombin time (PT) values. Therefore, we need to join these two tables to filter patients who meet the conditions.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "PT"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "First Date"
+            ],
+            "Laboratory": [
+                "ID",
+                "PT"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients who first came to the hospital after year 1992 with prothrombin time (PT) level that are normal. The hint provides the exact conditions: year(`First Date`) > 1992 and PT < 14. We need to identify columns that match these conditions. The `First Date` column in the `Patient` table corresponds to the year after 1992, and the `PT` column in the `Laboratory` table corresponds to the normal PT level.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) > '1992' AND T2.PT < 14 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns that are relevant to the question. The question asks for patients who first came to the hospital after year 1992 with prothrombin time (PT) level that are normal. This means I need to filter the patients based on the year of their first visit and the PT level. I also need to join the Patient table with the Laboratory table to get the PT level. I used the STRFTIME function to extract the year from the 'First Date' column in the Patient table. I then used the INNER JOIN to join the Patient table with the Laboratory table based on the ID column. Finally, I used the WHERE clause to filter the patients based on the year of their first visit and the PT level.",
+        "SQL": "SELECT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) > '1992' AND T2.PT < 14",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all patients who first came to the hospital after year 1992 with prothrombin time (PT) level that are normal.",
+            "Evidence": "first came to the hospital after year 1992 refers to year(`First Date`) > 1992; prothrombin time (PT) level that are normal refers to PT < 14;",
+            "GOLD_SQL": "SELECT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) > '1992' AND T2.PT < 14",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) > '1992' AND T2.PT < 14 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "List all patients who first came to the hospital after year 1992 with prothrombin time (PT) level that are normal.",
+            "Evidence": "first came to the hospital after year 1992 refers to year(`First Date`) > 1992; prothrombin time (PT) level that are normal refers to PT < 14;",
+            "GOLD_SQL": "SELECT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) > '1992' AND T2.PT < 14",
+            "PREDICTED_SQL": "SELECT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', T1.`First Date`) > '1992' AND T2.PT < 14"
+        },
+        "status": "success"
+    }
+]

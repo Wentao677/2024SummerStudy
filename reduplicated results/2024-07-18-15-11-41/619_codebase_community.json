@@ -1,0 +1,248 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Supporter",
+            "badge",
+            "adult",
+            "Age",
+            "19",
+            "65",
+            "Name"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "Age"
+            ],
+            "badges": [
+                "Name"
+            ]
+        },
+        "similar_values": {
+            "badges": {
+                "Name": [
+                    "Supporter"
+                ]
+            },
+            "users": {
+                "DisplayName": [
+                    "Name"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "age": {
+                    "column_name": "",
+                    "column_description": "user's age",
+                    "value_description": "\u0095 teenager: 13-18 \u0095 adult: 19-65 \u0095 elder: > 65"
+                },
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "favoritecount": {
+                    "column_name": "Favorite Count",
+                    "column_description": "the total number of favorites of the post",
+                    "value_description": "more favorite count refers to more valuable posts."
+                }
+            },
+            "badges": {
+                "name": {
+                    "column_name": "",
+                    "column_description": "the badge name the user obtained",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the badge id",
+                    "value_description": ""
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "the date that the user obtained the badge",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Name",
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age"
+            ],
+            "badges": [
+                "userid",
+                "name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "badges": [
+                "Name",
+                "Id",
+                "UserId"
+            ],
+            "users": [
+                "Age",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of adults who obtained the badge Supporter. The hint provides the definition of an adult as Age BETWEEN 19 AND 65. This information helps to identify the necessary tables. The badges table is required to find the users who obtained the badge Supporter. The users table is necessary to filter the adults based on their age. Therefore, both badges and users tables are needed.",
+        "selected_tables": [
+            "badges",
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age"
+            ],
+            "badges": [
+                "userid",
+                "name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "badges": [
+                "Name"
+            ],
+            "users": [
+                "Age"
+            ]
+        },
+        "model_selected_columns": {
+            "badges": [
+                "Name"
+            ],
+            "users": [
+                "Age"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of adults who obtained the badge Supporter. The hint provides the exact values for 'adult' and 'Supporter', which are present in the Age and Name columns of the users and badges tables, respectively. Therefore, we need to select columns that filter for these specific values and join the tables to get the required information.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'users'.'id'",
+            "'badges'.'userid'"
+        ],
+        "correct_columns": {
+            "users": [
+                "id",
+                "age"
+            ],
+            "badges": [
+                "userid",
+                "name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.UserId) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name = 'Supporter' AND T2.Age BETWEEN 19 AND 65 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns related to the question. I noticed that the badge name is stored in the 'Name' column of the 'badges' table, and the user's age is stored in the 'Age' column of the 'users' table. I then joined the two tables on the 'UserId' column to link the badge information to the user information. I filtered the results to only include badges with the name 'Supporter' and users with an age between 19 and 65. Finally, I used the COUNT function to count the number of users who obtained the badge 'Supporter' and are adults.",
+        "SQL": "SELECT COUNT(T1.UserId) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name = 'Supporter' AND T2.Age BETWEEN 19 AND 65",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many adults who obtained the badge Supporter?",
+            "Evidence": "Supporter is the Name of badge; adult refers to Age BETWEEN 19 AND 65",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId WHERE T2.Name = 'Supporter' AND T1.Age BETWEEN 19 AND 65",
+            "PREDICTED_SQL": "SELECT COUNT(T1.UserId) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name = 'Supporter' AND T2.Age BETWEEN 19 AND 65 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "How many adults who obtained the badge Supporter?",
+            "Evidence": "Supporter is the Name of badge; adult refers to Age BETWEEN 19 AND 65",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId WHERE T2.Name = 'Supporter' AND T1.Age BETWEEN 19 AND 65",
+            "PREDICTED_SQL": "SELECT COUNT(T1.UserId) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name = 'Supporter' AND T2.Age BETWEEN 19 AND 65"
+        },
+        "status": "success"
+    }
+]

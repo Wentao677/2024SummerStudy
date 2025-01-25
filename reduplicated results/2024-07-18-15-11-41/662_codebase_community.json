@@ -1,0 +1,277 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "posts",
+            "votes",
+            "2011",
+            "bounty",
+            "50",
+            "CreationDate",
+            "BountyAmount",
+            "YEAR(CreationDate)"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "votes": [
+                "CreationDate",
+                "BountyAmount",
+                "CreationDate"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "votes": {
+                "bountyamount": {
+                    "column_name": "Bounty Amount",
+                    "column_description": "the amount of bounty",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the vote",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "answercount": {
+                    "column_name": "Answer Count",
+                    "column_description": "the total number of answers of the post",
+                    "value_description": ""
+                },
+                "viewcount": {
+                    "column_name": "View Count",
+                    "column_description": "the view count of the post",
+                    "value_description": "Higher view count means the post has higher popularity"
+                },
+                "creaiondate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the user account",
+                    "value_description": ""
+                },
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the comment",
+                    "value_description": ""
+                }
+            },
+            "postlinks": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the post link",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Date",
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "CreationDate",
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "CreationDate",
+                "Id"
+            ],
+            "votes": [
+                "CreationDate",
+                "BountyAmount",
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posts": [
+                "id"
+            ],
+            "votes": [
+                "postid",
+                "bountyamount",
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "posts": [
+                "CreaionDate",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "votes": [
+                "CreationDate",
+                "BountyAmount",
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for posts with votes that were created in 2011 and have a bounty of 50. The hint clarifies that 'created in 2011' refers to the YEAR(CreationDate) = 2011. This suggests that we need to focus on the posts table, as it contains the CreationDate column. The hint also mentions BountyAmount = 50, which is a column in the votes table. Therefore, we need to include the posts and votes tables in our query. Additionally, the votes table is linked to the posts table through the PostId foreign key, so we also need the posts table to establish this relationship. Finally, we need to filter the results to include only posts with votes that have a bounty of 50, which is only possible by joining the posts and votes tables.",
+        "selected_tables": [
+            "posts",
+            "votes"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posts": [
+                "id"
+            ],
+            "votes": [
+                "postid",
+                "bountyamount",
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "posts": [
+                "Id",
+                "CreationDate"
+            ],
+            "votes": [
+                "PostId",
+                "BountyAmount"
+            ]
+        },
+        "model_selected_columns": {
+            "posts": [
+                "Id",
+                "CreationDate"
+            ],
+            "votes": [
+                "PostId",
+                "BountyAmount"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for posts with votes that were created in 2011 and have a bounty of 50. The hint provides the exact values for the YEAR(CreationDate) and BountyAmount. We need to filter the posts based on these conditions. The table 'posts' has the 'CreationDate' column, which we can use to filter the year. The table 'votes' has the 'BountyAmount' column, which we need to filter for the value 50. We also need to link the posts with votes, so we need the 'PostId' column from the 'votes' table and the 'Id' column from the 'posts' table.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'votes'.'creationdate'"
+        ],
+        "correct_columns": {
+            "posts": [
+                "id"
+            ],
+            "votes": [
+                "postid",
+                "bountyamount",
+                "creationdate"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.PostId WHERE T2.BountyAmount = 50 AND STRFTIME('%Y', T1.CreationDate) = '2011' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the conditions required: posts with votes that were created in 2011 and have a bounty of 50. I then looked at the database schema and identified the relevant tables and columns. I joined the posts and votes tables on the PostId column and applied the conditions using the WHERE clause. I used the YEAR function to extract the year from the CreationDate column to match the condition of posts created in 2011.",
+        "SQL": "SELECT COUNT(p.Id) FROM posts p INNER JOIN votes v ON p.Id = v.PostId WHERE YEAR(v.CreationDate) = 2011 AND v.BountyAmount = 50",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "no such column: T1.CreationDate",
+            "Question": "How many posts with votes that were created in 2011 have a bounty of 50?",
+            "Evidence": "created in 2012 refers YEAR(CreationDate) = 2011; BountyAmount = 50;",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.PostId WHERE T2.BountyAmount = 50 AND STRFTIME('%Y', T2.CreationDate) = '2011'",
+            "PREDICTED_SQL": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.PostId WHERE T2.BountyAmount = 50 AND STRFTIME('%Y', T1.CreationDate) = '2011' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "no such function: YEAR",
+            "Question": "How many posts with votes that were created in 2011 have a bounty of 50?",
+            "Evidence": "created in 2012 refers YEAR(CreationDate) = 2011; BountyAmount = 50;",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.PostId WHERE T2.BountyAmount = 50 AND STRFTIME('%Y', T2.CreationDate) = '2011'",
+            "PREDICTED_SQL": "SELECT COUNT(p.Id) FROM posts p INNER JOIN votes v ON p.Id = v.PostId WHERE YEAR(v.CreationDate) = 2011 AND v.BountyAmount = 50"
+        },
+        "status": "success"
+    }
+]

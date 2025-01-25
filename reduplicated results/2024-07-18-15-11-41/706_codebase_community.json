@@ -1,0 +1,292 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "linear regression",
+            "texts",
+            "post",
+            "Title",
+            "contains"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "comments": [
+                "Text"
+            ],
+            "posts": [
+                "Title"
+            ]
+        },
+        "similar_values": {
+            "tags": {
+                "TagName": [
+                    "regression"
+                ]
+            },
+            "badges": {
+                "Name": [
+                    "regression"
+                ]
+            },
+            "users": {
+                "DisplayName": [
+                    "LinearREgression"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "posthistory": {
+                "comment": {
+                    "column_name": "",
+                    "column_description": "comments of the post",
+                    "value_description": ""
+                },
+                "text": {
+                    "column_name": "",
+                    "column_description": "the detailed content of the post",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "text": {
+                    "column_name": "",
+                    "column_description": "the detailed content of the comment",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "title": {
+                    "column_name": "",
+                    "column_description": "the title of the post",
+                    "value_description": ""
+                },
+                "commentcount": {
+                    "column_name": "Comment Count",
+                    "column_description": "the total number of comments of the post",
+                    "value_description": ""
+                },
+                "closeddate": {
+                    "column_name": "Closed Date",
+                    "column_description": "the closed date of the post",
+                    "value_description": "if ClosedDate is null or empty, it means this post is not well-finished if CloseDate is not null or empty, it means this post has well-finished."
+                },
+                "body": {
+                    "column_name": "",
+                    "column_description": "the body of the post",
+                    "value_description": ""
+                },
+                "tags": {
+                    "column_name": "",
+                    "column_description": "the tag of the post",
+                    "value_description": ""
+                },
+                "lasteditordisplayname": {
+                    "column_name": "Last Editor Display Name",
+                    "column_description": "the display name of the last editor",
+                    "value_description": ""
+                }
+            },
+            "tags": {
+                "tagname": {
+                    "column_name": "Tag Name",
+                    "column_description": "the name of the tag",
+                    "value_description": ""
+                }
+            },
+            "users": {
+                "displayname": {
+                    "column_name": "Display Name",
+                    "column_description": "the user's display name",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "Id",
+                "UserId"
+            ],
+            "comments": [
+                "PostId",
+                "Text",
+                "Id",
+                "UserId"
+            ],
+            "postHistory": [
+                "Text",
+                "Comment",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postLinks": [
+                "PostId",
+                "Id",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Body",
+                "Title",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "DisplayName",
+                "Id"
+            ],
+            "votes": [
+                "Id",
+                "PostId",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "comments": [
+                "text",
+                "postid"
+            ],
+            "posts": [
+                "id",
+                "title"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "posts": [
+                "Body",
+                "Title",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "postHistory": [
+                "Text",
+                "Comment",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "comments": [
+                "PostId",
+                "Text",
+                "Id",
+                "UserId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the texts commented on a post about linear regression. The hint suggests that the post title contains 'linear regression'. This implies that we need to find the post with the matching title and then retrieve its comments. The database schema provides tables for posts, comments, and postHistory. The postHistory table stores the history of a post, including its comments. The posts table contains the post title, and the comments table contains the comments. Therefore, we need to join the posts, postHistory, and comments tables to retrieve the desired information.",
+        "selected_tables": [
+            "posts",
+            "postHistory",
+            "comments"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "comments": [
+                "text",
+                "postid"
+            ],
+            "posts": [
+                "id",
+                "title"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "posts": [
+                "Title"
+            ],
+            "comments": [
+                "Text",
+                "PostId"
+            ]
+        },
+        "model_selected_columns": {
+            "posts": [
+                "Title"
+            ],
+            "comments": [
+                "Text",
+                "PostId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the texts commented on the post about linear regression. The hint suggests that the post's title contains 'linear regression'. We need to find the post's ID and then retrieve the comments associated with that post. We also need to retrieve the text of the comments.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'posts'.'id'"
+        ],
+        "correct_columns": {
+            "comments": [
+                "text",
+                "postid"
+            ],
+            "posts": [
+                "id",
+                "title"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.Text FROM posts AS T1 INNER JOIN comments AS T2 ON T1.Id = T2.PostId WHERE T1.Title LIKE '%linear regression%' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "status": "error",
+        "error": "<class 'TypeError'>: <'NoneType' object is not subscriptable>"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Give the texts commented on the post about linear regression.",
+            "Evidence": "about linear regression refers to Title contains 'linear regression'",
+            "GOLD_SQL": "SELECT T1.Text FROM comments AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE T2.Title LIKE '%linear regression%'",
+            "PREDICTED_SQL": "SELECT T2.Text FROM posts AS T1 INNER JOIN comments AS T2 ON T1.Id = T2.PostId WHERE T1.Title LIKE '%linear regression%' "
+        },
+        "revision": {
+            "exec_res": "generation error",
+            "exec_err": "<class 'TypeError'>: <'NoneType' object is not subscriptable>",
+            "Question": "Give the texts commented on the post about linear regression.",
+            "Evidence": "about linear regression refers to Title contains 'linear regression'",
+            "GOLD_SQL": "SELECT T1.Text FROM comments AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE T2.Title LIKE '%linear regression%'",
+            "PREDICTED_SQL": "--"
+        },
+        "status": "success"
+    }
+]

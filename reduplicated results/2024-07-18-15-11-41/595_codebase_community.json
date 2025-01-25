@@ -1,0 +1,317 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "user",
+            "post history",
+            "post",
+            "views",
+            "1000",
+            "having at least 1000 views",
+            "Views >= 1000",
+            "UserId"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "Views",
+                "Views",
+                "Views"
+            ],
+            "postHistory": [
+                "UserId"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "user"
+                ]
+            },
+            "comments": {
+                "UserDisplayName": [
+                    "user28"
+                ]
+            },
+            "tags": {
+                "TagName": [
+                    "history"
+                ]
+            },
+            "posts": {
+                "OwnerDisplayName": [
+                    "User"
+                ]
+            },
+            "postHistory": {
+                "UserDisplayName": [
+                    "User"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "posthistory": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the user who post the post",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the post history id",
+                    "value_description": ""
+                },
+                "posthistorytypeid": {
+                    "column_name": "Post History Type Id",
+                    "column_description": "the id of the post history type",
+                    "value_description": ""
+                }
+            },
+            "posts": {
+                "viewcount": {
+                    "column_name": "View Count",
+                    "column_description": "the view count of the post",
+                    "value_description": "Higher view count means the post has higher popularity"
+                }
+            },
+            "users": {
+                "views": {
+                    "column_name": "",
+                    "column_description": "the number of views",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the user id",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the user who post the comment",
+                    "value_description": ""
+                }
+            },
+            "badges": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the unique id of the user",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the id of the voter",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Id"
+            ],
+            "comments": [
+                "UserId",
+                "Id",
+                "PostId"
+            ],
+            "postHistory": [
+                "PostId",
+                "UserId",
+                "Id"
+            ],
+            "postLinks": [
+                "PostId",
+                "Id",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "CreaionDate",
+                "ViewCount",
+                "OwnerUserId",
+                "Id",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Id",
+                "Views"
+            ],
+            "votes": [
+                "UserId",
+                "Id",
+                "PostId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'posthistory'.'posthistorytypeid'"
+        ],
+        "correct_columns": {
+            "posthistory": [
+                "userid",
+                "postid",
+                "posthistorytypeid"
+            ],
+            "users": [
+                "id"
+            ],
+            "posts": [
+                "id",
+                "viewcount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "postHistory": [
+                "PostId",
+                "UserId",
+                "Id"
+            ],
+            "posts": [
+                "CreaionDate",
+                "ViewCount",
+                "OwnerUserId",
+                "Id",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "users": [
+                "Id",
+                "Views"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for users who have only one post history per post and have at least 1000 views. The hint clarifies that 'having at least 1000 view' refers to the 'Views' column in the 'users' table, and 'user' refers to the 'UserId' column. To answer this question, we need to identify users who have only one post history per post, which is stored in the 'postHistory' table. We also need to filter users who have at least 1000 views, which is stored in the 'users' table. Additionally, we need to link the 'postHistory' table to the 'posts' table to get the post information, and link the 'posts' table to the 'users' table to get the user information.",
+        "selected_tables": [
+            "postHistory",
+            "posts",
+            "users"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'posthistory'.'posthistorytypeid'"
+        ],
+        "correct_columns": {
+            "posthistory": [
+                "userid",
+                "postid",
+                "posthistorytypeid"
+            ],
+            "users": [
+                "id"
+            ],
+            "posts": [
+                "id",
+                "viewcount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "postHistory": [
+                "PostId"
+            ],
+            "posts": [
+                "Id"
+            ],
+            "users": [
+                "Id",
+                "Views"
+            ]
+        },
+        "model_selected_columns": {
+            "postHistory": [
+                "PostId"
+            ],
+            "posts": [
+                "Id"
+            ],
+            "users": [
+                "Id",
+                "Views"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for users who have only one post history per post and have at least 1000 views. The hint clarifies that 'having at least 1000 view' refers to the 'Views' column in the 'users' table, and 'user' refers to the 'UserId' column. To answer the question, we need to identify users who have only one post history per post, which is linked to the 'PostId' column in the 'postHistory' table, and have at least 1000 views. Therefore, we need to select columns that link the 'postHistory' table to the 'users' table and filter the results based on the 'Views' column.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'posthistory'.'userid'",
+            "'posthistory'.'posthistorytypeid'",
+            "'posts'.'viewcount'"
+        ],
+        "correct_columns": {
+            "posthistory": [
+                "userid",
+                "postid",
+                "posthistorytypeid"
+            ],
+            "users": [
+                "id"
+            ],
+            "posts": [
+                "id",
+                "viewcount"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T2.UserId FROM posts AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.PostId INNER JOIN users AS T3 ON T2.UserId = T3.Id WHERE T3.Views >= 1000 GROUP BY T2.UserId HAVING COUNT(T2.PostId) = 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns relevant to the question. I noticed that the question asks for users who have at least 1000 views and only one post history per post. I then joined the posts, postHistory, and users tables to filter the users based on the conditions. I used the GROUP BY clause to group the results by user ID and the HAVING clause to filter the results to only include users with one post history per post. Finally, I used the WHERE clause to filter the results to only include users with at least 1000 views.",
+        "SQL": "SELECT T2.UserId FROM posts AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.PostId INNER JOIN users AS T3 ON T2.UserId = T3.Id WHERE T3.Views >= 1000 GROUP BY T2.UserId HAVING COUNT(T2.PostId) = 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Which user have only one post history per post and having at least 1000 views?",
+            "Evidence": "having at least 1000 view refers to Views > = 1000; user refers to UserId",
+            "GOLD_SQL": "SELECT T2.UserId FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN posts AS T3 ON T2.PostId = T3.Id WHERE T3.ViewCount >= 1000 GROUP BY T2.UserId HAVING COUNT(DISTINCT T2.PostHistoryTypeId) = 1",
+            "PREDICTED_SQL": "SELECT T2.UserId FROM posts AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.PostId INNER JOIN users AS T3 ON T2.UserId = T3.Id WHERE T3.Views >= 1000 GROUP BY T2.UserId HAVING COUNT(T2.PostId) = 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Which user have only one post history per post and having at least 1000 views?",
+            "Evidence": "having at least 1000 view refers to Views > = 1000; user refers to UserId",
+            "GOLD_SQL": "SELECT T2.UserId FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN posts AS T3 ON T2.PostId = T3.Id WHERE T3.ViewCount >= 1000 GROUP BY T2.UserId HAVING COUNT(DISTINCT T2.PostHistoryTypeId) = 1",
+            "PREDICTED_SQL": "SELECT T2.UserId FROM posts AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.PostId INNER JOIN users AS T3 ON T2.UserId = T3.Id WHERE T3.Views >= 1000 GROUP BY T2.UserId HAVING COUNT(T2.PostId) = 1"
+        },
+        "status": "success"
+    }
+]

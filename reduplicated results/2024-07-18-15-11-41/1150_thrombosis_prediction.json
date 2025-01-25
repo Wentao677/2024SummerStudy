@@ -1,0 +1,214 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "percentage",
+            "female patient",
+            "born after 1930",
+            "Sex",
+            "F",
+            "year(Birthday)",
+            "1930",
+            "ID",
+            "DIVIDE",
+            "COUNT",
+            "calculation"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "SEX",
+                "ID"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1930"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "sex": {
+                    "column_name": "",
+                    "column_description": "Sex",
+                    "value_description": "F: female; M: male"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "laboratory": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date"
+            ],
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "RF"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "sex",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "ID"
+            ],
+            "Examination": [
+                "ID",
+                "Examination Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of female patients born after 1930. The hint provides a clear direction on how to approach this problem. It suggests counting the number of female patients born after 1930 and dividing it by the total number of female patients. This requires information about patient sex and birthday. The hint also mentions the 'ID' column, which is likely a foreign key referencing the 'Patient' table. Therefore, we need to analyze the 'Patient' table to get the birthday information and the 'Examination' table to get the ID information. The 'Laboratory' table is not necessary for this question.",
+        "selected_tables": [
+            "Patient",
+            "Examination"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "sex",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Examination": [
+                "ID"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Examination": [
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of female patients born after 1930. The hint provides a clear direction on how to approach this. We need to filter patients by sex (F) and birthday year (after 1930). The table names and columns that are essential for crafting a SQL query to answer the question are identified below.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "sex",
+                "birthday"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN strftime('%Y', Birthday) > '1930' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(ID) FROM Patient WHERE SEX = 'F' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns needed for the query, which are Birthday and Sex from the Patient table. Then, I used the strftime function to extract the year from the Birthday column and compared it to '1930' to filter patients born after 1930. I used the COUNT function to count the total number of female patients and the number of female patients born after 1930. Finally, I used the SUM and COUNT functions to calculate the percentage of female patients born after 1930.",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN strftime('%Y', Birthday) > '1930' AND Sex = 'F' THEN 1 ELSE NULL END) AS REAL) * 100 / CAST(COUNT(CASE WHEN Sex = 'F' THEN 1 ELSE NULL END) AS REAL) FROM Patient",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of female patient were born after 1930?",
+            "Evidence": "female refers to Sex = 'F'; patient who were born after 1930 refers to year(Birthday) > '1930'; calculation = DIVIDE(COUNT(ID) where year(Birthday) > '1930' and SEX = 'F'), (COUNT(ID) where SEX = 'F')",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN STRFTIME('%Y', Birthday) > '1930' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM Patient WHERE SEX = 'F'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN strftime('%Y', Birthday) > '1930' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(ID) FROM Patient WHERE SEX = 'F' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the percentage of female patient were born after 1930?",
+            "Evidence": "female refers to Sex = 'F'; patient who were born after 1930 refers to year(Birthday) > '1930'; calculation = DIVIDE(COUNT(ID) where year(Birthday) > '1930' and SEX = 'F'), (COUNT(ID) where SEX = 'F')",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN STRFTIME('%Y', Birthday) > '1930' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM Patient WHERE SEX = 'F'",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(CASE WHEN strftime('%Y', Birthday) > '1930' AND Sex = 'F' THEN 1 ELSE NULL END) AS REAL) * 100 / CAST(COUNT(CASE WHEN Sex = 'F' THEN 1 ELSE NULL END) AS REAL) FROM Patient"
+        },
+        "status": "success"
+    }
+]

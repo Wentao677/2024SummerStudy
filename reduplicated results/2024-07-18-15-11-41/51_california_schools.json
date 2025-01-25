@@ -1,0 +1,271 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "mailing street address",
+            "school",
+            "lowest average score",
+            "reading",
+            "school's name"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "Street",
+                "School",
+                "School"
+            ]
+        },
+        "similar_values": {
+            "schools": {
+                "MailStreet": [
+                    "551 G Street"
+                ],
+                "Street": [
+                    "551 G Street"
+                ],
+                "AdmLName1": [
+                    "Reading"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "schools": {
+                "mailstrabr": {
+                    "column_name": "mailing street address",
+                    "column_description": "",
+                    "value_description": "the abbreviated mailing street address of the school, district, or administrative authority.Note: Many active entities have not provided a mailing street address. For your convenience we have filled the unpopulated MailStrAbr cells with StreetAbr data."
+                },
+                "mailstreet": {
+                    "column_name": "",
+                    "column_description": "MailStreet",
+                    "value_description": "The unabbreviated mailing address of the school, district, or administrative authority. Note: 1) Some entities (primarily closed or retired schools) may not have data in this field; 2) Many active entities have not provided a mailing street address. For your convenience we have filled the unpopulated MailStreet cells with Street data."
+                },
+                "streetabr": {
+                    "column_name": "street address",
+                    "column_description": "The abbreviated street address of the school, district, or administrative authority\u2019s physical location.",
+                    "value_description": "The abbreviated street address of the school, district, or administrative authority\u2019s physical location. Note: Some records (primarily records of closed or retired schools) may not have data in this field."
+                },
+                "mailcity": {
+                    "column_name": "mailing city",
+                    "column_description": "",
+                    "value_description": "The city associated with the mailing address of the school, district, or administrative authority. Note: Many entities have not provided a mailing address city. For your convenience we have filled the unpopulated MailCity cells with City data."
+                },
+                "website": {
+                    "column_name": "",
+                    "column_description": "The website address of the school, district, or administrative authority.",
+                    "value_description": "The website address of the school, district, or administrative authority."
+                },
+                "school": {
+                    "column_name": "",
+                    "column_description": "School",
+                    "value_description": ""
+                },
+                "phone": {
+                    "column_name": "",
+                    "column_description": "Phone",
+                    "value_description": ""
+                }
+            },
+            "satscores": {
+                "sname": {
+                    "column_name": "school name",
+                    "column_description": "school name",
+                    "value_description": ""
+                },
+                "avgscrread": {
+                    "column_name": "average scores in Reading",
+                    "column_description": "average scores in Reading",
+                    "value_description": "average scores in Reading"
+                },
+                "avgscrmath": {
+                    "column_name": "average scores in Math",
+                    "column_description": "average scores in Math",
+                    "value_description": "average scores in Math"
+                }
+            },
+            "frpm": {
+                "school name": {
+                    "column_name": "",
+                    "column_description": "School Name",
+                    "value_description": ""
+                },
+                "school type": {
+                    "column_name": "",
+                    "column_description": "School Type",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "School Name",
+                "CDSCode"
+            ],
+            "satscores": [
+                "sname",
+                "dname",
+                "AvgScrRead",
+                "AvgScrWrite",
+                "cds"
+            ],
+            "schools": [
+                "CDSCode",
+                "School",
+                "Street",
+                "StreetAbr",
+                "Zip",
+                "MailStreet",
+                "MailStrAbr",
+                "MailZip"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "mailstreet",
+                "school",
+                "cdscode"
+            ],
+            "satscores": [
+                "cds",
+                "avgscrread"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "satscores": [
+                "sname",
+                "dname",
+                "AvgScrRead",
+                "AvgScrWrite",
+                "cds"
+            ],
+            "schools": [
+                "CDSCode",
+                "School",
+                "Street",
+                "StreetAbr",
+                "Zip",
+                "MailStreet",
+                "MailStrAbr",
+                "MailZip"
+            ],
+            "frpm": [
+                "School Name",
+                "CDSCode"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to find the school with the lowest average score in reading and its corresponding mailing street address. The question mentions 'school name' and 'mailing street address', which are present in the 'schools' and 'frpm' tables, respectively. The 'satscores' table contains the average scores in reading. The hint emphasizes the importance of 'mailing street address', which is present in the 'schools' table. Therefore, we need to join the 'satscores' table with the 'schools' table to find the school with the lowest average score in reading and then join the result with the 'frpm' table to get the mailing street address.",
+        "selected_tables": [
+            "satscores",
+            "schools",
+            "frpm"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "schools": [
+                "mailstreet",
+                "school",
+                "cdscode"
+            ],
+            "satscores": [
+                "cds",
+                "avgscrread"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "satscores": [
+                "cds",
+                "AvgScrRead"
+            ],
+            "schools": [
+                "MailStreet"
+            ]
+        },
+        "model_selected_columns": {
+            "satscores": [
+                "cds",
+                "AvgScrRead"
+            ],
+            "schools": [
+                "MailStreet"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the school with the lowest average score in reading, and then find its mailing street address. We can achieve this by joining the satscores and schools tables, and then filtering the results to find the school with the lowest average score in reading. We also need to consider the MailStreet column from the schools table to get the mailing street address.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'schools'.'school'",
+            "'schools'.'cdscode'"
+        ],
+        "correct_columns": {
+            "schools": [
+                "mailstreet",
+                "school",
+                "cdscode"
+            ],
+            "satscores": [
+                "cds",
+                "avgscrread"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.AvgScrRead, T2.MailStreet FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead ASC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns needed to answer the question, which are the average score in reading and the mailing street address. I then joined the satscores table with the schools table on the CDSCode column. I filtered the results to find the school with the lowest average score in reading by using the ORDER BY and LIMIT 1 clauses. Finally, I selected the desired columns and returned the result.",
+        "SQL": "SELECT T1.sname, T2.MailStreet FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead ASC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "In which mailing street address can you find the school that has the lowest average score in reading? Also give the school's name.",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT T2.MailStreet, T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrRead IS NOT NULL ORDER BY T1.AvgScrRead ASC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.AvgScrRead, T2.MailStreet FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead ASC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "In which mailing street address can you find the school that has the lowest average score in reading? Also give the school's name.",
+            "Evidence": "",
+            "GOLD_SQL": "SELECT T2.MailStreet, T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrRead IS NOT NULL ORDER BY T1.AvgScrRead ASC LIMIT 1",
+            "PREDICTED_SQL": "SELECT T1.sname, T2.MailStreet FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead ASC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

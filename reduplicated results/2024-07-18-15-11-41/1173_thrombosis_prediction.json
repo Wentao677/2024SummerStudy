@@ -1,0 +1,225 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "most common illness",
+            "doctors",
+            "patients",
+            "lab work",
+            "1/1/1985",
+            "12/31/1995",
+            "Examination Date",
+            "MAX(COUNT(Diagnosis))",
+            "1985-01-01",
+            "1995-12-31"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "Date"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1982.1"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "laboratory": {
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "ID"
+            ],
+            "Patient": [
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "id"
+            ],
+            "examination": [
+                "id",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "Examination Date",
+                "Diagnosis",
+                "ID"
+            ],
+            "Patient": [
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the most common illness among patients whose lab work was done between 1/1/1985 and 12/31/1995. The hint clarifies that 'lab work' refers to 'Examination Date' between the specified dates. This implies that we need to focus on the Examination table, which contains the Examination Date and Diagnosis information. Additionally, we need to link the Examination table to the Patient table to get the patient's ID, and also to the Laboratory table to filter the examinations based on the date range. Therefore, we need to select the Examination, Patient, and Laboratory tables.",
+        "selected_tables": [
+            "Examination",
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "id"
+            ],
+            "examination": [
+                "id",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "ID"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the most common illness among patients whose lab work was done between 1/1/1985 and 12/31/1995. The hint suggests focusing on the 'Examination Date' column in the Examination table and the 'Diagnosis' column in the Examination and Patient tables. We need to filter the Examination table by the date range, and then count the occurrences of each diagnosis. The Patient table is necessary to link the Examination table to the patients.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'patient'.'diagnosis'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "id"
+            ],
+            "examination": [
+                "id",
+                "Examination Date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT Diagnosis FROM Examination WHERE `Examination Date` BETWEEN '1985-01-01' AND '1995-12-31' GROUP BY Diagnosis ORDER BY COUNT(Diagnosis) DESC LIMIT 1 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the query. I used the `Examination Date` column to filter the lab work between 1/1/1985 and 12/31/1995. Then, I grouped the results by `Diagnosis` and ordered them by the count of each diagnosis in descending order. Finally, I limited the results to the top 1 diagnosis.",
+        "SQL": "SELECT Diagnosis FROM Examination WHERE `Examination Date` BETWEEN '1985-01-01' AND '1995-12-31' GROUP BY Diagnosis ORDER BY COUNT(Diagnosis) DESC LIMIT 1",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the most common illness that doctors identified among the patients whose lab work was done between 1/1/1985, and 12/31/1995?",
+            "Evidence": "the most common illness refers to MAX(COUNT(Diagnosis)); lab work between 1/1/1985 and 12/31/1995 refers to `Examination Date` between '1985-01-01' and '1995-12-31 '",
+            "GOLD_SQL": "SELECT T2.Diagnosis FROM Examination AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.`Examination Date` BETWEEN '1985-01-01' AND '1995-12-31' GROUP BY T2.Diagnosis ORDER BY COUNT(T2.Diagnosis) DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT Diagnosis FROM Examination WHERE `Examination Date` BETWEEN '1985-01-01' AND '1995-12-31' GROUP BY Diagnosis ORDER BY COUNT(Diagnosis) DESC LIMIT 1 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the most common illness that doctors identified among the patients whose lab work was done between 1/1/1985, and 12/31/1995?",
+            "Evidence": "the most common illness refers to MAX(COUNT(Diagnosis)); lab work between 1/1/1985 and 12/31/1995 refers to `Examination Date` between '1985-01-01' and '1995-12-31 '",
+            "GOLD_SQL": "SELECT T2.Diagnosis FROM Examination AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.`Examination Date` BETWEEN '1985-01-01' AND '1995-12-31' GROUP BY T2.Diagnosis ORDER BY COUNT(T2.Diagnosis) DESC LIMIT 1",
+            "PREDICTED_SQL": "SELECT Diagnosis FROM Examination WHERE `Examination Date` BETWEEN '1985-01-01' AND '1995-12-31' GROUP BY Diagnosis ORDER BY COUNT(Diagnosis) DESC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

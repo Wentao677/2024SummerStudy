@@ -1,0 +1,256 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "elder user",
+            "posts",
+            "score",
+            "over 19",
+            "Age > 65",
+            "Score >= 20"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "posts": [
+                "Score",
+                "Score"
+            ],
+            "users": [
+                "Age"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "user"
+                ]
+            },
+            "comments": {
+                "UserDisplayName": [
+                    "user28"
+                ]
+            },
+            "tags": {
+                "TagName": [
+                    "scores"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "age": {
+                    "column_name": "",
+                    "column_description": "user's age",
+                    "value_description": "\u0095 teenager: 13-18 \u0095 adult: 19-65 \u0095 elder: > 65"
+                },
+                "reputation": {
+                    "column_name": "",
+                    "column_description": "the user's reputation",
+                    "value_description": "The user with higher reputation has more influence."
+                }
+            },
+            "posts": {
+                "score": {
+                    "column_name": "",
+                    "column_description": "the score of the post",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "score": {
+                    "column_name": "",
+                    "column_description": "rating score",
+                    "value_description": "The score is from 0 to 100. The score more than 60 refers that the comment is a positive comment. The score less than 60 refers that the comment is a negative comment."
+                }
+            },
+            "posthistory": {
+                "userid": {
+                    "column_name": "User Id",
+                    "column_description": "the user who post the post",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Id"
+            ],
+            "comments": [
+                "Score",
+                "Id",
+                "PostId",
+                "UserId"
+            ],
+            "postHistory": [
+                "PostId",
+                "UserId",
+                "Id"
+            ],
+            "postLinks": [
+                "PostId",
+                "Id",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "Score",
+                "OwnerUserId",
+                "CommentCount",
+                "Id",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Age",
+                "Id"
+            ],
+            "votes": [
+                "PostId",
+                "Id",
+                "UserId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posts": [
+                "id",
+                "owneruserid",
+                "score"
+            ],
+            "users": [
+                "id",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "users": [
+                "Age",
+                "Id"
+            ],
+            "posts": [
+                "Score",
+                "OwnerUserId",
+                "CommentCount",
+                "Id",
+                "LastEditorUserId",
+                "ParentId"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the posts owned by an elder user (Age > 65) and filter those with a score of over 19 (Score >= 20). The hint provides specific values for these conditions. We can find the elder users in the users table, and then link them to their posts in the posts table. The posts table also contains the score information. Therefore, we need to use the users and posts tables.",
+        "selected_tables": [
+            "users",
+            "posts"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posts": [
+                "id",
+                "owneruserid",
+                "score"
+            ],
+            "users": [
+                "id",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "users": [
+                "Id",
+                "Age"
+            ],
+            "posts": [
+                "Id",
+                "OwnerUserId",
+                "Score"
+            ]
+        },
+        "model_selected_columns": {
+            "users": [
+                "Id",
+                "Age"
+            ],
+            "posts": [
+                "Id",
+                "OwnerUserId",
+                "Score"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about posts owned by elder users (Age > 65) with a score of over 19. The hint clarifies that elder users refer to Age > 65 and Score of over 19 refers to Score >= 20. We need to identify the posts owned by users with Age > 65 and filter those with a Score >= 20. The necessary columns are those that link users to posts and provide the required filtering conditions.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "posts": [
+                "id",
+                "owneruserid",
+                "score"
+            ],
+            "users": [
+                "id",
+                "age"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN posts AS T2 ON T1.Id = T2.OwnerUserId WHERE T1.Age > 65 AND T2.Score >= 20 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition for an elder user, which is Age > 65. Then, I identified the condition for a post with a score of over 19, which is Score >= 20. I joined the users table with the posts table on the OwnerUserId column to get the posts owned by each user. I filtered the results to only include elder users and posts with a score of over 19. Finally, I used COUNT to count the number of posts that meet these conditions.",
+        "SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN posts AS T2 ON T1.Id = T2.OwnerUserId WHERE T1.Age > 65 AND T2.Score >= 20",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Among the posts owned by an elder user, how many of them have a score of over 19?",
+            "Evidence": "elder users refers to Age > 65; Score of over 19 refers to Score > = 20",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score >= 20 AND T2.Age > 65",
+            "PREDICTED_SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN posts AS T2 ON T1.Id = T2.OwnerUserId WHERE T1.Age > 65 AND T2.Score >= 20 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Among the posts owned by an elder user, how many of them have a score of over 19?",
+            "Evidence": "elder users refers to Age > 65; Score of over 19 refers to Score > = 20",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score >= 20 AND T2.Age > 65",
+            "PREDICTED_SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN posts AS T2 ON T1.Id = T2.OwnerUserId WHERE T1.Age > 65 AND T2.Score >= 20"
+        },
+        "status": "success"
+    }
+]

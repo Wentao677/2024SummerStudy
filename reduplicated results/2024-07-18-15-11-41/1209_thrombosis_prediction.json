@@ -1,0 +1,281 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "ALT glutamic pylvic transaminase",
+            "GPT",
+            "60",
+            "date of birth",
+            "birthday value",
+            "normal range",
+            "ascending order",
+            "patients",
+            "diagnosis"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "GPT",
+                "Date"
+            ],
+            "Patient": [
+                "Birthday",
+                "Diagnosis"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "U-PRO": [
+                    "30"
+                ]
+            },
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "gpt": {
+                    "column_name": "ALT glutamic pyruvic transaminase",
+                    "column_description": "ALT glutamic pyruvic transaminase",
+                    "value_description": "Commonsense evidence:  Normal range: N < 60"
+                },
+                "got": {
+                    "column_name": "AST glutamic oxaloacetic transaminase",
+                    "column_description": "AST glutamic oxaloacetic transaminase",
+                    "value_description": "Commonsense evidence:  Normal range: N < 60"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Diagnosis",
+                "LAC",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Birthday",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "Date",
+                "GPT",
+                "ALP",
+                "TP",
+                "UN",
+                "T-BIL",
+                "T-CHO",
+                "GLU",
+                "RBC",
+                "HCT",
+                "PLT",
+                "TAT2",
+                "U-PRO",
+                "IGG",
+                "RF",
+                "C3",
+                "DNA",
+                "ID"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "gpt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Examination": [
+                "Diagnosis",
+                "LAC",
+                "ID"
+            ],
+            "Laboratory": [
+                "Date",
+                "GPT",
+                "ALP",
+                "TP",
+                "UN",
+                "T-BIL",
+                "T-CHO",
+                "GLU",
+                "RBC",
+                "HCT",
+                "PLT",
+                "TAT2",
+                "U-PRO",
+                "IGG",
+                "RF",
+                "C3",
+                "DNA",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question requires the diagnosis of patients with ALT glutamic pyruvic transaminase beyond the normal range, which is defined as GPT > 60. The hint suggests that the larger the birthday value, the younger the person is, and vice versa. This implies that we need to consider the patient's age and diagnosis. The question also requires the result to be in ascending order of their date of birth. Therefore, we need to join the Examination and Patient tables to get the diagnosis and patient information, and the Laboratory table to get the GPT value. The Patient table is necessary to get the date of birth, and the Examination table is necessary to get the diagnosis. The Laboratory table is necessary to get the GPT value. The date of birth is used to sort the result in ascending order.",
+        "selected_tables": [
+            "Patient",
+            "Examination",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "gpt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Examination": [
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "GPT",
+                "Date"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday"
+            ],
+            "Examination": [
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "GPT",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with ALT glutamic pylvic transaminase beyond the normal range, sorted by their date of birth in ascending order. The hint clarifies that GPT > 60 indicates ALT glutamic pylvic transaminase beyond the normal range. We need to identify patients with GPT > 60, and then sort them by their date of birth. The table 'Patient' contains the date of birth, and the table 'Laboratory' contains the GPT values. We also need to filter the patients based on their diagnosis, which is stored in the 'Examination' table.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'patient'.'diagnosis'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "id",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "gpt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T1.Birthday, T2.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID INNER JOIN Laboratory AS T3 ON T1.ID = T3.ID WHERE T3.GPT > 60 ORDER BY T1.Birthday DESC ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the condition for the diagnosis, which is GPT > 60. Then, I joined the Patient, Examination, and Laboratory tables to get the necessary information. I filtered the results to only include patients with GPT > 60. Finally, I sorted the results by the patient's date of birth in ascending order.",
+        "SQL": "SELECT T1.ID, T1.Birthday, T2.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID INNER JOIN Laboratory AS T3 ON T1.ID = T3.ID WHERE T3.GPT > 60 ORDER BY T1.Birthday",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Please provide the diagnosis of patients with ALT glutamic pylvic transaminase beyond the normal range by ascending order of their date of birth.",
+            "Evidence": "ALT glutamic pylvic transaminase beyond the normal range refers to GPT > 60; The larger the birthday value, the younger the person is, and vice versa; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GPT > 60 ORDER BY T1.Birthday ASC",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.Birthday, T2.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID INNER JOIN Laboratory AS T3 ON T1.ID = T3.ID WHERE T3.GPT > 60 ORDER BY T1.Birthday DESC "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Please provide the diagnosis of patients with ALT glutamic pylvic transaminase beyond the normal range by ascending order of their date of birth.",
+            "Evidence": "ALT glutamic pylvic transaminase beyond the normal range refers to GPT > 60; The larger the birthday value, the younger the person is, and vice versa; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GPT > 60 ORDER BY T1.Birthday ASC",
+            "PREDICTED_SQL": "SELECT T1.ID, T1.Birthday, T2.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID INNER JOIN Laboratory AS T3 ON T1.ID = T3.ID WHERE T3.GPT > 60 ORDER BY T1.Birthday"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,269 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "K-12",
+            "free meals",
+            "percent eligible",
+            "Free Meal Count",
+            "Total",
+            "Enrollment",
+            "test takers",
+            "test score",
+            "1500",
+            "names of schools"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "schools": [
+                "County",
+                "School"
+            ]
+        },
+        "similar_values": {
+            "schools": {
+                "GSoffered": [
+                    "K-12"
+                ],
+                "GSserved": [
+                    "K-12"
+                ],
+                "AdmLName1": [
+                    "Free"
+                ],
+                "CharterNum": [
+                    "1500"
+                ],
+                "Ext": [
+                    "1500"
+                ],
+                "School": [
+                    "Summit Schools"
+                ]
+            },
+            "frpm": {
+                "Charter School Number": [
+                    "1500"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "frpm": {
+                "free meal count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free Meal Count (K-12)",
+                    "value_description": "eligible free rate = Free Meal Count / Enrollment"
+                },
+                "frpm count (k-12)": {
+                    "column_name": "",
+                    "column_description": "Free or Reduced Price Meal Count (K-12)",
+                    "value_description": "eligible FRPM rate = FRPM / Enrollment"
+                },
+                "enrollment (k-12)": {
+                    "column_name": "",
+                    "column_description": "Enrollment (K-12)",
+                    "value_description": "K-12: 1st grade - 12nd grade"
+                },
+                "free meal count (ages 5-17)": {
+                    "column_name": "",
+                    "column_description": "Free Meal Count (Ages 5-17)",
+                    "value_description": "eligible free rate = Free Meal Count / Enrollment"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "School Name",
+                "IRC",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)",
+                "Percent (%) Eligible Free (K-12)",
+                "FRPM Count (K-12)",
+                "Percent (%) Eligible FRPM (K-12)",
+                "Percent (%) Eligible Free (Ages 5-17)",
+                "Percent (%) Eligible FRPM (Ages 5-17)"
+            ],
+            "satscores": [
+                "sname",
+                "enroll12",
+                "NumGE1500",
+                "cds"
+            ],
+            "schools": [
+                "County",
+                "District",
+                "School",
+                "CharterNum",
+                "FundingType",
+                "EdOpsName",
+                "GSoffered",
+                "AdmLName2",
+                "AdmLName3",
+                "CDSCode"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "frpm": [
+                "School Name",
+                "cdscode",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)"
+            ],
+            "satscores": [
+                "cds",
+                "numge1500"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "School Name",
+                "IRC",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)",
+                "Percent (%) Eligible Free (K-12)",
+                "FRPM Count (K-12)",
+                "Percent (%) Eligible FRPM (K-12)",
+                "Percent (%) Eligible Free (Ages 5-17)",
+                "Percent (%) Eligible FRPM (Ages 5-17)"
+            ],
+            "satscores": [
+                "sname",
+                "enroll12",
+                "NumGE1500",
+                "cds"
+            ],
+            "schools": [
+                "County",
+                "District",
+                "School",
+                "CharterNum",
+                "FundingType",
+                "EdOpsName",
+                "GSoffered",
+                "AdmLName2",
+                "AdmLName3",
+                "CDSCode"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify schools with the percent eligible for free meals in K-12 more than 0.1 and test takers with test scores greater than or equal to 1500. The hint provides the formula for the percent eligible for free meals, which involves the Free Meal Count (K-12) and Enrollment (K-12) columns. This suggests that we need the frpm table to access these columns. Additionally, the question mentions test scores, which are present in the satscores table. Finally, we need the schools table to link the CDSCode to the school names. Therefore, we need to select the frpm, satscores, and schools tables.",
+        "selected_tables": [
+            "frpm",
+            "satscores",
+            "schools"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "frpm": [
+                "School Name",
+                "cdscode",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)"
+            ],
+            "satscores": [
+                "cds",
+                "numge1500"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "frpm": [
+                "CDSCode",
+                "Free Meal Count (K-12)",
+                "Enrollment (K-12)"
+            ],
+            "satscores": [
+                "cds",
+                "NumGE1500"
+            ]
+        },
+        "model_selected_columns": {
+            "frpm": [
+                "CDSCode",
+                "Free Meal Count (K-12)",
+                "Enrollment (K-12)"
+            ],
+            "satscores": [
+                "cds",
+                "NumGE1500"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question requires identifying schools with a percent eligible for free meals in K-12 greater than 0.1 and test takers with test scores greater than or equal to 1500. The hint helps in identifying the relevant columns. The 'Free Meal Count (K-12)' and 'Enrollment (K-12)' columns from the frpm table are necessary to calculate the percent eligible for free meals. The 'NumGE1500' column from the satscores table is necessary to identify test takers with test scores greater than or equal to 1500. The 'CDSCode' column from the frpm and satscores tables is necessary to link the schools and test takers.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'frpm'.'School Name'"
+        ],
+        "correct_columns": {
+            "frpm": [
+                "School Name",
+                "cdscode",
+                "Enrollment (K-12)",
+                "Free Meal Count (K-12)"
+            ],
+            "satscores": [
+                "cds",
+                "numge1500"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT T1.CDSCode FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` > 0.1 AND T2.NumGE1500 > 0 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns needed for the query: CDSCode, Free Meal Count (K-12), Enrollment (K-12), and NumGE1500. I then joined the frpm and satscores tables on the CDSCode column. I used the condition Free Meal Count (K-12) / Enrollment (K-12) > 0.1 to filter schools with a percent eligible for free meals greater than 0.1. Finally, I used the condition NumGE1500 > 0 to filter test takers with a score greater than or equal to 1500.",
+        "SQL": "SELECT T1.CDSCode FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` > 0.1 AND T2.NumGE1500 >= 1500",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Give the names of the schools with the percent eligible for free meals in K-12 is more than 0.1 and test takers whose test score is greater than or equal to 1500?",
+            "Evidence": "Percent eligible for free meals = Free Meal Count (K-12) / Total (Enrollment (K-12)",
+            "GOLD_SQL": "SELECT T2.`School Name` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE CAST(T2.`Free Meal Count (K-12)` AS REAL) / T2.`Enrollment (K-12)` > 0.1 AND T1.NumGE1500 > 0",
+            "PREDICTED_SQL": "SELECT T1.CDSCode FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` > 0.1 AND T2.NumGE1500 > 0 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Give the names of the schools with the percent eligible for free meals in K-12 is more than 0.1 and test takers whose test score is greater than or equal to 1500?",
+            "Evidence": "Percent eligible for free meals = Free Meal Count (K-12) / Total (Enrollment (K-12)",
+            "GOLD_SQL": "SELECT T2.`School Name` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE CAST(T2.`Free Meal Count (K-12)` AS REAL) / T2.`Enrollment (K-12)` > 0.1 AND T1.NumGE1500 > 0",
+            "PREDICTED_SQL": "SELECT T1.CDSCode FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` > 0.1 AND T2.NumGE1500 >= 1500"
+        },
+        "status": "success"
+    }
+]

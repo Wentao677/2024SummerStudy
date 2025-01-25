@@ -1,0 +1,226 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "normal level",
+            "anti-ribonuclear protein",
+            "RNP",
+            "hospital",
+            "admitted",
+            "Admission",
+            "DISTINCT",
+            "patients",
+            "anti-ribonuclear protein",
+            "normal level",
+            "RNP",
+            "Admission",
+            "hospital"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "RNP",
+                "RNP"
+            ],
+            "Patient": [
+                "Admission",
+                "Admission"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "rnp": {
+                    "column_name": "anti-ribonuclear protein",
+                    "column_description": "anti-ribonuclear protein",
+                    "value_description": "Commonsense evidence:  Normal range: N= -, +-"
+                },
+                "u-pro": {
+                    "column_name": "proteinuria",
+                    "column_description": "proteinuria",
+                    "value_description": "Commonsense evidence:  Normal range: 0 < N < 30"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "ana": {
+                    "column_name": "anti-nucleus antibody",
+                    "column_description": "anti-nucleus antibody concentration",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "Diagnosis",
+                "KCT",
+                "RVVT",
+                "LAC",
+                "ID"
+            ],
+            "Patient": [
+                "First Date",
+                "Admission",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "RA",
+                "RF",
+                "C3",
+                "RNP",
+                "SM",
+                "SC170",
+                "SSA",
+                "SSB",
+                "CENTROMEA",
+                "DNA",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "rnp"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "First Date",
+                "Admission",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "RA",
+                "RF",
+                "C3",
+                "RNP",
+                "SM",
+                "SC170",
+                "SSA",
+                "SSB",
+                "CENTROMEA",
+                "DNA",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with a normal level of anti-ribonuclear protein and admitted to the hospital. The hint clarifies that a normal level means RNP = '-' or '+-', and admitted to the hospital means Admission = '+'. This information helps identify the relevant columns and tables. The Patient table is necessary to find the patients, and the Laboratory table is necessary to check the RNP level. The Examination table is not necessary in this case, as it only provides additional information about the diagnosis and does not contain the required information.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "rnp"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {},
+        "model_selected_columns": {},
+        "chain_of_thought_reasoning": "",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient",
+            "laboratory"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "rnp"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(DISTINCT PatientID) FROM `2020-01-01` WHERE RNP IN ('-', '+-') AND Admission = '+' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the conditions required: normal level of anti-ribonuclear protein (RNP = '-' or '+-') and admitted to the hospital (Admission = '+'). I then looked at the database schema to determine the relevant tables and columns. I decided to join the Patient and Laboratory tables to access the required information. I used the IN operator to check for the normal level of anti-ribonuclear protein and the Admission column to check for hospital admission. Finally, I used the COUNT(DISTINCT) function to count the number of unique patients that meet the conditions.",
+        "SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient T1 JOIN Laboratory T2 ON T1.ID = T2.ID WHERE T2.RNP IN ('-', '+-') AND T1.Admission = '+'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "no such table: 2020-01-01",
+            "Question": "How many patients have a normal level of anti-ribonuclear protein and have been admitted to the hospital?",
+            "Evidence": "normal level of anti-ribonuclear protein refers to RNP = '-', '+-'; And'-' means 'negative'; '+-' refers to '0'; admitted to the hospital refers to Admission = '+'; Should consider DISTINCT in the final result;",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.RNP = 'negative' OR T2.RNP = '0' AND T1.Admission = '+'",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT PatientID) FROM `2020-01-01` WHERE RNP IN ('-', '+-') AND Admission = '+' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How many patients have a normal level of anti-ribonuclear protein and have been admitted to the hospital?",
+            "Evidence": "normal level of anti-ribonuclear protein refers to RNP = '-', '+-'; And'-' means 'negative'; '+-' refers to '0'; admitted to the hospital refers to Admission = '+'; Should consider DISTINCT in the final result;",
+            "GOLD_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.RNP = 'negative' OR T2.RNP = '0' AND T1.Admission = '+'",
+            "PREDICTED_SQL": "SELECT COUNT(DISTINCT T1.ID) FROM Patient T1 JOIN Laboratory T2 ON T1.ID = T2.ID WHERE T2.RNP IN ('-', '+-') AND T1.Admission = '+'"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,251 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "total cholesterol",
+            "normal",
+            "T-CHO",
+            "250",
+            "negative measure",
+            "degree of coagulation",
+            "KCT",
+            "patients",
+            "measure of degree"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "T-CHO"
+            ],
+            "Examination": [
+                "KCT"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "1250"
+                ],
+                "RNP": [
+                    "negative"
+                ],
+                "SC170": [
+                    "negative"
+                ],
+                "SM": [
+                    "negative"
+                ],
+                "CENTROMEA": [
+                    "negative"
+                ],
+                "SSB": [
+                    "negative"
+                ],
+                "SSA": [
+                    "negative"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "rvvt": {
+                    "column_name": "measure of degree of coagulation",
+                    "column_description": "measure of degree of coagulation",
+                    "value_description": "+: positive  -: negative"
+                },
+                "kct": {
+                    "column_name": "measure of degree of coagulation",
+                    "column_description": "measure of degree of coagulation",
+                    "value_description": "+: positive  -: negative"
+                },
+                "lac": {
+                    "column_name": "measure of degree of coagulation",
+                    "column_description": "measure of degree of coagulation",
+                    "value_description": "+: positive  -: negative"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "KCT",
+                "RVVT",
+                "LAC",
+                "ID"
+            ],
+            "Patient": [
+                "ID"
+            ],
+            "Laboratory": [
+                "T-CHO",
+                "APTT",
+                "RNP",
+                "SM",
+                "SC170",
+                "SSA",
+                "SSB",
+                "CENTROMEA",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ],
+            "examination": [
+                "id",
+                "kct"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "T-CHO",
+                "APTT",
+                "RNP",
+                "SM",
+                "SC170",
+                "SSA",
+                "SSB",
+                "CENTROMEA",
+                "ID",
+                "Date"
+            ],
+            "Examination": [
+                "KCT",
+                "RVVT",
+                "LAC",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with total cholesterol higher than normal and a negative measure of degree of coagulation. The hint clarifies that total cholesterol is higher than normal when T-CHO >= 250 and negative measure of degree of coagulation when KCT = '-'. To answer this question, we need to identify patients with T-CHO >= 250 and KCT = '-'. The database schema provides the necessary information in the Laboratory and Examination tables.",
+        "selected_tables": [
+            "Laboratory",
+            "Examination"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ],
+            "examination": [
+                "id",
+                "kct"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO"
+            ],
+            "Examination": [
+                "ID",
+                "KCT"
+            ]
+        },
+        "model_selected_columns": {
+            "Laboratory": [
+                "ID",
+                "Date",
+                "T-CHO"
+            ],
+            "Examination": [
+                "ID",
+                "KCT"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with total cholesterol higher than normal and a negative measure of degree of coagulation. The hint provides the conditions for these two criteria: T-CHO >= 250 and KCT = '-'. We need to identify the columns that will help us filter these values. The 'T-CHO' column in the Laboratory table represents total cholesterol, and the 'KCT' column in the Examination table represents the measure of degree of coagulation. We also need to link the patients to their examinations, which is done by matching the ID in the Laboratory table with the ID in the Examination table.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "patient"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ],
+            "examination": [
+                "id",
+                "kct"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.`T-CHO` >= 250 AND T2.KCT = '-' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "First, I identified the columns mentioned in the question: total cholesterol (T-CHO) and measure of degree of coagulation (KCT). Then, I used the hint to determine that total cholesterol is higher than normal when T-CHO >= 250 and negative measure of degree of coagulation when KCT = '-'. I joined the Laboratory and Examination tables on the ID column and filtered the results based on the conditions. Finally, I used COUNT to count the number of patients who meet the conditions.",
+        "SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.`T-CHO` >= 250 AND T2.KCT = '-'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patients whose total cholesterol is higher than normal, how many of them have a negative measure of degree of coagulation?",
+            "Evidence": "total cholesterol is higher than normal refers to `T-CHO` > = 250; negative measure of degree of coagulation refers to KCT = '-' ;",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID INNER JOIN Examination AS T3 ON T1.ID = T3.ID WHERE T2.`T-CHO` >= 250 AND T3.KCT = '-'",
+            "PREDICTED_SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.`T-CHO` >= 250 AND T2.KCT = '-' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patients whose total cholesterol is higher than normal, how many of them have a negative measure of degree of coagulation?",
+            "Evidence": "total cholesterol is higher than normal refers to `T-CHO` > = 250; negative measure of degree of coagulation refers to KCT = '-' ;",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID INNER JOIN Examination AS T3 ON T1.ID = T3.ID WHERE T2.`T-CHO` >= 250 AND T3.KCT = '-'",
+            "PREDICTED_SQL": "SELECT COUNT(T1.ID) FROM Laboratory AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE T1.`T-CHO` >= 250 AND T2.KCT = '-'"
+        },
+        "status": "success"
+    }
+]

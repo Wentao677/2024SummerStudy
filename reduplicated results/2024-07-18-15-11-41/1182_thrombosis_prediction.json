@@ -1,0 +1,231 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "hospital",
+            "1991/6/13",
+            "SJS",
+            "Laboratory tests",
+            "total number",
+            "COUNT(ID)",
+            "Date",
+            "First Date",
+            "1995"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "Date",
+                "Date"
+            ]
+        },
+        "similar_values": {
+            "Patient": {
+                "Diagnosis": [
+                    "SJS"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                }
+            },
+            "examination": {
+                "ana pattern": {
+                    "column_name": "pattern observed in the sheet of ANA examination",
+                    "column_description": "pattern observed in the sheet of ANA examination",
+                    "value_description": ""
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            },
+            "laboratory": {
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Examination Date",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "TP",
+                "SSA"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Description",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "TP",
+                "SSA"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the total number of laboratory tests for a specific patient who first came to the hospital on a certain date and was diagnosed with a specific disease. The hint provides the exact dates and diagnosis mentioned in the question. Based on this, we need to identify the patient and then find the corresponding laboratory tests. The 'First Date' column in the Patient table can be used to identify the patient, and the 'Date' column in the Laboratory table can be used to filter the laboratory tests by year. The 'Diagnosis' column in the Patient table can be used to filter the patient by diagnosis. Finally, the 'ID' column in the Laboratory table can be used to count the total number of laboratory tests.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "First Date",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for a specific patient who first came to the hospital on a certain date, was diagnosed with a specific disease, and has a total number of laboratory tests in a specific year. The hint provides the exact values for these conditions, which helps to identify the necessary columns. We need to filter the patient based on the 'First Date' and 'Diagnosis', and then count the number of laboratory tests in the 'Date' column for that patient in the specified year.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "First Date",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.`First Date` = '1991-06-13' AND T1.Diagnosis = 'SJS' AND T2.Date LIKE '1995%' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the patient who first came to the hospital on 1991/6/13 and was diagnosed with SJS. I joined the Patient table with the Laboratory table on the ID column. I then filtered the results to only include the patient with the correct first date and diagnosis. Finally, I counted the number of laboratory tests in 1995 by filtering the Date column to include only dates in 1995.",
+        "SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.`First Date` = '1991-06-13' AND T1.Diagnosis = 'SJS' AND T2.Date LIKE '1995-%'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patient who first came to the hospital on 1991/6/13 who was diagnosed with SJS, what is the total number of his/her Laboratory tests in 1995?",
+            "Evidence": "1991/6/13 refers to `First Date` = '1991-06-13'; 'SJS' refers to Diagnosis; total number of his/her Laboratory tests refers to COUNT(ID); 1995 refers to Date",
+            "GOLD_SQL": "SELECT COUNT(*) FROM Laboratory WHERE ID = ( SELECT ID FROM Patient WHERE `First Date` = '1991-06-13' AND Diagnosis = 'SJS' ) AND STRFTIME('%Y', Date) = '1995'",
+            "PREDICTED_SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.`First Date` = '1991-06-13' AND T1.Diagnosis = 'SJS' AND T2.Date LIKE '1995%' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For the patient who first came to the hospital on 1991/6/13 who was diagnosed with SJS, what is the total number of his/her Laboratory tests in 1995?",
+            "Evidence": "1991/6/13 refers to `First Date` = '1991-06-13'; 'SJS' refers to Diagnosis; total number of his/her Laboratory tests refers to COUNT(ID); 1995 refers to Date",
+            "GOLD_SQL": "SELECT COUNT(*) FROM Laboratory WHERE ID = ( SELECT ID FROM Patient WHERE `First Date` = '1991-06-13' AND Diagnosis = 'SJS' ) AND STRFTIME('%Y', Date) = '1995'",
+            "PREDICTED_SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.`First Date` = '1991-06-13' AND T1.Diagnosis = 'SJS' AND T2.Date LIKE '1995-%'"
+        },
+        "status": "success"
+    }
+]

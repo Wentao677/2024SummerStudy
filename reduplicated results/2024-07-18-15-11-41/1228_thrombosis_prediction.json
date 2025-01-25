@@ -1,0 +1,247 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patients",
+            "diagnosis",
+            "triglyceride",
+            "TG",
+            "index",
+            "normal range",
+            "TG > 300"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "TG",
+                "TG"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "U-PRO": [
+                    "300"
+                ],
+                "RF": [
+                    "300.2"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "tg": {
+                    "column_name": "triglyceride",
+                    "column_description": "triglyceride",
+                    "value_description": "Commonsense evidence:  Normal range: N < 200"
+                },
+                "t-cho": {
+                    "column_name": "total cholesterol",
+                    "column_description": "total cholesterol",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "glu": {
+                    "column_name": "blood glucose",
+                    "column_description": "blood glucose",
+                    "value_description": "Commonsense evidence: Normal range: N < 180"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "diagnosis": {
+                    "column_name": "",
+                    "column_description": "disease names",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Diagnosis",
+                "KCT"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "GPT",
+                "UN",
+                "TG",
+                "PLT",
+                "PIC",
+                "TAT",
+                "U-PRO",
+                "IGM",
+                "RF",
+                "RNP",
+                "SM",
+                "SSA",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "tg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "GPT",
+                "UN",
+                "TG",
+                "PLT",
+                "PIC",
+                "TAT",
+                "U-PRO",
+                "IGM",
+                "RF",
+                "RNP",
+                "SM",
+                "SSA",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for a list of patients with a triglyceride (TG) index greater than 100 of the normal range, which is defined as TG > 300. This requires accessing the patient's diagnosis and triglyceride value. The hint provides the specific value for the normal range, which helps to identify the relevant columns and tables. The Examination table is not necessary as it only contains a diagnosis, which is not the primary focus of the question. The Patient table is necessary to retrieve the patient's ID, which is used to link to the Laboratory table. The Laboratory table is necessary to retrieve the triglyceride value (TG) and link it to the patient. Therefore, the necessary tables are Patient and Laboratory.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "tg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "TG"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "TG"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with triglyceride (TG) index greater than 100 of the normal range, which is specified as TG > 300. This hint directs our attention to the Laboratory table, where TG is a column. We also need the Patient table to retrieve patient information. The Diagnosis column in the Patient table is necessary to provide the list of patients. Finally, the Date column in the Laboratory table is not necessary for this question, but it's included in the primary key, so we include it to ensure we get the correct laboratory results for each patient.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "diagnosis"
+            ],
+            "laboratory": [
+                "id",
+                "tg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T1.ID, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG > 300 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I carefully read the question and the database schema to understand what is being asked. I noticed that the question asks for patients with triglyceride (TG) index greater than 100 of the normal range, which is TG > 300. I then used the database schema to identify the relevant tables and columns. I joined the Patient table with the Laboratory table on the ID column, and then filtered the results to only include patients with TG > 300. Finally, I selected the ID and Diagnosis columns from the Patient table.",
+        "SQL": "SELECT DISTINCT T1.ID, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG > 300",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Provide list of patients and their diagnosis with triglyceride (TG) index greater than 100 of the normal range?",
+            "Evidence": "triglyceride (TG) index greater than 100 of the normal range refers to TG > 300;",
+            "GOLD_SQL": "SELECT T1.ID, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG > 300",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG > 300 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Provide list of patients and their diagnosis with triglyceride (TG) index greater than 100 of the normal range?",
+            "Evidence": "triglyceride (TG) index greater than 100 of the normal range refers to TG > 300;",
+            "GOLD_SQL": "SELECT T1.ID, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG > 300",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG > 300"
+        },
+        "status": "success"
+    }
+]

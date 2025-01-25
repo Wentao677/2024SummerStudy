@@ -1,0 +1,201 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "SLE",
+            "outpatient",
+            "inpatient",
+            "followed up treatment",
+            "ratio",
+            "patient",
+            "Diagnosis",
+            "Admission",
+            "ID",
+            "DIVIDE(COUNT(ID))"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Diagnosis",
+                "Admission",
+                "ID"
+            ]
+        },
+        "similar_values": {
+            "Patient": {
+                "Diagnosis": [
+                    "SLE"
+                ]
+            },
+            "Examination": {
+                "Diagnosis": [
+                    "SLE"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "ana pattern": {
+                    "column_name": "pattern observed in the sheet of ANA examination",
+                    "column_description": "pattern observed in the sheet of ANA examination",
+                    "value_description": ""
+                }
+            },
+            "laboratory": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Patient": [
+                "Admission",
+                "Diagnosis",
+                "ID"
+            ],
+            "Laboratory": [
+                "SSA",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "admission"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Admission",
+                "Diagnosis",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patients. The hint provides a clear direction on how to calculate this ratio. The calculation involves counting the number of 'SLE' diagnosed patients with Admission = '+' (inpatient) and Admission = '-' (outpatient). This requires information from the Patient table, which contains the Admission column. The Diagnosis column in the Patient table also matches the 'SLE' diagnosis mentioned in the question. The Examination table is not necessary as it only contains the Diagnosis column, which is also present in the Patient table. The Laboratory table is not relevant to this question as it only contains information about laboratory tests and does not have any columns related to Admission or Diagnosis.",
+        "selected_tables": [
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "admission"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Diagnosis",
+                "Admission"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "Diagnosis",
+                "Admission"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patients. The hint provides the calculation formula, which involves counting the number of patients with 'SLE' diagnosis and '+' admission (inpatient) and '-' admission (outpatient). Therefore, we need to select columns that allow us to filter patients by 'SLE' diagnosis and '+' or '-' admission.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "diagnosis",
+                "admission"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE  WHEN Admission = '+' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE  WHEN Admission = '-' THEN 1 ELSE 0 END) FROM Patient WHERE Diagnosis = 'SLE' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by understanding the question, which is asking for the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patients. I then looked at the database schema and identified the relevant columns: Diagnosis and Admission in the Patient table. I used a CASE statement to count the number of inpatient and outpatient patients with SLE diagnosis, and then divided the two counts to get the ratio.",
+        "SQL": "SELECT (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = '+') / (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = '-')",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient?",
+            "Evidence": "'SLE' diagnosed patient means Diagnosis = 'SLE'; inpatient refers to Admission = '+'; outpatient refers to Admission = '-'; calculation =  DIVIDE(COUNT(ID) where Diagnosis = 'SLE' and Admission = '+', COUNT(ID) where Diagnosis = 'SLE' and Admission = '-')",
+            "GOLD_SQL": "SELECT SUM(CASE WHEN Admission = '+' THEN 1.0 ELSE 0 END) / SUM(CASE WHEN Admission = '-' THEN 1 ELSE 0 END) FROM Patient WHERE Diagnosis = 'SLE'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE  WHEN Admission = '+' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE  WHEN Admission = '-' THEN 1 ELSE 0 END) FROM Patient WHERE Diagnosis = 'SLE' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient?",
+            "Evidence": "'SLE' diagnosed patient means Diagnosis = 'SLE'; inpatient refers to Admission = '+'; outpatient refers to Admission = '-'; calculation =  DIVIDE(COUNT(ID) where Diagnosis = 'SLE' and Admission = '+', COUNT(ID) where Diagnosis = 'SLE' and Admission = '-')",
+            "GOLD_SQL": "SELECT SUM(CASE WHEN Admission = '+' THEN 1.0 ELSE 0 END) / SUM(CASE WHEN Admission = '-' THEN 1 ELSE 0 END) FROM Patient WHERE Diagnosis = 'SLE'",
+            "PREDICTED_SQL": "SELECT (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = '+') / (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = '-')"
+        },
+        "status": "success"
+    }
+]

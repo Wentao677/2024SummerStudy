@@ -1,0 +1,260 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "thrombosis",
+            "level 2",
+            "ANA",
+            "S",
+            "anti-Cardiolip in antibody",
+            "IgM",
+            "20%",
+            "average",
+            "Thrombosis",
+            "ANA = 'S'",
+            "AVG",
+            "aCL IgM",
+            "MULTIPLY",
+            "CALCULATION"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Examination": [
+                "Thrombosis",
+                "ANA",
+                "Thrombosis",
+                "ANA",
+                "aCL IgM"
+            ],
+            "Laboratory": [
+                "IGM"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "thrombosis"
+                ],
+                "Symptoms": [
+                    "thrombophlebitis"
+                ]
+            },
+            "Laboratory": {
+                "SSA": [
+                    "1"
+                ],
+                "SM": [
+                    "1"
+                ],
+                "SSB": [
+                    "1"
+                ]
+            },
+            "Patient": {
+                "Diagnosis": [
+                    "ANA"
+                ],
+                "SEX": [
+                    ""
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "acl igm": {
+                    "column_name": "anti-Cardiolipin antibody (IgM)",
+                    "column_description": "anti-Cardiolipin antibody (IgM) concentration",
+                    "value_description": ""
+                },
+                "acl igg": {
+                    "column_name": "anti-Cardiolipin antibody (IgG)",
+                    "column_description": "anti-Cardiolipin antibody (IgG) concentration",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "acl iga": {
+                    "column_name": "anti-Cardiolipin antibody (IgA) concentration",
+                    "column_description": "anti-Cardiolipin antibody (IgA) concentration",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "aCL IgG",
+                "aCL IgM",
+                "ANA",
+                "ANA Pattern",
+                "aCL IgA",
+                "Diagnosis",
+                "KCT",
+                "RVVT",
+                "LAC",
+                "Symptoms",
+                "Thrombosis",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "IGG",
+                "IGA",
+                "IGM",
+                "SM",
+                "SSA",
+                "DNA",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "aCL IgM",
+                "thrombosis",
+                "ANA Pattern"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Examination": [
+                "aCL IgG",
+                "aCL IgM",
+                "ANA",
+                "ANA Pattern",
+                "aCL IgA",
+                "Diagnosis",
+                "KCT",
+                "RVVT",
+                "LAC",
+                "Symptoms",
+                "Thrombosis",
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "Diagnosis"
+            ],
+            "Laboratory": [
+                "IGG",
+                "IGA",
+                "IGM",
+                "SM",
+                "SSA",
+                "DNA",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with a degree of thrombosis level 2 (Thrombosis = 2) and ANA pattern of only S (ANA = 'S'). It also requires a level of anti-Cardiolip in antibody (IgM) 20% higher than average. The hint provides the necessary information to calculate the average and the 20% increase. The tables Examination and Patient are necessary to find the patients with the required thrombosis level and ANA pattern. The table Laboratory is necessary to find the average anti-Cardiolip in antibody (IgM) concentration and to calculate the 20% increase.",
+        "selected_tables": [
+            "Examination",
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "examination": [
+                "aCL IgM",
+                "thrombosis",
+                "ANA Pattern"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Examination": [
+                "Thrombosis",
+                "ANA",
+                "aCL IgM"
+            ],
+            "Patient": [
+                "ID"
+            ]
+        },
+        "model_selected_columns": {
+            "Examination": [
+                "Thrombosis",
+                "ANA",
+                "aCL IgM"
+            ],
+            "Patient": [
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with a degree of thrombosis level 2, ANA pattern of only S, and a level of anti-Cardiolip in antibody (IgM) 20% higher than average. The hint provides the exact values for thrombosis level 2 and ANA pattern of only S, and the calculation for the average anti-Cardiolip in antibody (IgM). We need to filter patients based on these conditions and calculate the average anti-Cardiolip in antibody (IgM) for the selected patients. The columns necessary for this query are those that contain the values mentioned in the question and hint, as well as the column for calculating the average anti-Cardiolip in antibody (IgM).",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'examination'.'ANA Pattern'"
+        ],
+        "correct_columns": {
+            "examination": [
+                "aCL IgM",
+                "thrombosis",
+                "ANA Pattern"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T1.ID) FROM Examination AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis = 2 AND T1.ANA = 'S' AND T1.`aCL IgM` > ( SELECT AVG(`aCL IgM`) FROM Examination ) * 1.2 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the conditions specified in the question: degree of thrombosis level 2, ANA pattern of only S, and anti-Cardiolip in antibody (IgM) 20% higher than average. I then constructed the SQL query by joining the Examination and Patient tables, filtering the results based on the conditions, and calculating the average anti-Cardiolip in antibody (IgM) concentration. Finally, I used the calculated average to determine the threshold for the anti-Cardiolip in antibody (IgM) concentration.",
+        "SQL": "SELECT COUNT(T1.ID) FROM Examination AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis = 2 AND T1.ANA = 'S' AND T1.`aCL IgM` > (SELECT AVG(`aCL IgM`) FROM Examination) * 1.2",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What number of patients with a degree of thrombosis level 2 and ANA pattern of only S, have a level of anti-Cardiolip in antibody (IgM) 20% higher than average?",
+            "Evidence": "thrombosis level 2 refers to Thrombosis = 2; ANA pattern of only S refers to ANA = 'S'; average anti-Cardiolip in antibody (IgM) refers to AVG(`aCL IgM`); calculation = MULTIPLY(AVG + AVG, 0.2)",
+            "GOLD_SQL": "SELECT COUNT(*) FROM Examination WHERE Thrombosis = 2 AND `ANA Pattern` = 'S' AND `aCL IgM` > (SELECT AVG(`aCL IgM`) * 1.2 FROM Examination WHERE Thrombosis = 2 AND `ANA Pattern` = 'S')",
+            "PREDICTED_SQL": "SELECT COUNT(T1.ID) FROM Examination AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis = 2 AND T1.ANA = 'S' AND T1.`aCL IgM` > ( SELECT AVG(`aCL IgM`) FROM Examination ) * 1.2 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "What number of patients with a degree of thrombosis level 2 and ANA pattern of only S, have a level of anti-Cardiolip in antibody (IgM) 20% higher than average?",
+            "Evidence": "thrombosis level 2 refers to Thrombosis = 2; ANA pattern of only S refers to ANA = 'S'; average anti-Cardiolip in antibody (IgM) refers to AVG(`aCL IgM`); calculation = MULTIPLY(AVG + AVG, 0.2)",
+            "GOLD_SQL": "SELECT COUNT(*) FROM Examination WHERE Thrombosis = 2 AND `ANA Pattern` = 'S' AND `aCL IgM` > (SELECT AVG(`aCL IgM`) * 1.2 FROM Examination WHERE Thrombosis = 2 AND `ANA Pattern` = 'S')",
+            "PREDICTED_SQL": "SELECT COUNT(T1.ID) FROM Examination AS T1 INNER JOIN Patient AS T2 ON T1.ID = T2.ID WHERE T1.Thrombosis = 2 AND T1.ANA = 'S' AND T1.`aCL IgM` > (SELECT AVG(`aCL IgM`) FROM Examination) * 1.2"
+        },
+        "status": "success"
+    }
+]

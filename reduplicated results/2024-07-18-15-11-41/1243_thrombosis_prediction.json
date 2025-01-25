@@ -1,0 +1,235 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "older",
+            "55 years old",
+            "female",
+            "abnormal prothrombin time",
+            "PT",
+            "percentage",
+            "current_timestamp",
+            "Birthday",
+            "year",
+            "SUM",
+            "PT > = 14",
+            "SEX",
+            "F",
+            "sex = 'F'",
+            "DIVIDE",
+            "SUM(PT > = 14 AND SEX = 'F')",
+            "SUM(PT > = 14)",
+            "current_timestamp",
+            "Birthday",
+            "year",
+            "SUBTRACT",
+            "year(current_timestamp)",
+            "year(Birthday)",
+            "older than 55 years old"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "PT",
+                "PT"
+            ],
+            "Patient": [
+                "Birthday",
+                "SEX",
+                "SEX",
+                "SEX",
+                "Birthday"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "U-PRO": [
+                    "30"
+                ],
+                "RF": [
+                    "34",
+                    "54"
+                ]
+            },
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "pt": {
+                    "column_name": "prothrombin time",
+                    "column_description": "prothrombin time",
+                    "value_description": "Commonsense evidence:  Normal range: N < 14"
+                },
+                "aptt": {
+                    "column_name": "activated partial prothrombin time",
+                    "column_description": "activated partial prothrombin time",
+                    "value_description": "Commonsense evidence:  Normal range: N < 45"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID"
+            ],
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "PT",
+                "APTT",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday",
+                "sex"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "PT",
+                "APTT",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question requires identifying patients older than 55 years old, determining the percentage of female patients with abnormal prothrombin time (PT), and linking these patients to their corresponding sex and PT values. The hint provides the necessary conditions for identifying these patients and calculating the percentage. Based on the database schema, we need to join the Examination, Patient, and Laboratory tables to gather the required information.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday",
+                "sex"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "PT"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "PT"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients older than 55 years old, with abnormal prothrombin time (PT), and the percentage of female patients among them. The hint provides the necessary conditions for filtering patients by age and PT value. The column 'Birthday' is necessary for calculating the patient's age, and 'PT' is necessary for identifying abnormal PT values. The column 'SEX' is necessary for identifying female patients. Finally, the 'Patient' table is necessary for linking the patient's information to their laboratory test results.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "birthday",
+                "sex"
+            ],
+            "laboratory": [
+                "id",
+                "pt"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.PT >= 14 AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 55 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "First, I identified the conditions specified in the question: patients older than 55 years old and abnormal prothrombin time (PT). I then broke down the conditions into smaller parts: patients older than 55 years old (SUBTRACT(year(current_timestamp), year(Birthday)) > 55) and abnormal prothrombin time (PT >= 14). I used the hint provided to help me with the conditions. Next, I determined that the percentage of female patients with abnormal PT is the number of female patients with abnormal PT divided by the total number of patients with abnormal PT, multiplied by 100. I used the COUNT and SUM functions to calculate this percentage. Finally, I joined the Patient and Laboratory tables to retrieve the necessary information and applied the conditions to filter the results.",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T1.SEX = 'F' AND T2.PT >= 14 THEN 1 ELSE NULL END) AS REAL) * 100.0 / CAST(COUNT(CASE WHEN T2.PT >= 14 THEN 1 ELSE NULL END) AS REAL) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 55 AND T2.PT >= 14",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For all patients who are older than 55 years old, what is the percentage of female who has abnormal prothrombin time (PT)?",
+            "Evidence": "older than 55 years old = SUBTRACT(year(current_timestamp), year(Birthday)) > 55; abnormal prothrombin time (PT) refers to PT > = 14; percentage = DIVIDE(SUM(PT > = 14 AND SEX = 'F'), SUM(PT > = 14)) * 100; female refers to sex = 'F'; ",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN T2.PT >= 14 AND T1.SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) > 55",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.PT >= 14 AND strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 55 "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For all patients who are older than 55 years old, what is the percentage of female who has abnormal prothrombin time (PT)?",
+            "Evidence": "older than 55 years old = SUBTRACT(year(current_timestamp), year(Birthday)) > 55; abnormal prothrombin time (PT) refers to PT > = 14; percentage = DIVIDE(SUM(PT > = 14 AND SEX = 'F'), SUM(PT > = 14)) * 100; female refers to sex = 'F'; ",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN T2.PT >= 14 AND T1.SEX = 'F' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) > 55",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(CASE WHEN T1.SEX = 'F' AND T2.PT >= 14 THEN 1 ELSE NULL END) AS REAL) * 100.0 / CAST(COUNT(CASE WHEN T2.PT >= 14 THEN 1 ELSE NULL END) AS REAL) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) > 55 AND T2.PT >= 14"
+        },
+        "status": "success"
+    }
+]

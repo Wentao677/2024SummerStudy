@@ -1,0 +1,210 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "patient",
+            "born",
+            "Year",
+            "1930",
+            "1940",
+            "inpatient",
+            "Admission",
+            "Birthday",
+            "between",
+            "percent"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "Admission",
+                "Birthday"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1930"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "examination": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "examination date": {
+                    "column_name": "",
+                    "column_description": "Examination Date",
+                    "value_description": ""
+                }
+            },
+            "laboratory": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "KCT",
+                "ID"
+            ],
+            "Patient": [
+                "Birthday",
+                "Admission",
+                "ID"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "birthday",
+                "admission"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Birthday",
+                "Admission",
+                "ID"
+            ],
+            "Examination": [
+                "KCT",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of patients born between 1930 to 1940 who were inpatients. The hint clarifies that 'patient born between Year 1930 to 1940' refers to the year(Birthday) between '1930-01-01' and '1940-12-12', and 'inpatient' refers to Admission = '+'. To answer this question, we need to identify patients born within this time frame and filter those who were inpatients. The tables Examination and Patient are necessary to identify patients, but we also need the Patient table to filter patients based on their birth year. The Laboratory table is not necessary for this question.",
+        "selected_tables": [
+            "Patient",
+            "Examination"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "birthday",
+                "admission"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "Birthday",
+                "Admission"
+            ],
+            "Examination": [
+                "ID"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "Birthday",
+                "Admission"
+            ],
+            "Examination": [
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients born between 1930 and 1940, and the hint clarifies that 'inpatient' refers to Admission = '+'. Therefore, we need columns that filter patients by birth year and admission status.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "birthday",
+                "admission"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.Admission = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE strftime('%Y', T1.Birthday) BETWEEN '1930' AND '1940' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns and tables. The question asks for the percentage of patients born between 1930 and 1940 who were inpatients. This means I need to filter patients by their birth year and admission status. I used the hint provided to convert the birth year range to a date range. I then joined the Patient and Examination tables on the ID column and filtered the results using the WHERE clause. I used the COUNT function to count the total number of patients and the SUM function with a CASE statement to count the number of inpatients. I then divided the sum of inpatients by the total count and multiplied by 100 to get the percentage.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(ID) FROM Patient INNER JOIN Examination ON ID = ID WHERE strftime('%Y', Birthday) BETWEEN '1930' AND '1940'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For patient born between Year 1930 to 1940, how many percent of them were inpatient?",
+            "Evidence": "patient born between Year 1930 to 1940 refers to year(Birthday) BETWEEN '1930-01-01' AND '1940-12-31'; inpatient refers to Admission = '+'",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM Patient WHERE STRFTIME('%Y', Birthday) BETWEEN '1930' AND '1940'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.Admission = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID = T2.ID WHERE strftime('%Y', T1.Birthday) BETWEEN '1930' AND '1940' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "ambiguous column name: ID",
+            "Question": "For patient born between Year 1930 to 1940, how many percent of them were inpatient?",
+            "Evidence": "patient born between Year 1930 to 1940 refers to year(Birthday) BETWEEN '1930-01-01' AND '1940-12-31'; inpatient refers to Admission = '+'",
+            "GOLD_SQL": "SELECT CAST(SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM Patient WHERE STRFTIME('%Y', Birthday) BETWEEN '1930' AND '1940'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(ID) FROM Patient INNER JOIN Examination ON ID = ID WHERE strftime('%Y', Birthday) BETWEEN '1930' AND '1940'"
+        },
+        "status": "success"
+    }
+]

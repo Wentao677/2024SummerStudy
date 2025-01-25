@@ -1,0 +1,269 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Harlan",
+            "votes",
+            "DisplayName"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "users": [
+                "DisplayName"
+            ]
+        },
+        "similar_values": {
+            "users": {
+                "DisplayName": [
+                    "Harlan"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "users": {
+                "upvotes": {
+                    "column_name": "",
+                    "column_description": "the number of upvotes",
+                    "value_description": ""
+                },
+                "downvotes": {
+                    "column_name": "",
+                    "column_description": "the number of downvotes",
+                    "value_description": ""
+                },
+                "displayname": {
+                    "column_name": "Display Name",
+                    "column_description": "the user's display name",
+                    "value_description": ""
+                }
+            },
+            "votes": {
+                "creationdate": {
+                    "column_name": "Creation Date",
+                    "column_description": "the creation date of the vote",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "the vote id",
+                    "value_description": ""
+                },
+                "postid": {
+                    "column_name": "Post Id",
+                    "column_description": "the id of the post that is voted",
+                    "value_description": ""
+                },
+                "votetypeid": {
+                    "column_name": "Vote Type Id",
+                    "column_description": "the id of the vote type",
+                    "value_description": ""
+                }
+            },
+            "comments": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                }
+            },
+            "posthistory": {
+                "userdisplayname": {
+                    "column_name": "User Display Name",
+                    "column_description": "user's display name",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "badges": [
+                "UserId",
+                "Id"
+            ],
+            "comments": [
+                "UserId",
+                "UserDisplayName",
+                "Id",
+                "PostId"
+            ],
+            "postHistory": [
+                "UserId",
+                "UserDisplayName",
+                "Id",
+                "PostId"
+            ],
+            "postLinks": [
+                "Id",
+                "PostId",
+                "RelatedPostId"
+            ],
+            "posts": [
+                "OwnerDisplayName",
+                "LastEditorDisplayName",
+                "Id",
+                "OwnerUserId",
+                "LastEditorUserId",
+                "ParentId"
+            ],
+            "tags": [
+                "Id",
+                "ExcerptPostId"
+            ],
+            "users": [
+                "Id",
+                "DisplayName",
+                "UpVotes"
+            ],
+            "votes": [
+                "UserId",
+                "Id",
+                "PostId"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "displayname"
+            ],
+            "posthistory": [
+                "userid",
+                "postid"
+            ],
+            "votes": [
+                "postid"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "users": [
+                "Id",
+                "DisplayName",
+                "UpVotes"
+            ],
+            "votes": [
+                "UserId",
+                "Id",
+                "PostId"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the number of votes made by Harlan, which is a specific user. The hint provides the user's display name, 'Harlan'. This information is crucial in identifying the relevant tables. The 'users' table contains information about users, including their display names. The 'votes' table contains information about votes, including the user who made the vote. Therefore, we need to use both the 'users' and 'votes' tables to answer the question.",
+        "selected_tables": [
+            "users",
+            "votes"
+        ],
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "posthistory"
+        ],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "users": [
+                "id",
+                "displayname"
+            ],
+            "posthistory": [
+                "userid",
+                "postid"
+            ],
+            "votes": [
+                "postid"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "users": [
+                "Id",
+                "DisplayName"
+            ],
+            "votes": [
+                "UserId",
+                "Id"
+            ]
+        },
+        "model_selected_columns": {
+            "users": [
+                "Id",
+                "DisplayName"
+            ],
+            "votes": [
+                "UserId",
+                "Id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks how many votes were made by Harlan. The hint provides the exact display name 'Harlan' which is present in the users table. Therefore, we need to identify the user with the display name 'Harlan' and then count the votes made by that user. The votes table has a foreign key referencing the users table, which allows us to link votes to their respective users.",
+        "missing_table_status": "missing_table",
+        "missing_tables": [
+            "posthistory"
+        ],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'votes'.'postid'"
+        ],
+        "correct_columns": {
+            "users": [
+                "id",
+                "displayname"
+            ],
+            "posthistory": [
+                "userid",
+                "postid"
+            ],
+            "votes": [
+                "postid"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T2.Id) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.DisplayName = 'Harlan' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the column that contains the display name of the user, which is 'DisplayName' in the 'users' table. Then, I joined the 'users' table with the 'votes' table on the 'UserId' column. Finally, I filtered the results to only include votes made by the user with the display name 'Harlan'.",
+        "SQL": "SELECT COUNT(T2.Id) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.DisplayName = 'Harlan'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How many votes were made by Harlan?",
+            "Evidence": "DisplayName = 'Harlan';",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN votes AS T3 ON T3.PostId = T2.PostId WHERE T1.DisplayName = 'Harlan'",
+            "PREDICTED_SQL": "SELECT COUNT(T2.Id) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.DisplayName = 'Harlan' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "How many votes were made by Harlan?",
+            "Evidence": "DisplayName = 'Harlan';",
+            "GOLD_SQL": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN votes AS T3 ON T3.PostId = T2.PostId WHERE T1.DisplayName = 'Harlan'",
+            "PREDICTED_SQL": "SELECT COUNT(T2.Id) FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.DisplayName = 'Harlan'"
+        },
+        "status": "success"
+    }
+]

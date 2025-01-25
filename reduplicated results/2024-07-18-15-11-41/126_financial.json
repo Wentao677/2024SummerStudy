@@ -1,0 +1,287 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Decin",
+            "district",
+            "account",
+            "percentage",
+            "1993",
+            "A2",
+            "information"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "trans": [
+                "account"
+            ],
+            "district": [
+                "A2"
+            ]
+        },
+        "similar_values": {
+            "district": {
+                "A2": [
+                    "Decin"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "district": {
+                "a10": {
+                    "column_name": "ratio of urban inhabitants",
+                    "column_description": "ratio of urban inhabitants",
+                    "value_description": ""
+                },
+                "a12": {
+                    "column_name": "unemployment rate 1995",
+                    "column_description": "unemployment rate 1995",
+                    "value_description": ""
+                },
+                "a6": {
+                    "column_name": "no. of municipalities with inhabitants 500-1999",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                },
+                "a2": {
+                    "column_name": "district_name",
+                    "column_description": "district_name",
+                    "value_description": ""
+                },
+                "a7": {
+                    "column_name": "no. of municipalities with inhabitants 2000-9999",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                },
+                "a8": {
+                    "column_name": "no. of municipalities with inhabitants > 10000",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                },
+                "a5": {
+                    "column_name": "no. of municipalities with inhabitants < 499",
+                    "column_description": "municipality < district < region",
+                    "value_description": ""
+                },
+                "a15": {
+                    "column_name": "no. of committed crimes 1995",
+                    "column_description": "no. of committed crimes 1995",
+                    "value_description": ""
+                }
+            },
+            "order": {
+                "account_id": {
+                    "column_name": "",
+                    "column_description": "id number of account",
+                    "value_description": ""
+                }
+            },
+            "disp": {
+                "account_id": {
+                    "column_name": "",
+                    "column_description": "id number of account",
+                    "value_description": ""
+                }
+            },
+            "account": {
+                "date": {
+                    "column_name": "date",
+                    "column_description": "the creation date of the account",
+                    "value_description": "in the form YYMMDD"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "district_id",
+                "date",
+                "account_id"
+            ],
+            "card": [
+                "issued",
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "district_id",
+                "client_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id",
+                "A2",
+                "A3",
+                "A4",
+                "A9",
+                "A10",
+                "A12",
+                "A14",
+                "A16"
+            ],
+            "loan": [
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "account_id",
+                "order_id"
+            ],
+            "trans": [
+                "date",
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a2"
+            ],
+            "account": [
+                "district_id",
+                "account_id",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "account": [
+                "district_id",
+                "date",
+                "account_id"
+            ],
+            "district": [
+                "district_id",
+                "A2",
+                "A3",
+                "A4",
+                "A9",
+                "A10",
+                "A12",
+                "A14",
+                "A16"
+            ],
+            "trans": [
+                "account",
+                "trans_id",
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the percentage of accounts from 'Decin' district for all accounts opened in 1993. The hint suggests that A2 contains the information about district. This implies that the district table is necessary to identify the accounts from 'Decin' district. The account table is necessary to identify the accounts opened in 1993. The account table also contains the district_id foreign key, which links it to the district table. Therefore, both the account and district tables are necessary to answer the question.",
+        "selected_tables": [
+            "account",
+            "district"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a2"
+            ],
+            "account": [
+                "district_id",
+                "account_id",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "date"
+            ],
+            "district": [
+                "A2"
+            ]
+        },
+        "model_selected_columns": {
+            "account": [
+                "account_id",
+                "date"
+            ],
+            "district": [
+                "A2"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the percentage of accounts from 'Decin' district for all accounts opened in 1993. The hint points to A2 column in the district table, which contains information about the district. The date column in the account table is used to filter accounts opened in 1993. Therefore, we need columns from the account and district tables.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'district'.'district_id'",
+            "'account'.'district_id'"
+        ],
+        "correct_columns": {
+            "district": [
+                "district_id",
+                "a2"
+            ],
+            "account": [
+                "district_id",
+                "account_id",
+                "date"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.date LIKE '1993%' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A2 = 'Decin' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the relevant columns and tables. The question asks for the percentage of accounts from 'Decin' district for all accounts opened in 1993. The district information is stored in the 'A2' column of the 'district' table, and the account creation date is stored in the 'date' column of the 'account' table. I joined the 'account' and 'district' tables on the 'district_id' column. I then filtered the results to only include accounts opened in 1993 and from the 'Decin' district. To calculate the percentage, I used the SUM and COUNT functions and cast the result to REAL. Finally, I multiplied the result by 100 to get the percentage.",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.date LIKE '1993%' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A2 = 'Decin'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Calculate the percentage of account from 'Decin' district for all accounts are opened in 1993.",
+            "Evidence": "A2 contains the information about district.",
+            "GOLD_SQL": "SELECT CAST(SUM(T1.A2 = 'Decin') AS REAL) * 100 / COUNT(account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id WHERE STRFTIME('%Y', T2.date) = '1993'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.date LIKE '1993%' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A2 = 'Decin' "
+        },
+        "revision": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Calculate the percentage of account from 'Decin' district for all accounts are opened in 1993.",
+            "Evidence": "A2 contains the information about district.",
+            "GOLD_SQL": "SELECT CAST(SUM(T1.A2 = 'Decin') AS REAL) * 100 / COUNT(account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id WHERE STRFTIME('%Y', T2.date) = '1993'",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.date LIKE '1993%' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A2 = 'Decin'"
+        },
+        "status": "success"
+    }
+]

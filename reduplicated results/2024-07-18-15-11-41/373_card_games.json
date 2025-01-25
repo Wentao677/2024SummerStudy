@@ -1,0 +1,216 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "Aaron Boyd",
+            "illustrated",
+            "cards",
+            "artist"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "cards": [
+                "artist"
+            ]
+        },
+        "similar_values": {
+            "cards": {
+                "artist": [
+                    "Aaron Boyd"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "cards": {
+                "artist": {
+                    "column_name": "",
+                    "column_description": "The name of the artist that illustrated the card art.",
+                    "value_description": ""
+                },
+                "name": {
+                    "column_name": "",
+                    "column_description": "The name of the card.",
+                    "value_description": "Cards with multiple faces, like \"Split\" and \"Meld\" cards are given a delimiter."
+                },
+                "facename": {
+                    "column_name": "face Name",
+                    "column_description": "The name on the face of the card.",
+                    "value_description": ""
+                },
+                "availability": {
+                    "column_name": "",
+                    "column_description": "A list of the card's available printing types.",
+                    "value_description": "\"arena\", \"dreamcast\", \"mtgo\", \"paper\", \"shandalar\""
+                },
+                "isfullart": {
+                    "column_name": "is Full Art",
+                    "column_description": "If the card has full artwork.",
+                    "value_description": "0: doesn't have, 1: has full artwork"
+                },
+                "ispromo": {
+                    "column_name": "is Promotion",
+                    "column_description": "If the card is a promotional printing.",
+                    "value_description": "0: is not 1: is"
+                },
+                "frameversion": {
+                    "column_name": "frame Version",
+                    "column_description": "The version of the card frame style.",
+                    "value_description": "\"1993\", \"1997\", \"2003\", \"2015\", \"future\""
+                }
+            },
+            "sets": {
+                "basesetsize": {
+                    "column_name": "base Set Size",
+                    "column_description": "The number of cards in the set.",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "cards": [
+                "artist",
+                "asciiName",
+                "cardKingdomId",
+                "faceName",
+                "name",
+                "id",
+                "uuid"
+            ],
+            "foreign_data": [
+                "name",
+                "type",
+                "uuid",
+                "id"
+            ],
+            "legalities": [
+                "status",
+                "id",
+                "uuid"
+            ],
+            "sets": [
+                "booster",
+                "code",
+                "mcmName",
+                "name",
+                "id"
+            ],
+            "set_translations": [
+                "id",
+                "setCode"
+            ],
+            "rulings": [
+                "id",
+                "uuid"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "name",
+                "artist"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "cards": [
+                "artist",
+                "asciiName",
+                "cardKingdomId",
+                "faceName",
+                "name",
+                "id",
+                "uuid"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the cards illustrated by Aaron Boyd, which is mentioned in the hint as 'artist'. This information is stored in the 'cards' table, which has a column named 'artist'. The 'foreign_data' table is not relevant to this question as it stores data about foreign cards, not the cards illustrated by a specific artist. The 'legalities', 'sets', 'set_translations', and 'rulings' tables do not contain information about the artist who illustrated the cards. Therefore, the necessary tables to answer this question are the 'cards' table.",
+        "selected_tables": [
+            "cards"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "name",
+                "artist"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "cards": [
+                "artist",
+                "name"
+            ]
+        },
+        "model_selected_columns": {
+            "cards": [
+                "artist",
+                "name"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for cards illustrated by Aaron Boyd, which is mentioned in the hint as the artist. Therefore, we need to identify the cards that have Aaron Boyd as the artist. The schema provides the artist column in the cards table, which contains the names of the artists. We also need to identify the cards themselves, which are stored in the name column.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "cards": [
+                "name",
+                "artist"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT name FROM cards WHERE artist = 'Aaron Boyd' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the column that contains the artist's name, which is 'artist'. I then used the '=' operator to match the value 'Aaron Boyd' in the 'artist' column. This resulted in a query that selects the 'name' column from the 'cards' table where the 'artist' is 'Aaron Boyd'.",
+        "SQL": "SELECT name FROM cards WHERE artist = 'Aaron Boyd'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Name the cards that were illustrated by Aaron Boyd.",
+            "Evidence": "Aaron Boyd' is artist;",
+            "GOLD_SQL": "SELECT DISTINCT name FROM cards WHERE artist = 'Aaron Boyd'",
+            "PREDICTED_SQL": "SELECT name FROM cards WHERE artist = 'Aaron Boyd' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Name the cards that were illustrated by Aaron Boyd.",
+            "Evidence": "Aaron Boyd' is artist;",
+            "GOLD_SQL": "SELECT DISTINCT name FROM cards WHERE artist = 'Aaron Boyd'",
+            "PREDICTED_SQL": "SELECT name FROM cards WHERE artist = 'Aaron Boyd'"
+        },
+        "status": "success"
+    }
+]

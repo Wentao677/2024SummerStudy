@@ -1,0 +1,189 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "TR007_4_19",
+            "bond type",
+            "double bond",
+            "single bond",
+            "triple bond",
+            "bond_type",
+            "="
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "bond": [
+                "bond_type",
+                "bond_type"
+            ]
+        },
+        "similar_values": {
+            "molecule": {
+                "label": [
+                    "+"
+                ]
+            },
+            "bond": {
+                "bond_type": [
+                    "="
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "bond": {
+                "bond_type": {
+                    "column_name": "",
+                    "column_description": "type of the bond",
+                    "value_description": "\u0093-\u0094: single bond '=': double bond '#': triple bond"
+                },
+                "molecule_id": {
+                    "column_name": "",
+                    "column_description": "identifying the molecule in which the bond appears",
+                    "value_description": ""
+                },
+                "bond_id": {
+                    "column_name": "",
+                    "column_description": "unique id representing bonds",
+                    "value_description": "TRxxx_A1_A2: TRXXX refers to which molecule A1 and A2 refers to which atom"
+                }
+            },
+            "connected": {
+                "bond_id": {
+                    "column_name": "bond id",
+                    "column_description": "bond id representing bond between two atoms",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "atom": [
+                "atom_id",
+                "molecule_id"
+            ],
+            "bond": [
+                "bond_id",
+                "molecule_id",
+                "bond_type"
+            ],
+            "connected": [
+                "atom_id",
+                "bond_id",
+                "atom_id2"
+            ],
+            "molecule": [
+                "molecule_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "bond_type",
+                "bond_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "bond": [
+                "bond_id",
+                "molecule_id",
+                "bond_type"
+            ],
+            "connected": [
+                "atom_id",
+                "bond_id",
+                "atom_id2"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the bond type of TR007_4_19, which is a specific bond_id. The hint provides information about the bond_type values for single, double, and triple bonds. This hint suggests that the bond_type column in the bond table is relevant. Additionally, the bond_id in the connected table is linked to the bond table, and the bond_id in the connected table is also linked to the atom table. Therefore, we need to join the connected table with the bond table to find the bond_type for the specific bond_id TR007_4_19. The atom table is not necessary in this case, as we are not looking for information about specific atoms.",
+        "selected_tables": [
+            "bond",
+            "connected"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "bond_type",
+                "bond_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "bond": [
+                "bond_id",
+                "bond_type"
+            ]
+        },
+        "model_selected_columns": {
+            "bond": [
+                "bond_id",
+                "bond_type"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks about the bond type of TR007_4_19, which is related to the bond_type column in the bond table. The hint provides examples of bond types, which are also present in the bond table. Therefore, we need to select columns that can help us find the bond type of TR007_4_19.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "bond": [
+                "bond_type",
+                "bond_id"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT bond_type FROM bond WHERE bond_id = 'TR007_4_19' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the required information, which is the bond type of TR007_4_19. I then looked at the database schema and noticed that the bond_id in the bond table matches the bond_id in the connected table. I used this information to join the bond table with the connected table to get the bond type. I also used the hint provided to map the bond type to the correct value.",
+        "SQL": "SELECT bond_type FROM bond WHERE bond_id = 'TR007_4_19'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the bond type of TR007_4_19?",
+            "Evidence": "double bond refers to bond_type = ' = '; single bond refers to bond_type = '-'; triple bond refers to bond_type = '#';",
+            "GOLD_SQL": "SELECT T.bond_type FROM bond AS T WHERE T.bond_id = 'TR007_4_19'",
+            "PREDICTED_SQL": "SELECT bond_type FROM bond WHERE bond_id = 'TR007_4_19' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the bond type of TR007_4_19?",
+            "Evidence": "double bond refers to bond_type = ' = '; single bond refers to bond_type = '-'; triple bond refers to bond_type = '#';",
+            "GOLD_SQL": "SELECT T.bond_type FROM bond AS T WHERE T.bond_id = 'TR007_4_19'",
+            "PREDICTED_SQL": "SELECT bond_type FROM bond WHERE bond_id = 'TR007_4_19'"
+        },
+        "status": "success"
+    }
+]

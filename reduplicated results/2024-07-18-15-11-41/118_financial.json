@@ -1,0 +1,258 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "loan amount",
+            "USD100,000",
+            "accounts",
+            "running",
+            "no issue",
+            "Status",
+            "C",
+            "running contract",
+            "ok so far",
+            "Percentage of accounts",
+            "condition",
+            "total(amount)",
+            "total amount"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "loan": [
+                "amount",
+                "status",
+                "amount"
+            ],
+            "trans": [
+                "account",
+                "account"
+            ],
+            "card": [
+                "issued"
+            ]
+        },
+        "similar_values": {},
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "loan": {
+                "duration": {
+                    "column_name": "",
+                    "column_description": "loan duration",
+                    "value_description": "unit\uff1amonth"
+                },
+                "status": {
+                    "column_name": "",
+                    "column_description": "repayment status",
+                    "value_description": "'A' stands for contract finished, no problems; 'B' stands for contract finished, loan not paid; 'C' stands for running contract, OK so far; 'D' stands for running contract, client in debt"
+                },
+                "amount": {
+                    "column_name": "",
+                    "column_description": "approved amount",
+                    "value_description": "unit\uff1aUS dollar"
+                }
+            },
+            "trans": {
+                "amount": {
+                    "column_name": "amount of money",
+                    "column_description": "amount of money",
+                    "value_description": "Unit\uff1aUSD"
+                },
+                "balance": {
+                    "column_name": "balance after transaction",
+                    "column_description": "balance after transaction",
+                    "value_description": "Unit\uff1aUSD"
+                }
+            },
+            "order": {
+                "amount": {
+                    "column_name": "debited amount",
+                    "column_description": "debited amount",
+                    "value_description": ""
+                },
+                "account_id": {
+                    "column_name": "",
+                    "column_description": "id number of account",
+                    "value_description": ""
+                }
+            },
+            "district": {
+                "a14": {
+                    "column_name": "no. of entrepreneurs per 1000 inhabitants",
+                    "column_description": "no. of entrepreneurs per 1000 inhabitants",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "card": [
+                "issued",
+                "card_id",
+                "disp_id"
+            ],
+            "client": [
+                "client_id",
+                "district_id"
+            ],
+            "disp": [
+                "disp_id",
+                "client_id",
+                "account_id"
+            ],
+            "district": [
+                "district_id"
+            ],
+            "loan": [
+                "amount",
+                "payments",
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "order": [
+                "account_id",
+                "amount",
+                "order_id"
+            ],
+            "trans": [
+                "account_id",
+                "amount",
+                "account",
+                "trans_id"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "account_id",
+                "status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "loan": [
+                "amount",
+                "payments",
+                "status",
+                "loan_id",
+                "account_id"
+            ],
+            "account": [
+                "account_id",
+                "district_id"
+            ],
+            "trans": [
+                "account",
+                "trans_id",
+                "account_id"
+            ],
+            "card": [
+                "issued",
+                "card_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of accounts that are still running with no issue, which is defined as 'C' status in the loan table. The hint provides a formula to calculate the percentage, which involves total amount and condition. The condition is 'loan amount less than USD100,000'. The loan table is necessary to get the loan amount and status. The account table is necessary to get the total amount. The district table is not necessary for this question. The client, disp, card, and trans tables are not necessary because they do not provide information about loan amount or status.",
+        "selected_tables": [
+            "loan",
+            "account"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "account_id",
+                "status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "loan": [
+                "status"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "model_selected_columns": {
+            "loan": [
+                "status"
+            ],
+            "account": [
+                "account_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the percentage of accounts with a loan amount less than USD100,000 that are still running with no issue, which is indicated by the status 'C'. The hint provides a formula to calculate the percentage. The necessary columns are those that contain the loan amount, account status, and account information.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'loan'.'amount'",
+            "'loan'.'account_id'"
+        ],
+        "correct_columns": {
+            "loan": [
+                "amount",
+                "account_id",
+                "status"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T1.status = 'C' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.account_id) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I followed the instructions to write the SQL query. I joined the loan and account tables to get the necessary information. I used a CASE statement to filter the accounts that are still running with no issue (status = 'C'). I then calculated the percentage of these accounts by dividing the sum of these accounts by the total count of accounts and multiplying by 100.",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T1.status = 'C' THEN 1 ELSE NULL END) AS REAL) * 100.0 / COUNT(DISTINCT T1.account_id) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T1.amount < 100000",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "For loan amount less than USD100,000, what is the percentage of accounts that is still running with no issue.",
+            "Evidence": "Status = 'C' stands for running contract, ok so far; Percentage of accounts by condition = [(total(amount) & condition) / (total amount)] * 100.",
+            "GOLD_SQL": "SELECT CAST(SUM(status = 'C') AS REAL) * 100 / COUNT(account_id) FROM loan WHERE amount < 100000",
+            "PREDICTED_SQL": "SELECT CAST(SUM(CASE WHEN T1.status = 'C' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.account_id) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "For loan amount less than USD100,000, what is the percentage of accounts that is still running with no issue.",
+            "Evidence": "Status = 'C' stands for running contract, ok so far; Percentage of accounts by condition = [(total(amount) & condition) / (total amount)] * 100.",
+            "GOLD_SQL": "SELECT CAST(SUM(status = 'C') AS REAL) * 100 / COUNT(account_id) FROM loan WHERE amount < 100000",
+            "PREDICTED_SQL": "SELECT CAST(COUNT(CASE WHEN T1.status = 'C' THEN 1 ELSE NULL END) AS REAL) * 100.0 / COUNT(DISTINCT T1.account_id) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T1.amount < 100000"
+        },
+        "status": "success"
+    }
+]

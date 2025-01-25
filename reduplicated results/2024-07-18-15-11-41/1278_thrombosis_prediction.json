@@ -1,0 +1,228 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "normal level of IGG",
+            "patients",
+            "hospital",
+            "IGG",
+            "900",
+            "2000",
+            "Admission",
+            "+"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Laboratory": [
+                "IGG",
+                "IGG"
+            ],
+            "Patient": [
+                "Admission"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "2000.8"
+                ],
+                "RA": [
+                    "+"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                },
+                "acl igg": {
+                    "column_name": "anti-Cardiolipin antibody (IgG)",
+                    "column_description": "anti-Cardiolipin antibody (IgG) concentration",
+                    "value_description": ""
+                },
+                "ana pattern": {
+                    "column_name": "pattern observed in the sheet of ANA examination",
+                    "column_description": "pattern observed in the sheet of ANA examination",
+                    "value_description": ""
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                },
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID"
+            ],
+            "Patient": [
+                "Admission",
+                "ID"
+            ],
+            "Laboratory": [
+                "IGG",
+                "IGA",
+                "IGM",
+                "RF",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "igg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "IGG",
+                "IGA",
+                "IGM",
+                "RF",
+                "ID",
+                "Date"
+            ],
+            "Patient": [
+                "Admission",
+                "ID"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify patients with a normal level of IGG and those who were admitted to the hospital. The hint provides the range for normal IGG levels (900 < IGG < 2000). We also know that Admission = '+' refers to patients who were admitted to the hospital. We can find this information in the Laboratory table, which contains IGG levels and Admission information. Additionally, we need to link patients to their corresponding IGG levels and Admission status, which is achieved through the foreign key relationships between the Laboratory and Patient tables. Therefore, we require the Examination, Patient, and Laboratory tables to formulate a SQL query that answers the question.",
+        "selected_tables": [
+            "Laboratory",
+            "Patient"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "igg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Laboratory": [
+                "IGG",
+                "Date"
+            ],
+            "Patient": [
+                "ID",
+                "Admission"
+            ]
+        },
+        "model_selected_columns": {
+            "Laboratory": [
+                "IGG",
+                "Date"
+            ],
+            "Patient": [
+                "ID",
+                "Admission"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for patients with a normal level of IGG (900 < IGG < 2000) who were admitted to the hospital (Admission = '+'). The hint provides the exact values for IGG and Admission. We need to filter patients based on these conditions, so we need columns that contain these values.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'laboratory'.'id'"
+        ],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "admission"
+            ],
+            "laboratory": [
+                "id",
+                "igg"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.IGG BETWEEN 900 AND 2000 AND T1.Admission = '+' ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the columns mentioned in the question: IGG and Admission. I then looked at the table schema and found that IGG is in the Laboratory table and Admission is in the Patient table. I used the hint to determine the condition for a normal level of IGG, which is 900 < IGG < 2000. I then joined the Patient and Laboratory tables on the ID column and applied the conditions to get the desired result.",
+        "SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.IGG BETWEEN 900 AND 2000 AND T1.Admission = '+'",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Of the patients with an normal level of IGG, how many of them admitted to the hospital?",
+            "Evidence": "normal level of IGG refers to 900 < IGG < 2000; admitted to the hospital refers to Admission = '+';",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.IGG > 900 AND T2.IGG <2000 AND  T1.Admission = '+'",
+            "PREDICTED_SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.IGG BETWEEN 900 AND 2000 AND T1.Admission = '+' "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Of the patients with an normal level of IGG, how many of them admitted to the hospital?",
+            "Evidence": "normal level of IGG refers to 900 < IGG < 2000; admitted to the hospital refers to Admission = '+';",
+            "GOLD_SQL": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.IGG > 900 AND T2.IGG <2000 AND  T1.Admission = '+'",
+            "PREDICTED_SQL": "SELECT COUNT(T2.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.IGG BETWEEN 900 AND 2000 AND T1.Admission = '+'"
+        },
+        "status": "success"
+    }
+]

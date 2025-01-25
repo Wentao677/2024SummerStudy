@@ -1,0 +1,3837 @@
+############################## Human at step keyword_extraction ##############################
+
+Objective: Analyze the given question and hint to identify and extract keywords, keyphrases, and named entities. These elements are crucial for understanding the core components of the inquiry and the guidance provided. This process involves recognizing and isolating significant terms and phrases that could be instrumental in formulating searches or queries related to the posed question.
+
+Instructions:
+
+Read the Question Carefully: Understand the primary focus and specific details of the question. Look for any named entities (such as organizations, locations, etc.), technical terms, and other phrases that encapsulate important aspects of the inquiry.
+
+Analyze the Hint: The hint is designed to direct attention toward certain elements relevant to answering the question. Extract any keywords, phrases, or named entities that could provide further clarity or direction in formulating an answer.
+
+List Keyphrases and Entities: Combine your findings from both the question and the hint into a single Python list. This list should contain:
+
+Keywords: Single words that capture essential aspects of the question or hint.
+Keyphrases: Short phrases or named entities that represent specific concepts, locations, organizations, or other significant details.
+Ensure to maintain the original phrasing or terminology used in the question and hint.
+
+Example 1:
+Question: "What is the annual revenue of Acme Corp in the United States for 2022?"
+Hint: "Focus on financial reports and U.S. market performance for the fiscal year 2022."
+
+["annual revenue", "Acme Corp", "United States", "2022", "financial reports", "U.S. market performance", "fiscal year"]
+
+Example 2:
+Question: "In the Winter and Summer Olympics of 1988, which game has the most number of competitors? Find the difference of the number of competitors between the two games."
+Hint: "the most number of competitors refer to MAX(COUNT(person_id)); SUBTRACT(COUNT(person_id where games_name = '1988 Summer'), COUNT(person_id where games_name = '1988 Winter'));"
+
+["Winter Olympics", "Summer Olympics", "1988", "1988 Summer", "Summer", "1988 Winter", "Winter", "number of competitors", "difference", "MAX(COUNT(person_id))", "games_name", "person_id"]
+
+Example 3:
+Question: "How many Men's 200 Metres Freestyle events did Ian James Thorpe compete in?"
+Hint: "Men's 200 Metres Freestyle events refer to event_name = 'Swimming Men''s 200 metres Freestyle'; events compete in refers to event_id;"
+
+["Swimming Men's 200 metres Freestyle", "Ian James Thorpe", "Ian", "James", "Thorpe", "compete in", "event_name", "event_id"]
+
+Task:
+Given the following question and hint, identify and list all relevant keywords, keyphrases, and named entities.
+
+Question: What is the average number of bonds the atoms with the element iodine have?
+Hint: atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+Please provide your findings as a Python list, capturing the essence of both the question and hint through the identified terms and phrases. 
+Only output the Python list, no explanations needed. 
+
+############################## AI at step keyword_extraction ##############################
+
+[
+    "average number of bonds",
+    "atoms with the element iodine",
+    "element iodine",
+    "element",
+    "i",
+    "bond_id",
+    "atom_id",
+    "COUNT(bond_id)",
+    "COUNT(atom_id)",
+    "DIVIDE"
+]
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `bond`
+Original column name: `bond_type`
+Data type: TEXT
+Description: type of the bond
+Value description: -: single bond '=': double bond '#': triple bond
+Example of values in the column: `#`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds of atoms with the element iodine, and the hint provides a formula to calculate this. The bond_type column directly provides information about the type of bond, which is essential for identifying the number of bonds an atom has.",
+    "is_column_information_relevant": "Yes"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `atom`
+Original column name: `molecule_id`
+Expanded column name: `molecule id`
+Data type: TEXT
+Description: identifying the molecule to which the atom belongs
+Value description: TRXXX_i represents ith atom of molecule TRXXX
+Example of values in the column: `TR001`
+This column references the following columns:
+    Table: `molecule`, Column: `molecule_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds of atoms with the element iodine, and the hint provides a formula for calculating this average. The molecule_id column is relevant because it identifies the molecule to which each atom belongs, which is necessary for filtering atoms with the element iodine.",
+    "is_column_information_relevant": "Yes"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `connected`
+Original column name: `atom_id`
+Expanded column name: `atom id`
+Data type: TEXT
+Description: id of the first atom
+Example of values in the column: `TR000_2`
+This column is a primary key.
+This column references the following columns:
+    Table: `atom`, Column: `atom_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds for atoms with the element iodine, and the hint provides a formula for calculating this average. The atom_id column is relevant because it references the atom_id column in the atom table, which is necessary for identifying the atoms with the element iodine.",
+    "is_column_information_relevant": "Yes"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `atom`
+Original column name: `atom_id`
+Expanded column name: `atom id`
+Data type: TEXT
+Description: the unique id of atoms
+Example of values in the column: `TR001_13`
+This column is a primary key.
+This column is referenced by the following columns:
+    Table: `connected`, Column: `atom_id2`
+    Table: `connected`, Column: `atom_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds of atoms with the element iodine, and the hint provides the formula to calculate this. The atom_id column is relevant because it is referenced by the connected table, which likely contains information about bonds between atoms, and the hint uses atom_id in the calculation.",
+    "is_column_information_relevant": "Yes"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `bond`
+Original column name: `molecule_id`
+Data type: TEXT
+Description: identifying the molecule in which the bond appears
+Example of values in the column: `TR000`
+This column references the following columns:
+    Table: `molecule`, Column: `molecule_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds of atoms with the element iodine, and the hint provides a formula that involves counting bonds and atoms. The molecule_id column is relevant because it identifies the molecule in which the bond appears, which is necessary to determine the bonds of atoms with the element iodine.",
+    "is_column_information_relevant": "Yes"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `atom`
+Original column name: `element`
+Data type: TEXT
+Description: the element of the toxicology
+Value description:  cl: chlorine  c: carbon  h: hydrogen  o: oxygen  s: sulfur  n: nitrogen  p: phosphorus  na: sodium  br: bromine  f: fluorine  i: iodine  sn: Tin  pb: lead  te: tellurium  ca: Calcium
+Example of values in the column: `o`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds for atoms with the element iodine, and the hint provides a formula to calculate this. The element column directly provides the information about the element of each atom, which is essential for identifying the atoms with the element iodine. This makes the element column relevant to the question and hint.",
+    "is_column_information_relevant": "Yes"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `bond`
+Original column name: `bond_id`
+Data type: TEXT
+Description: unique id representing bonds
+Value description: TRxxx_A1_A2: TRXXX refers to which molecule A1 and A2 refers to which atom
+Example of values in the column: `TR001_10_11`
+This column is a primary key.
+This column is referenced by the following columns:
+    Table: `connected`, Column: `bond_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds for atoms with the element iodine, and the hint provides a formula involving bond_id. Although bond_id is not directly related to iodine, it is a primary key and is referenced by the connected table, which might be relevant to the question. However, without more information, it's unclear how bond_id is connected to iodine atoms.",
+    "is_column_information_relevant": "No"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `connected`
+Original column name: `atom_id2`
+Expanded column name: `atom id 2`
+Data type: TEXT
+Description: id of the second atom
+Example of values in the column: `TR000_5`
+This column is a primary key.
+This column references the following columns:
+    Table: `atom`, Column: `atom_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds for atoms with the element iodine, and the hint provides a formula to calculate this. The atom_id2 column is not mentioned in the hint or the question, and it does not seem to be related to the element or the bonds. Therefore, this column is not relevant to the question and the hint.",
+    "is_column_information_relevant": "No"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `connected`
+Original column name: `bond_id`
+Expanded column name: `bond id`
+Data type: TEXT
+Description: bond id representing bond between two atoms
+Example of values in the column: `TR001_10_11`
+This column references the following columns:
+    Table: `bond`, Column: `bond_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds for atoms with the element iodine, and the hint provides a formula that involves counting the bond_id and atom_id. The bond_id column is directly relevant to the question because it represents the bond between two atoms, which is essential for calculating the average number of bonds for atoms with the element iodine.",
+    "is_column_information_relevant": "Yes"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `molecule`
+Original column name: `label`
+Data type: TEXT
+Description: whether this molecule is carcinogenic or not
+Example of values in the column: `-`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds of atoms with the element iodine, and the hint provides a formula to calculate this. The column information 'label' is not relevant to this calculation, as it describes whether a molecule is carcinogenic or not, which is not related to the element iodine or bond counts.",
+    "is_column_information_relevant": "No"
+}
+
+############################## Human at step column_filtering ##############################
+
+You are a detail-oriented data scientist tasked with evaluating the relevance of database column information for answering specific SQL query question based on provided hint.
+
+Your goal is to assess whether the given column details are pertinent to constructing an SQL query to address the question informed by the hint. Label the column information as "relevant" if it aids in query formulation, or "irrelevant" if it does not.
+
+Procedure:
+1. Carefully examine the provided column details.
+2. Understand the question about the database and its associated hint.
+3. Decide if the column details are necessary for the SQL query based on your analysis.
+
+Here are some examples of how to determine if the column information is relevant or irrelevant to the question and the hint:
+
+Example 1:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+Name movie titles released in year 1945. Sort the listing by the descending order of movie popularity.
+
+HINT:
+released in the year 1945 refers to movie_release_year = 1945;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question specifically asks for movie titles from a particular year and to sort them by popularity. The column movie_title directly provides the names of movies, which is exactly what is required to list the movie titles as requested in the question.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 2:
+Column information:
+Original column name: `movie_release_year`
+Expanded column name: ``
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+List all movie title rated in April 2020 from user who was a trialist.
+
+HINT:
+movie title rated in April 2020 refers to rating_timestamp_utc LIKE '%2020-04-%'; user is a trial list refers to user_trialist = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question and hint focus on movies rated in a specific month and year and by a specific type of user (trialist), neither of which relates to the movie_release_year column. This column only provides the year movies were released, which is not what is being queried.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 3:
+Column information:
+Original column name: `user_has_payment_method`
+Data type: INTEGER
+Description: whether the user was a paying subscriber when he rated the movie
+Value description: 1 = the user was a paying subscriber when he rated the movie  0 = the user was not a paying subscriber when he rated
+Example of values in the column: `0`
+
+
+Question:
+How many users, who were a paying subscriber when they rated the movie, gave the movie that was released in 1924 and directed by Erich von Stroheim a rating score of 5?
+
+HINT:
+Directed by Buster Keaton refers to director_name; released in 1924 refers to movie_release_year = 1924; paying subscriber refers to user_has_payment_method = 1; rating score of 5 refers to rating_score = 5;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks about users who were paying subscribers and rated a specific movie from 1924 directed by a specific director. The user_has_payment_method column indicates whether a user was a paying subscriber at the time of rating, which is directly relevant to the question and the hint focusing on subscribers.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 4:
+Column information:
+Original column name: `director_name`
+Data type: TEXT
+Description: Full Name of the movie director
+Example of values in the column: `Stanley Kubrick`
+
+
+Question:
+What is the average number of Mubi users who love movies directed by Stanley Kubrick?
+
+HINT:
+average = AVG(movie_popularity); number of Mubi users who loves the movie refers to movie_popularity;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question requires filtering movies directed by `Stanley Kubrick` to calculate the average popularity. The director_name column provides the director's name, and as shown in the example values, it includes `Stanley Kubrick`, which is essential for filtering movies directed by this specific director.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 6:
+Column information:
+Original column name: `list_creation_date_utc`
+Data type: TEXT
+Description: Creation date for the list
+Value description: YYYY-MM-DD
+Example of values in the column: `2009-12-18`
+
+
+Question:
+Provide list titles created by user who are eligible for trial when he created the list.
+
+HINT:
+eligible for trial refers to user_eligible_for_trial = 1
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for list titles created by users eligible for a trial. The list_creation_date_utc column, which provides the creation dates of lists, is irrelevant because the hint and the question are concerned with the trial status of the users, not the dates the lists were created.",
+  "is_column_information_relevant": "No"
+}
+```
+
+Example 7:
+Column information:
+Original column name: `Installs`
+Data type: TEXT
+Description: Number of user downloads/installs for the app (as when scraped)
+Value description: 1,000,000+ 15% 10,000,000+ 12% Other (8010) 74%
+Example of values in the column: `10,000+`
+
+
+Question:
+Name the Apps with a sentiment objectivity of 0.3 and include their number of installs.
+
+HINT:
+FALSE;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for apps with a specific sentiment objectivity and their number of installs. The Installs column is relevant because it provides data on how many times each app has been installed, which is crucial for answering the question as per the hint.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 8:
+Column information:
+Original column name: `movie_title`
+Data type: TEXT
+Description: Name of the movie
+Example of values in the column: `La Antena`
+
+
+Question:
+What is Jeannot Szwarc's most popular movie and what is its average rating score?
+
+HINT:
+Jeannot Szwarc's refers to director_name = 'Jeannot Szwarc'; most popular movie refers to MAX(movie_popularity); average rating score refers to avg(rating_score)
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the most popular movie by a specific director and its average rating score. The movie_title column is relevant because it provides the names of movies, which are essential for identifying the most popular movie directed by Jeannot Szwarc.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 10:
+Column information:
+Original column name: `list_followers`
+Data type: INTEGER
+Description: Number of followers on the list
+Example of values in the column: `5`
+
+
+Question:
+How many users who created a list in the February of 2016 were eligible for trial when they created the list? Indicate the user id of the user who has the most number of followers in his list in February of 2016.
+
+HINT:
+created a list in the February of 2016 refer to list_creation_date_utc BETWEEN 2/1/2016 and 2/29/2016; eligible for trial refers to user_eligible_for_trial = 1;
+
+```json
+{
+  "chain_of_thought_reasoning": "The question involves finding users who created a list in a specific month and year, with additional focus on those who had the most followers. The list_followers column directly applies because it provides the exact data needed to identify which user's list had the most followers during the specified time.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 13:
+Column information:
+Original column name: `rating_score`
+Data type: INTEGER
+Description: Rating score ranging from 1 (lowest) to 5 (highest)
+Value description: commonsense evidence: The score is proportional to the user's liking. The higher the score is, the more the user likes the movie
+Example of values in the column: `3`
+
+
+Question:
+What is the URL to the user profile image on Mubi of the user who gave the movie id of 1103 a 5 ratinng score on 4/19/2020?
+
+HINT:
+URL to the user profile image on Mubi  refers to user_avatar_image_url;  4/19/2020 refers to rating_date_utc
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks the URL for the user profile of someone who rated a specific movie highly on a particular date. The rating_score column, indicating the score given to movies, is relevant because it allows filtering for ratings of 5, directly addressing the hint's requirement for identifying high ratings.
+",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 14:
+Column information:
+Original column name: `movie_release_year`
+Data type: INTEGER
+Description: Release year of the movie
+Example of values in the column: `2007`
+
+
+Question:
+When was the first movie of the director who directed the highest number of movies released and what is the user id of the user who received the highest number of comments related to the critic made by the user rating the movie?
+
+HINT:
+comments refer to critic_comments
+
+```json
+{
+  "chain_of_thought_reasoning": "The question asks for the release year of the first movie by the director who has directed the most films. The movie_release_year column directly provides this necessary information, as it lists the release years of movies. This column is essential to determine when that first movie was released, making it relevant to the question despite the hint focusing solely on comments related to critic ratings.",
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Example 15:
+Original column name: `Price`
+Data type: TEXT
+Description: Price of the app (as when scraped)
+Value description: 0 93% $0.99 1% Other (653) 6%  commonsense evidence: Free means the price is 0.
+Example of values in the column: `0`
+
+
+Question:
+Which of the app is the best selling app and what is the sentiments polarity of it?
+
+HINT:
+best selling app = MAX(MULTIPLY(Price, Installs));
+
+```json
+{
+  "chain_of_thought_reasoning": "The question seeks to identify the best-selling app and its sentiments polarity, with the hint specifying the calculation for "best selling" as the maximum product of Price and Installs. The Price column is crucial for this computation as it provides the price at which each app is sold, which, when multiplied by the number of installs, helps determine the app's total revenue. This makes the Price column directly relevant to identifying the best-selling app according to the hint's criteria.",
+  "is_column_information_relevant": "Yes"
+}
+
+Example 16:
+Column information:
+Original column name: `full_name`
+Expanded column name: `full name`
+Data type: TEXT
+Description: the full name of the person
+Value description: commonsense evidence: A person's full name is the complete name that they are known by, which typically includes their first name, middle name (if applicable), and last name. 
+Example of values in the column: `Dagfinn Sverre Aarskog`
+
+
+Question:
+Tell the weight of Dagfinn Sverre Aarskog.
+
+HINT:
+
+
+```json
+{
+  "chain_of_thought_reasoning": "The question explicitly asks for the weight of a person named `Dagfinn Sverre Aarskog`. As shown in the column information, `Dagfinn Sverre Aarskog` is one of the example values in the `full_name` column, therefore this column can be used to identify the person and retrieve their weight.", 
+  "is_column_information_relevant": "Yes"
+}
+```
+
+Now, its your turn to determine whether the provided column information can help formulate a SQL query to answer the given question, based on the provided hint.
+
+The following guidelines are VERY IMPORTANT to follow. Make sure to check each of them carefully before making your decision:
+1. You're given only one column's information, which alone isn't enough to answer the full query. Concentrate solely on this provided data and assess its relevance to the question and hint without considering any missing information.
+2. Read the column information carefully and understand the description of it, then see if the question or the hint is asking or referring to the same information. If yes then the column information is relevant, otherwise it is irrelevant.
+3. Look beyond mere keywords. Assess whether there is a meaningful, semantic connection between the column information and the needs of the question or hint. Mere word matches do not necessarily imply relevance.
+4. If the question refers to applying a logic on a data such as average, sum, max, min, or any other operation, and the column information is a part of that logic, then the column information is relevant.
+5. Pay attention to the provided `Example of values in the column`. If you see a shared keyword between the example and the question or hint, then the column information is relevant. (VERY IMPORTANT)
+6. If you see the column name appeared in the hint, then it is definitely relevant. (VERY IMPORTANT)
+
+Column information:
+Table name: `molecule`
+Original column name: `molecule_id`
+Expanded column name: `molecule id`
+Data type: TEXT
+Description: unique id of molecule
+Value description: "+" --> this molecule / compound is carcinogenic '-' this molecule is not / compound carcinogenic
+Example of values in the column: `TR004`
+This column is a primary key.
+This column is referenced by the following columns:
+    Table: `atom`, Column: `molecule_id`
+    Table: `bond`, Column: `molecule_id`
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+HINT:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+
+Take a deep breath and provide your answer in the following json format:
+
+```json
+{
+  "chain_of_thought_reasoning": "One line explanation of why or why not the column information is relevant to the question and the hint.",
+  "is_column_information_relevant": "Yes" or "No"
+}
+```
+
+Only output a json as your response.
+
+############################## AI at step column_filtering ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds of atoms with the element iodine, and the hint provides a formula to calculate this. The molecule_id column is not directly related to the question or hint, as it refers to the unique id of a molecule, not the element of atoms. Therefore, this column is not relevant to answering the question.",
+    "is_column_information_relevant": "No"
+}
+
+############################## Human at step table_selection ##############################
+
+You are an expert and very smart data analyst. 
+Your task is to analyze the provided database schema, comprehend the posed question, and leverage the hint to identify which tables are needed to generate a SQL query for answering the question.
+
+Database Schema Overview:
+CREATE TABLE atom
+(
+	`atom_id` TEXT NOT NULL, -- `atom id` description: the unique id of atoms
+	`molecule_id` TEXT DEFAULT NULL, --
+	`element` TEXT DEFAULT NULL, -- description: the element of the toxicology value description:  cl: chlorine  c: carbon  h: hydrogen  o: oxygen  s: sulfur  n: nitrogen  p: phosphorus  na: sodium  br: bromine  f: fluorine  i: iodine  sn: Tin  pb: lead  te: tellurium  ca: Calcium
+	PRIMARY KEY (`atom_id`),
+	FOREIGN KEY (`molecule_id`) REFERENCES `molecule` (`molecule_id`),
+);
+
+CREATE TABLE bond
+(
+	`bond_id` TEXT NOT NULL, --
+	`molecule_id` TEXT DEFAULT NULL, --
+	`bond_type` TEXT DEFAULT NULL, -- description: type of the bond value description: -: single bond '=': double bond '#': triple bond
+	PRIMARY KEY (`bond_id`),
+	FOREIGN KEY (`molecule_id`) REFERENCES `molecule` (`molecule_id`),
+);
+
+CREATE TABLE connected
+(
+	`atom_id` TEXT NOT NULL, -- `atom id` description: id of the first atom
+	`atom_id2` TEXT NOT NULL, -- `atom id 2` description: id of the second atom
+	`bond_id` TEXT DEFAULT NULL, -- `bond id` description: bond id representing bond between two atoms
+	PRIMARY KEY (`atom_id`,`atom_id2`),
+	FOREIGN KEY (`atom_id`) REFERENCES `atom` (`atom_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`atom_id2`) REFERENCES `atom` (`atom_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`bond_id`) REFERENCES `bond` (`bond_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+);
+
+CREATE TABLE molecule
+(
+	`molecule_id` TEXT NOT NULL, --
+	PRIMARY KEY (`molecule_id`),
+);
+
+This schema provides a detailed definition of the database's structure, including tables, their columns, primary keys, foreign keys, and any relevant details about relationships or constraints.
+For key phrases mentioned in the question, we have provided the most similar values within the columns denoted by "-- examples" in front of the corresponding column names. This is a critical hint to identify the tables that will be used in the SQL query.
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+Hint:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+The hint aims to direct your focus towards the specific elements of the database schema that are crucial for answering the question effectively.
+
+Task:
+Based on the database schema, question, and hint provided, your task is to determine the tables that should be used in the SQL query formulation. 
+For each of the selected tables, explain why exactly it is necessary for answering the question. Your explanation should be logical and concise, demonstrating a clear understanding of the database schema, the question, and the hint.
+
+Please respond with a JSON object structured as follows:
+
+```json
+{
+  "chain_of_thought_reasoning": "Explanation of the logical analysis that led to the selection of the tables.",
+  "table_names": ["Table1", "Table2", "Table3", ...]
+}
+```
+
+Note that you should choose all and only the tables that are necessary to write a SQL query that answers the question effectively.
+Take a deep breath and think logically. If you do the task correctly, I will give you 1 million dollars. 
+
+Only output a json as your response.
+
+
+############################## AI at step table_selection ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds the atoms with the element iodine have. The hint suggests that we need to count the number of bonds for each atom with the element 'i' and then divide it by the total count of such atoms. This requires information about the bonds and the atoms. The hint also mentions the element 'i', which is present in the 'element' column of the 'atom' table. Therefore, we need to select the 'atom' table to identify the atoms with the element 'i'. Additionally, we need the 'bond' table to count the number of bonds for each atom. The 'connected' table is not necessary as it provides information about the bonds between atoms, but not about the bonds of a specific atom. The 'molecule' table is not necessary as it only provides information about the molecules, but not about the atoms or bonds.",
+    "table_names": [
+        "atom",
+        "bond"
+    ]
+}
+
+############################## Human at step column_selection ##############################
+
+You are an expert and very smart data analyst.
+Your task is to examine the provided database schema, understand the posed question, and use the hint to pinpoint the specific columns within tables that are essential for crafting a SQL query to answer the question.
+
+Database Schema Overview:
+CREATE TABLE atom
+(
+	`atom_id` TEXT NOT NULL, -- `atom id` description: the unique id of atoms
+	`molecule_id` TEXT DEFAULT NULL, --
+	`element` TEXT DEFAULT NULL, -- description: the element of the toxicology value description:  cl: chlorine  c: carbon  h: hydrogen  o: oxygen  s: sulfur  n: nitrogen  p: phosphorus  na: sodium  br: bromine  f: fluorine  i: iodine  sn: Tin  pb: lead  te: tellurium  ca: Calcium
+	PRIMARY KEY (`atom_id`),
+);
+
+CREATE TABLE bond
+(
+	`bond_id` TEXT NOT NULL, --
+	`molecule_id` TEXT DEFAULT NULL, --
+	`bond_type` TEXT DEFAULT NULL, -- description: type of the bond value description: -: single bond '=': double bond '#': triple bond
+	PRIMARY KEY (`bond_id`),
+);
+
+This schema offers an in-depth description of the database's architecture, detailing tables, columns, primary keys, foreign keys, and any pertinent information regarding relationships or constraints. Special attention should be given to the examples listed beside each column, as they directly hint at which columns are relevant to our query.
+
+For key phrases mentioned in the question, we have provided the most similar values within the columns denoted by "-- examples" in front of the corresponding column names. This is a critical hint to identify the columns that will be used in the SQL query.
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+Hint:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+The hint aims to direct your focus towards the specific elements of the database schema that are crucial for answering the question effectively.
+
+Task:
+Based on the database schema, question, and hint provided, your task is to identify all and only the columns that are essential for crafting a SQL query to answer the question.
+For each of the selected columns, explain why exactly it is necessary for answering the question. Your reasoning should be concise and clear, demonstrating a logical connection between the columns and the question asked.
+
+Tip: If you are choosing a column for filtering a value within that column, make sure that column has the value as an example.
+
+
+Please respond with a JSON object structured as follows:
+
+```json
+{
+  "chain_of_thought_reasoning": "Your reasoning for selecting the columns, be concise and clear.",
+  "table_name1": ["column1", "column2", ...],
+  "table_name2": ["column1", "column2", ...],
+  ...
+}
+```
+
+Make sure your response includes the table names as keys, each associated with a list of column names that are necessary for writing a SQL query to answer the question.
+For each aspect of the question, provide a clear and concise explanation of your reasoning behind selecting the columns.
+Take a deep breath and think logically. If you do the task correctly, I will give you 1 million dollars.
+
+Only output a json as your response.
+
+############################## AI at step column_selection ##############################
+
+{
+    "chain_of_thought_reasoning": "The question asks for the average number of bonds the atoms with the element iodine have. The hint provides a clear direction to identify the columns necessary for the query. We need to filter the atoms by their element, which is 'i', and then count the number of bonds for each atom. The average number of bonds is calculated by dividing the count of bonds by the count of atoms. Therefore, we need columns that provide this information.",
+    "atom": [
+        "atom_id",
+        "element"
+    ],
+    "bond": [
+        "bond_id",
+        "molecule_id"
+    ]
+}
+
+############################## Human at step nl_to_sql ##############################
+
+You are a data science expert.
+Below, you are presented with a database schema and a question.
+Your task is to read the schema, understand the question, and generate a valid SQLite query to answer the question.
+
+This schema offers an in-depth description of the database's architecture, detailing tables, columns, primary keys, foreign keys, and any pertinent information regarding relationships or constraints. Special attention should be given to the examples listed beside each column, as they directly hint at which columns are relevant to our query.
+
+
+Database Schema
+###
+CREATE TABLE atom
+(
+	`atom_id` TEXT NOT NULL, -- `atom id` description: the unique id of atoms
+	`element` TEXT DEFAULT NULL, -- description: the element of the toxicology value description:  cl: chlorine  c: carbon  h: hydrogen  o: oxygen  s: sulfur  n: nitrogen  p: phosphorus  na: sodium  br: bromine  f: fluorine  i: iodine  sn: Tin  pb: lead  te: tellurium  ca: Calcium
+	PRIMARY KEY (`atom_id`),
+);
+
+CREATE TABLE bond
+(
+	`bond_id` TEXT NOT NULL, --
+	`molecule_id` TEXT DEFAULT NULL, --
+	PRIMARY KEY (`bond_id`),
+);
+
+###
+Question: 
+What is the average number of bonds the atoms with the element iodine have? 
+
+Hint:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+Please respond with a SQL query between ```sql and ``` that answers the question.
+
+############################## AI at step nl_to_sql ##############################
+
+{
+    "SQL": "SELECT CAST(COUNT(T2.molecule_id) AS REAL) / COUNT(DISTINCT T1.atom_id) FROM atom AS T1 INNER JOIN bond AS T2 ON T1.atom_id = T2.molecule_id WHERE T1.element = 'i' "
+}
+
+############################## Human at step revision ##############################
+
+Objective: Your objective is to make sure a query follows the database admin instructions and use the correct conditions.
+
+Database Schema:    
+CREATE TABLE atom
+(
+	`atom_id` TEXT NOT NULL, -- `atom id` description: the unique id of atoms
+	`molecule_id` TEXT DEFAULT NULL, --
+	`element` TEXT DEFAULT NULL, -- description: the element of the toxicology value description:  cl: chlorine  c: carbon  h: hydrogen  o: oxygen  s: sulfur  n: nitrogen  p: phosphorus  na: sodium  br: bromine  f: fluorine  i: iodine  sn: Tin  pb: lead  te: tellurium  ca: Calcium
+	PRIMARY KEY (`atom_id`),
+	FOREIGN KEY (`molecule_id`) REFERENCES `molecule` (`molecule_id`),
+);
+
+CREATE TABLE bond
+(
+	`bond_id` TEXT NOT NULL, --
+	`molecule_id` TEXT DEFAULT NULL, --
+	`bond_type` TEXT DEFAULT NULL, -- description: type of the bond value description: -: single bond '=': double bond '#': triple bond
+	PRIMARY KEY (`bond_id`),
+	FOREIGN KEY (`molecule_id`) REFERENCES `molecule` (`molecule_id`),
+);
+
+CREATE TABLE connected
+(
+	`atom_id` TEXT NOT NULL, -- `atom id` description: id of the first atom
+	`atom_id2` TEXT NOT NULL, -- `atom id 2` description: id of the second atom
+	`bond_id` TEXT DEFAULT NULL, -- `bond id` description: bond id representing bond between two atoms
+	PRIMARY KEY (`atom_id`,`atom_id2`),
+	FOREIGN KEY (`atom_id`) REFERENCES `atom` (`atom_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`atom_id2`) REFERENCES `atom` (`atom_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (`bond_id`) REFERENCES `bond` (`bond_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+);
+
+CREATE TABLE molecule
+(
+	`molecule_id` TEXT NOT NULL, --
+	`label` TEXT DEFAULT NULL, --
+	PRIMARY KEY (`molecule_id`),
+);
+
+Database admin instructions:
+1. When you need to find the highest or lowest values based on a certain condition, using ORDER BY + LIMIT 1 is prefered over using MAX/MIN within sub queries.
+2. If predicted query includes an ORDER BY clause to sort the results, you should only include the column(s) used for sorting in the SELECT clause if the question specifically ask for them. Otherwise, omit these columns from the SELECT.
+3. If the question doesn't specify exactly which columns to select, between name column and id column, prefer to select id column.
+4. Make sure you only output the information that is asked in the question. If the question asks for a specific column, make sure to only include that column in the SELECT clause, nothing more.
+5. Predicted query should return all of the information asked in the question without any missing or extra information.
+7. For key phrases mentioned in the question, we have provided the most similar values within the columns denoted by "-- examples" in front of the corresponding column names. This is a crucial hint indicating the correct columns to use for your SQL query.
+8. No matter of how many things the question asks, you should only return one SQL query as the answer having all the information asked in the question, seperated by a comma.
+9. Using || ' ' ||  to concatenate is string is banned and using that is punishable by death. Never concatenate columns in the SELECT clause.
+10. If you are joining multiple tables, make sure to use alias names for the tables and use the alias names to reference the columns in the query. Use T1, T2, T3, ... as alias names.
+11. If you are doing a logical operation on a column, such as mathematical operations and sorting, make sure to filter null values within those columns.
+12. When ORDER BY is used, just include the column name in the ORDER BY in the SELECT clause when explicitly asked in the question. Otherwise, do not include the column name in the SELECT clause.
+
+
+
+
+
+Question:
+What is the average number of bonds the atoms with the element iodine have?
+
+Hint:
+atoms with the element iodine refers to element = 'i'; average = DIVIDE(COUND(bond_id), COUNT(atom_id)) where element = 'i'
+
+Predicted query:
+SELECT CAST(COUNT(T2.molecule_id) AS REAL) / COUNT(DISTINCT T1.atom_id) FROM atom AS T1 INNER JOIN bond AS T2 ON T1.atom_id = T2.molecule_id WHERE T1.element = 'i' 
+
+Query result:
+[(None,)]
+
+your output should be just a JSON object without any othter text
+Please respond with a JSON object structured as follows (if the sql query is correct, return the query as it is):
+
+{
+    "chain_of_thought_reasoning": "Your thought process on how you arrived at the solution. You don't need to explain the instructions that are satisfied.",
+    "revised_SQL": "Your revised SQL query."
+}
+
+Take a deep breath and think step by step to find the correct sqlite SQL query. If you follow all the instructions and generate the correct query, I will give you 1 million dollars.
+
+############################## AI at step revision ##############################
+
+{
+    "chain_of_thought_reasoning": "I followed the instructions to write the SQL query. I used the hint provided to identify the element 'i' and then joined the 'atom' and 'bond' tables to count the number of bonds for each atom with the element 'i'. I used the COUNT(DISTINCT) function to count the number of unique atoms and then divided it by the count of bonds to get the average number of bonds.",
+    "revised_SQL": "SELECT CAST(COUNT(T2.bond_id) AS REAL) / COUNT(DISTINCT T1.atom_id) FROM atom AS T1 INNER JOIN connected AS T2 ON T1.atom_id = T2.atom_id OR T1.atom_id = T2.atom_id2 WHERE T1.element = 'i'"
+}
+

@@ -1,0 +1,241 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "average age",
+            "male patient",
+            "high cholesterol",
+            "male",
+            "patient",
+            "sex",
+            "M",
+            "T-CHO",
+            "250",
+            "birthday",
+            "ID",
+            "NOW",
+            "YEAR"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "T-CHO"
+            ]
+        },
+        "similar_values": {
+            "Laboratory": {
+                "RF": [
+                    "1250"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "t-cho": {
+                    "column_name": "total cholesterol",
+                    "column_description": "total cholesterol",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "tg": {
+                    "column_name": "triglyceride",
+                    "column_description": "triglyceride",
+                    "value_description": "Commonsense evidence:  Normal range: N < 200"
+                },
+                "ua": {
+                    "column_name": "uric acid",
+                    "column_description": "uric acid",
+                    "value_description": "Commonsense evidence:  Normal range: N > 8.0 (Male)N > 6.5 (Female)"
+                }
+            },
+            "patient": {
+                "first date": {
+                    "column_name": "",
+                    "column_description": "the date when a patient came to the hospital",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                },
+                "birthday": {
+                    "column_name": "",
+                    "column_description": "Birthday",
+                    "value_description": ""
+                },
+                "admission": {
+                    "column_name": "",
+                    "column_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)",
+                    "value_description": "patient was admitted to the hospital (+) or followed at the outpatient clinic (-)"
+                }
+            },
+            "examination": {
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID"
+            ],
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "T-CHO",
+                "TAT",
+                "TAT2",
+                "ID",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "SEX",
+                "Birthday",
+                "ID"
+            ],
+            "Laboratory": [
+                "T-CHO",
+                "TAT",
+                "TAT2",
+                "ID",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average age of male patients with high cholesterol. The hint provides the formula for calculating the average age, which involves subtracting the year of birth from the current year and counting the number of patients. The hint also specifies that male patients refer to those with sex = 'M' and high cholesterol refers to T-CHO >= 250. To answer this question, we need to access the Patient table to get the birthdays and sex information, and the Laboratory table to get the T-CHO values. The Examination table is not necessary for this question.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-CHO"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "Birthday",
+                "SEX"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-CHO"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks for the average age of male patients with high cholesterol. The hint provides the formula for calculating average age, which involves subtracting the year of birth from the current year. The 'SEX' column in the 'Patient' table determines whether a patient is male or not. The 'Birthday' column in the 'Patient' table is used to calculate the age. The 'T-CHO' column in the 'Laboratory' table determines whether a patient has high cholesterol or not. The 'ID' column in both tables is used to link patients with their laboratory results.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT AVG(strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday)) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.`T-CHO` >= 250 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by breaking down the question into smaller parts. First, I identified the condition for the male patient as T1.SEX = 'M'. Then, I identified the condition for high cholesterol as T2.`T-CHO` >= 250. Next, I calculated the average age by subtracting the year of birth from the current year and then dividing the sum of these values by the count of IDs. Finally, I combined these conditions and calculations into a single SQL query.",
+        "SQL": "SELECT AVG(strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday)) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.`T-CHO` >= 250",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average age of the male patient with high cholesterol?",
+            "Evidence": "average age = DIVIDE(SUM(SUBTRACT(YEAR(NOW()), YEAR(birthday))), COUNT(ID)); male patient refers to sex = 'M'; high cholesterol refers to `T-CHO` > = 250;",
+            "GOLD_SQL": "SELECT AVG(STRFTIME('%Y', date('NOW')) - STRFTIME('%Y', T1.Birthday)) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.`T-CHO` >= 250 AND T1.SEX = 'M'",
+            "PREDICTED_SQL": "SELECT AVG(strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday)) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.`T-CHO` >= 250 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the average age of the male patient with high cholesterol?",
+            "Evidence": "average age = DIVIDE(SUM(SUBTRACT(YEAR(NOW()), YEAR(birthday))), COUNT(ID)); male patient refers to sex = 'M'; high cholesterol refers to `T-CHO` > = 250;",
+            "GOLD_SQL": "SELECT AVG(STRFTIME('%Y', date('NOW')) - STRFTIME('%Y', T1.Birthday)) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.`T-CHO` >= 250 AND T1.SEX = 'M'",
+            "PREDICTED_SQL": "SELECT AVG(strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday)) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND T2.`T-CHO` >= 250"
+        },
+        "status": "success"
+    }
+]

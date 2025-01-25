@@ -1,0 +1,254 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "April Speaker",
+            "event",
+            "amount budgeted",
+            "SUM(amount)",
+            "budget categories",
+            "category",
+            "ascending order"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "budget": [
+                "amount",
+                "category"
+            ]
+        },
+        "similar_values": {
+            "event": {
+                "event_name": [
+                    "April Speaker"
+                ],
+                "type": [
+                    "Budget"
+                ]
+            },
+            "budget": {
+                "category": [
+                    "Speaker Gifts"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "budget": {
+                "amount": {
+                    "column_name": "",
+                    "column_description": "The amount budgeted for the specified category and event",
+                    "value_description": "the unit is dollar   some computation like: amount = spent + remaining"
+                },
+                "spent": {
+                    "column_name": "",
+                    "column_description": "The total amount spent in the budgeted category for an event.",
+                    "value_description": "the unit is dollar. This is summarized from the Expense table"
+                },
+                "remaining": {
+                    "column_name": "",
+                    "column_description": "A value calculated as the amount budgeted minus the amount spent",
+                    "value_description": "the unit is dollar   If the remaining < 0, it means that the cost has exceeded the budget."
+                },
+                "link_to_event": {
+                    "column_name": "link to event",
+                    "column_description": "The unique identifier of the event to which the budget line applies.",
+                    "value_description": "References the Event table"
+                },
+                "budget_id": {
+                    "column_name": "budget id",
+                    "column_description": "A unique identifier for the budget entry",
+                    "value_description": ""
+                }
+            },
+            "expense": {
+                "link_to_budget": {
+                    "column_name": "link to budget",
+                    "column_description": "The unique identifier of the record in the Budget table that indicates the expected total expenditure for a given category and event.",
+                    "value_description": "References the Budget table"
+                },
+                "expense_description": {
+                    "column_name": "expense description",
+                    "column_description": "A textual description of what the money was spend for",
+                    "value_description": ""
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "major": [
+                "major_id"
+            ],
+            "zip_code": [
+                "zip_code"
+            ],
+            "attendance": [
+                "link_to_event",
+                "link_to_member"
+            ],
+            "budget": [
+                "category",
+                "spent",
+                "amount",
+                "link_to_event",
+                "budget_id"
+            ],
+            "expense": [
+                "cost",
+                "link_to_budget",
+                "expense_id",
+                "link_to_member"
+            ],
+            "income": [
+                "amount",
+                "source",
+                "income_id",
+                "link_to_member"
+            ],
+            "member": [
+                "member_id",
+                "zip",
+                "link_to_major"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "category",
+                "amount",
+                "link_to_event"
+            ],
+            "event": [
+                "event_id",
+                "event_name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name",
+                "event_id"
+            ],
+            "budget": [
+                "category",
+                "spent",
+                "amount",
+                "link_to_event",
+                "budget_id"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the amount budgeted for 'April Speaker' event and list all budgeted categories in ascending order. The hint provides the necessary information to identify the relevant tables. The event name 'April Speaker' is present in the event table, and the amount budgeted is mentioned in the budget table. The budget table also contains the category information. Therefore, we need to join the event table with the budget table to get the budgeted amount for the specific event. Additionally, we need to sort the result by the amount budgeted, which is present in the budget table. Hence, we require the event and budget tables.",
+        "selected_tables": [
+            "event",
+            "budget"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "budget": [
+                "category",
+                "amount",
+                "link_to_event"
+            ],
+            "event": [
+                "event_id",
+                "event_name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "event": [
+                "event_name"
+            ],
+            "budget": [
+                "link_to_event",
+                "category",
+                "amount"
+            ]
+        },
+        "model_selected_columns": {
+            "event": [
+                "event_name"
+            ],
+            "budget": [
+                "link_to_event",
+                "category",
+                "amount"
+            ]
+        },
+        "chain_of_thought_reasoning": "The question asks to calculate the amount budgeted for 'April Speaker' event, which is linked to the budget table. The hint mentions 'amount budgeted' refers to SUM(amount), and 'budget categories' refers to category. Therefore, we need to select the event_name from the event table to filter the event, link_to_event from the budget table to link the event to the budget, category from the budget table to get the budget categories, and amount from the budget table to calculate the total amount budgeted.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "missing_column",
+        "missing_columns": [
+            "'event'.'event_id'"
+        ],
+        "correct_columns": {
+            "budget": [
+                "category",
+                "amount",
+                "link_to_event"
+            ],
+            "event": [
+                "event_id",
+                "event_name"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT SUM(T2.amount), T2.category FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'April Speaker' GROUP BY T2.category ORDER BY SUM(T2.amount) ASC ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by identifying the tables and columns related to the event and budget. I then joined the event and budget tables on the event_id column to link the event to its corresponding budget. I filtered the results to only include the 'April Speaker' event and grouped the results by category. Finally, I sorted the results in ascending order by the amount budgeted.",
+        "SQL": "SELECT T2.category, SUM(T2.amount) FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'April Speaker' GROUP BY T2.category ORDER BY SUM(T2.amount) ASC",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Calculate the amount budgeted for 'April Speaker' event. List all the budgeted categories for said event in an ascending order based on their amount budgeted.",
+            "Evidence": "'April Speaker' is an event name; amount budgeted refers to SUM(amount); budget categories refers to category",
+            "GOLD_SQL": "SELECT T2.category, SUM(T2.amount) FROM event AS T1 JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'April Speaker' GROUP BY T2.category ORDER BY SUM(T2.amount) ASC",
+            "PREDICTED_SQL": "SELECT SUM(T2.amount), T2.category FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'April Speaker' GROUP BY T2.category ORDER BY SUM(T2.amount) ASC "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Calculate the amount budgeted for 'April Speaker' event. List all the budgeted categories for said event in an ascending order based on their amount budgeted.",
+            "Evidence": "'April Speaker' is an event name; amount budgeted refers to SUM(amount); budget categories refers to category",
+            "GOLD_SQL": "SELECT T2.category, SUM(T2.amount) FROM event AS T1 JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'April Speaker' GROUP BY T2.category ORDER BY SUM(T2.amount) ASC",
+            "PREDICTED_SQL": "SELECT T2.category, SUM(T2.amount) FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'April Speaker' GROUP BY T2.category ORDER BY SUM(T2.amount) ASC"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,264 @@
+[
+    {
+        "node_type": "keyword_extraction",
+        "keywords": [
+            "ID",
+            "sex",
+            "age",
+            "patient",
+            "blood glucose",
+            "GLU",
+            "normal range",
+            "total cholesterol",
+            "T-CHO",
+            "Birthday",
+            "current_timestamp",
+            "year",
+            "SUBTRACT",
+            "GLU >= 180",
+            "GLU < 250",
+            "250"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "entity_retrieval",
+        "similar_columns": {
+            "Patient": [
+                "ID",
+                "SEX",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "GLU",
+                "T-CHO",
+                "GLU",
+                "GLU"
+            ]
+        },
+        "similar_values": {
+            "Examination": {
+                "Diagnosis": [
+                    "Normal"
+                ]
+            },
+            "Laboratory": {
+                "RF": [
+                    "180"
+                ]
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "context_retrieval",
+        "schema_with_descriptions": {
+            "laboratory": {
+                "glu": {
+                    "column_name": "blood glucose",
+                    "column_description": "blood glucose",
+                    "value_description": "Commonsense evidence: Normal range: N < 180"
+                },
+                "t-cho": {
+                    "column_name": "total cholesterol",
+                    "column_description": "total cholesterol",
+                    "value_description": "Commonsense evidence: Normal range: N < 250"
+                },
+                "date": {
+                    "column_name": "",
+                    "column_description": "Date of the laboratory tests (YYMMDD)",
+                    "value_description": ""
+                },
+                "tg": {
+                    "column_name": "triglyceride",
+                    "column_description": "triglyceride",
+                    "value_description": "Commonsense evidence:  Normal range: N < 200"
+                },
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                }
+            },
+            "patient": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "description": {
+                    "column_name": "",
+                    "column_description": "the first date when a patient data was recorded",
+                    "value_description": "null or empty: not recorded"
+                }
+            },
+            "examination": {
+                "id": {
+                    "column_name": "",
+                    "column_description": "identification of the patient",
+                    "value_description": ""
+                },
+                "thrombosis": {
+                    "column_name": "",
+                    "column_description": "degree of thrombosis",
+                    "value_description": "0: negative (no thrombosis) 1: positive (the most serious) 2: positive (severe)3: positive (mild)"
+                }
+            }
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_filtering",
+        "tentative_schema": {
+            "Examination": [
+                "ID"
+            ],
+            "Patient": [
+                "ID",
+                "SEX",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-CHO",
+                "GLU",
+                "RF",
+                "Date"
+            ]
+        },
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "glu",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "table_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "SEX",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "T-CHO",
+                "GLU",
+                "RF",
+                "Date"
+            ]
+        },
+        "chain_of_thought_reasoning": "To answer the question, we need to identify the patient who has blood glucose (GLU) not within normal range but with total cholesterol(T-CHO) within normal range. The hint provides the conditions for GLU and T-CHO. We also need to calculate the age of the patient. The ID and sex of the patient are required in the output. The Birthday column in the Patient table provides the necessary information for calculating the age. The Laboratory table contains the GLU and T-CHO values. The Examination table is not necessary for this question.",
+        "selected_tables": [
+            "Patient",
+            "Laboratory"
+        ],
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "glu",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "column_selection",
+        "tentative_schema": {
+            "Patient": [
+                "ID",
+                "SEX",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "GLU",
+                "T-CHO"
+            ]
+        },
+        "model_selected_columns": {
+            "Patient": [
+                "ID",
+                "SEX",
+                "Birthday"
+            ],
+            "Laboratory": [
+                "ID",
+                "Date",
+                "GLU",
+                "T-CHO"
+            ]
+        },
+        "chain_of_thought_reasoning": "Based on the question, we need to identify the patient who has blood glucose (GLU) not within normal range but with total cholesterol(T-CHO) within normal range. The hint provides the conditions for GLU and T-CHO. We also need to consider the patient's age and sex. The Birthday column in the Patient table and the Date column in the Laboratory table are crucial for calculating the age. The ID column in both tables is necessary for linking the patient's information with the laboratory test results.",
+        "missing_table_status": "success",
+        "missing_tables": [],
+        "missing_column_status": "success",
+        "missing_columns": [],
+        "correct_columns": {
+            "patient": [
+                "id",
+                "sex",
+                "birthday"
+            ],
+            "laboratory": [
+                "id",
+                "glu",
+                "T-CHO"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generation",
+        "SQL": "SELECT DISTINCT T1.ID, T1.SEX, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU >= 180 AND T2.`T-CHO` < 250 ",
+        "status": "success"
+    },
+    {
+        "node_type": "revision",
+        "chain_of_thought_reasoning": "I started by analyzing the question and identifying the conditions required: blood glucose (GLU) not within normal range (GLU >= 180) and total cholesterol (T-CHO) within normal range (T-CHO < 250). I then joined the Patient and Laboratory tables on the ID column, filtered the results based on the conditions, and selected the required columns (ID, sex, and age).",
+        "SQL": "SELECT T1.ID, T1.SEX, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU >= 180 AND T2.`T-CHO` < 250",
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generation": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Provide ID, sex and age of patient who has blood glucose (GLU) not within normal range but with total cholesterol(T-CHO) within normal range.",
+            "Evidence": "age = SUBTRACT(year(current_timestamp), year(Birthday)); blood glucose (GLU) not within normal range refers to GLU > = 180; total cholesterol(T-CHO) within normal range refers to `T-CHO` < 250; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID, T1.SEX , STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU >= 180 AND T2.`T-CHO` < 250",
+            "PREDICTED_SQL": "SELECT DISTINCT T1.ID, T1.SEX, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU >= 180 AND T2.`T-CHO` < 250 "
+        },
+        "revision": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "Provide ID, sex and age of patient who has blood glucose (GLU) not within normal range but with total cholesterol(T-CHO) within normal range.",
+            "Evidence": "age = SUBTRACT(year(current_timestamp), year(Birthday)); blood glucose (GLU) not within normal range refers to GLU > = 180; total cholesterol(T-CHO) within normal range refers to `T-CHO` < 250; ",
+            "GOLD_SQL": "SELECT DISTINCT T1.ID, T1.SEX , STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU >= 180 AND T2.`T-CHO` < 250",
+            "PREDICTED_SQL": "SELECT T1.ID, T1.SEX, strftime('%Y', CURRENT_TIMESTAMP) - strftime('%Y', T1.Birthday) AS age FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GLU >= 180 AND T2.`T-CHO` < 250"
+        },
+        "status": "success"
+    }
+]
